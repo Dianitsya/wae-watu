@@ -24,4 +24,7 @@ COPY backend/ .
 
 RUN composer install --no-dev --optimize-autoloader --no-scripts --ignore-platform-reqs
 
-CMD ["sh", "-c", "php artisan migrate --force && php artisan db:seed --force && php artisan serve --host 0.0.0.0 --port $PORT"]
+RUN mkdir -p storage/framework/views storage/framework/sessions storage/framework/cache storage/logs bootstrap/cache \
+    && chmod -R 777 storage bootstrap/cache
+
+CMD ["sh", "-c", "php artisan key:generate --force && php artisan migrate --force && php artisan db:seed --force && php artisan serve --host 0.0.0.0 --port $PORT"]
