@@ -22,6 +22,8 @@ WORKDIR /app
 
 COPY . .
 
+RUN cp .env.example .env
+
 RUN composer install --no-dev --optimize-autoloader --no-scripts --ignore-platform-reqs
 
 RUN mkdir -p storage/framework/views storage/framework/sessions storage/framework/cache storage/logs bootstrap/cache \
