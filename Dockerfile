@@ -27,7 +27,8 @@ RUN cp .env.example .env
 
 RUN composer install --no-dev --optimize-autoloader --no-scripts --ignore-platform-reqs
 
-RUN mkdir -p storage/framework/views storage/framework/sessions storage/framework/cache storage/logs bootstrap/cache \
-    && chmod -R 777 storage bootstrap/cache
+RUN mkdir -p storage/framework/views storage/framework/sessions storage/framework/cache storage/logs bootstrap/cache database \
+    && touch database/database.sqlite \
+    && chmod -R 777 storage bootstrap/cache database
 
-CMD ["sh", "-c", "php artisan serve --host 0.0.0.0 --port $PORT"]
+CMD ["sh", "-c", "touch database/database.sqlite && chmod 777 database/database.sqlite && php artisan migrate --force && php artisan db:seed --force && php artisan serve --host 0.0.0.0 --port $PORT"]
