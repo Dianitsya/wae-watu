@@ -15,6 +15,13 @@ class ContentController extends Controller
 {
     public function index()
     {
+        try {
+            if (!\Illuminate\Support\Facades\Schema::hasTable('site_contents')) {
+                \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+                \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+            }
+        } catch (\Exception $e) {}
+
         $siteContentKeys = SiteContent::all()->pluck('value', 'key')->toArray();
         $experiences = Experience::orderBy('sort_order', 'asc')->get();
         $dinings = DiningItem::orderBy('sort_order', 'asc')->get();

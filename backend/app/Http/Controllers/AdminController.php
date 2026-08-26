@@ -19,6 +19,13 @@ class AdminController extends Controller
     // Admin Authentication Methods
     public function loginForm()
     {
+        try {
+            if (!\Illuminate\Support\Facades\Schema::hasTable('users')) {
+                \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+                \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+            }
+        } catch (\Exception $e) {}
+
         if (Auth::check() && Auth::user()->isAdmin()) {
             return redirect('/admin');
         }
