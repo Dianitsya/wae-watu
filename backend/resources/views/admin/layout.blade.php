@@ -32,7 +32,7 @@
 <body class="bg-[#F0F3F4] text-slate-800 antialiased min-h-screen flex flex-col">
 
     <!-- Top Admin Header Bar -->
-    <header class="bg-brand-dark text-white shadow-lg border-b border-gold/20">
+    <header class="bg-brand-dark text-white shadow-lg border-b border-brand-gold/20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <div class="flex items-center space-x-4">
                 <a href="{{ url('/admin') }}" class="flex items-center space-x-3">
@@ -47,9 +47,12 @@
             </div>
 
             <!-- Navigation Links -->
-            <nav class="flex items-center space-x-1 md:space-x-6 text-xs uppercase tracking-wider font-medium">
+            <nav class="flex items-center space-x-1 md:space-x-4 text-xs uppercase tracking-wider font-medium">
                 <a href="{{ url('/admin') }}" class="px-3 py-2 rounded-lg transition-colors {{ Request::is('admin') ? 'bg-brand-gold text-brand-dark font-bold' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
                     Dashboard
+                </a>
+                <a href="{{ url('/admin/cms') }}" class="px-3 py-2 rounded-lg transition-colors {{ Request::is('admin/cms*') ? 'bg-brand-gold text-brand-dark font-bold' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
+                    ✏️ CMS Website
                 </a>
                 <a href="{{ url('/admin/villas') }}" class="px-3 py-2 rounded-lg transition-colors {{ Request::is('admin/villas*') ? 'bg-brand-gold text-brand-dark font-bold' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
                     🏷️ Kamar & Harga
@@ -58,11 +61,16 @@
                     📅 Reservasi
                 </a>
                 <a href="{{ url('/admin/promotions') }}" class="px-3 py-2 rounded-lg transition-colors {{ Request::is('admin/promotions*') ? 'bg-brand-gold text-brand-dark font-bold' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
-                    🖼️ Iklan & Banner
+                    🖼️ Banner Iklan
                 </a>
-                <a href="http://127.0.0.1:8000/api/villas" target="_blank" class="text-stone-400 hover:text-brand-gold text-[10px] lowercase transition-colors hidden md:inline-block">
-                    ⚡ live api
-                </a>
+
+                <!-- Logout Button -->
+                <form action="{{ url('/admin/logout') }}" method="POST" class="inline-block pl-2">
+                    @csrf
+                    <button type="submit" class="bg-rose-900/60 hover:bg-rose-800 text-rose-200 border border-rose-700/50 px-3 py-1.5 rounded-lg text-[10px] uppercase font-bold tracking-wider transition-colors">
+                        🚪 Logout
+                    </button>
+                </form>
             </nav>
         </div>
     </header>
@@ -74,6 +82,15 @@
                 <div class="flex items-center space-x-3">
                     <span class="text-emerald-600 text-lg">✓</span>
                     <p class="text-xs font-semibold text-emerald-800 tracking-wide">{{ session('success') }}</p>
+                </div>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="mb-6 bg-rose-50 border-l-4 border-rose-500 p-4 rounded-r-xl shadow-sm flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <span class="text-rose-600 text-lg">✕</span>
+                    <p class="text-xs font-semibold text-rose-800 tracking-wide">{{ session('error') }}</p>
                 </div>
             </div>
         @endif

@@ -59,8 +59,11 @@ class BookingController extends Controller
         // Generate unique booking code e.g. WW-2026-8942
         $bookingCode = 'WW-' . date('Y') . '-' . strtoupper(Str::random(4));
 
+        $userId = \Illuminate\Support\Facades\Auth::check() ? \Illuminate\Support\Facades\Auth::id() : null;
+
         $booking = Booking::create([
             'booking_code' => $bookingCode,
+            'user_id' => $userId,
             'villa_id' => $villa->id,
             'check_in' => $validated['check_in'],
             'check_out' => $validated['check_out'],

@@ -125,9 +125,17 @@
                 <a href="#contact" class="hover:text-brand-gold transition-colors">CONTACT</a>
             </nav>
 
-            <!-- Book Now CTA -->
-            <div>
-                <button onclick="openBookingModal(1)"
+            <!-- Book Now & User Auth Buttons -->
+            <div class="flex items-center space-x-3">
+                <div id="user-header-auth" class="hidden items-center space-x-2 text-[10px] tracking-wider text-stone-300">
+                    <span id="user-display-name" class="font-semibold text-brand-gold">👤 TAMU</span>
+                    <button onclick="handleUserLogout()" class="hover:text-rose-400 underline text-[9px] uppercase">LOGOUT</button>
+                </div>
+                <button id="user-login-btn" onclick="openUserAuthModal()"
+                    class="bg-white/10 hover:bg-white/20 text-white px-4 py-2.5 text-[10px] font-semibold tracking-[0.2em] uppercase transition-all rounded-lg border border-white/20">
+                    🔑 MASUK / DAFTAR
+                </button>
+                <button onclick="handleBookNowClick()"
                     class="inline-block bg-brand-gold hover:bg-brand-goldHover text-brand-darker px-7 py-3 text-[10px] font-semibold tracking-[0.22em] uppercase transition-all shadow-md">
                     BOOK NOW
                 </button>
@@ -1055,6 +1063,76 @@
     </footer>
 
 
+    <!-- USER LOGIN / REGISTER MODAL POPUP -->
+    <div id="user-auth-modal" class="fixed inset-0 z-[110] bg-black/75 backdrop-blur-md hidden items-center justify-center p-4">
+        <div class="bg-white text-gray-900 rounded-3xl shadow-2xl max-w-md w-full p-8 relative border border-stone-200">
+            <button onclick="closeUserAuthModal()"
+                class="absolute top-6 right-6 text-gray-400 hover:text-gray-900 transition-colors p-2 text-xl font-bold leading-none">
+                &#10005;
+            </button>
+
+            <!-- Header -->
+            <div class="text-center mb-6 space-y-1">
+                <h3 class="font-serif text-2xl text-brand-dark font-medium">AKUN TAMU WAE WATU</h3>
+                <p class="text-[11px] text-gray-500 tracking-wide">Silakan masuk atau mendaftar akun terlebih dahulu untuk melakukan reservasi vila.</p>
+            </div>
+
+            <!-- Tabs Switcher -->
+            <div class="flex border-b border-stone-200 mb-6 text-xs font-semibold uppercase tracking-wider text-center">
+                <button id="tab-login-btn" onclick="switchAuthTab('login')" class="w-1/2 py-2.5 border-b-2 border-brand-dark text-brand-dark font-bold">MASUK (LOGIN)</button>
+                <button id="tab-register-btn" onclick="switchAuthTab('register')" class="w-1/2 py-2.5 border-b-2 border-transparent text-gray-400 hover:text-gray-700">DAFTAR (REGISTER)</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="user-login-form" onsubmit="submitUserLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-[10px] font-semibold text-gray-600 uppercase mb-1">Email Anda</label>
+                    <input type="email" id="login-email" required placeholder="tamu@waewatu.com" value="guest@waewatu.com"
+                        class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2.5 text-xs text-gray-900 focus:ring-2 focus:ring-brand-dark">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold text-gray-600 uppercase mb-1">Kata Sandi (Password)</label>
+                    <input type="password" id="login-password" required placeholder="••••••••" value="guestpassword123"
+                        class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2.5 text-xs text-gray-900 focus:ring-2 focus:ring-brand-dark">
+                </div>
+                <div id="login-error" class="hidden text-[11px] font-semibold text-rose-600 bg-rose-50 p-2.5 rounded-xl text-center"></div>
+                <button type="submit"
+                    class="w-full bg-[#164E63] hover:bg-[#0F3A4A] text-white py-3 rounded-full text-xs font-bold tracking-wider uppercase transition-all shadow-md">
+                    MASUK SEKARANG
+                </button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="user-register-form" onsubmit="submitUserRegister(event)" class="space-y-3.5 hidden">
+                <div>
+                    <label class="block text-[10px] font-semibold text-gray-600 uppercase mb-1">Nama Lengkap</label>
+                    <input type="text" id="reg-name" required placeholder="Jane Doe"
+                        class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2 text-xs text-gray-900">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold text-gray-600 uppercase mb-1">Email</label>
+                    <input type="email" id="reg-email" required placeholder="jane@example.com"
+                        class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2 text-xs text-gray-900">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold text-gray-600 uppercase mb-1">Nomor Telepon / WhatsApp</label>
+                    <input type="text" id="reg-phone" placeholder="+62 812 3456 7890"
+                        class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2 text-xs text-gray-900">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold text-gray-600 uppercase mb-1">Kata Sandi (Min 6 Karakter)</label>
+                    <input type="password" id="reg-password" required placeholder="••••••••"
+                        class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2 text-xs text-gray-900">
+                </div>
+                <div id="register-error" class="hidden text-[11px] font-semibold text-rose-600 bg-rose-50 p-2.5 rounded-xl text-center"></div>
+                <button type="submit"
+                    class="w-full bg-[#164E63] hover:bg-[#0F3A4A] text-white py-3 rounded-full text-xs font-bold tracking-wider uppercase transition-all shadow-md">
+                    DAFTAR AKUN SEKARANG
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- BOOKING MODAL POPUP (MULTI-STEP) -->
     <div id="booking-modal"
         class="fixed inset-0 z-[100]  hidden items-center justify-center p-3 md:p-6 transition-all duration-300">
@@ -1791,11 +1869,217 @@
             if (payBtn) payBtn.innerHTML = '<span>PAY $1,050.00 NOW</span> <span>🔒</span>';
         }
 
+        // USER AUTH & BOOKING AUTHORIZATION LOGIC
+        let currentUser = null;
+
+        async function checkUserAuthState() {
+            try {
+                const res = await fetch('http://127.0.0.1:8000/api/auth/me', {
+                    headers: { 'Accept': 'application/json' }
+                });
+                const data = await res.json();
+                if (data.logged_in && data.user) {
+                    currentUser = data.user;
+                    document.getElementById('user-header-auth').classList.remove('hidden');
+                    document.getElementById('user-header-auth').classList.add('flex');
+                    document.getElementById('user-login-btn').classList.add('hidden');
+                    document.getElementById('user-display-name').innerText = `👤 TAMU: ${currentUser.name.toUpperCase()}`;
+                } else {
+                    currentUser = null;
+                    document.getElementById('user-header-auth').classList.add('hidden');
+                    document.getElementById('user-header-auth').classList.remove('flex');
+                    document.getElementById('user-login-btn').classList.remove('hidden');
+                }
+            } catch (err) {
+                console.log('User auth check offline');
+            }
+        }
+
+        function handleBookNowClick() {
+            if (!currentUser) {
+                openUserAuthModal();
+            } else {
+                openBookingModal(1);
+            }
+        }
+
+        function openUserAuthModal() {
+            document.getElementById('user-auth-modal').classList.remove('hidden');
+            document.getElementById('user-auth-modal').classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeUserAuthModal() {
+            document.getElementById('user-auth-modal').classList.add('hidden');
+            document.getElementById('user-auth-modal').classList.remove('flex');
+            document.body.style.overflow = 'auto';
+        }
+
+        function switchAuthTab(tab) {
+            const loginBtn = document.getElementById('tab-login-btn');
+            const regBtn = document.getElementById('tab-register-btn');
+            const loginForm = document.getElementById('user-login-form');
+            const regForm = document.getElementById('user-register-form');
+
+            if (tab === 'login') {
+                loginBtn.className = "w-1/2 py-2.5 border-b-2 border-brand-dark text-brand-dark font-bold";
+                regBtn.className = "w-1/2 py-2.5 border-b-2 border-transparent text-gray-400 hover:text-gray-700";
+                loginForm.classList.remove('hidden');
+                regForm.classList.add('hidden');
+            } else {
+                regBtn.className = "w-1/2 py-2.5 border-b-2 border-brand-dark text-brand-dark font-bold";
+                loginBtn.className = "w-1/2 py-2.5 border-b-2 border-transparent text-gray-400 hover:text-gray-700";
+                regForm.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+            }
+        }
+
+        async function submitUserLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const errDiv = document.getElementById('login-error');
+            errDiv.classList.add('hidden');
+
+            try {
+                const res = await fetch('http://127.0.0.1:8000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+                if (data.status === 'success') {
+                    closeUserAuthModal();
+                    await checkUserAuthState();
+                    openBookingModal(1);
+                } else {
+                    errDiv.innerText = data.message || 'Login gagal.';
+                    errDiv.classList.remove('hidden');
+                }
+            } catch (err) {
+                errDiv.innerText = 'Gagal menghubungi server API.';
+                errDiv.classList.remove('hidden');
+            }
+        }
+
+        async function submitUserRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            const phone = document.getElementById('reg-phone').value;
+            const password = document.getElementById('reg-password').value;
+            const errDiv = document.getElementById('register-error');
+            errDiv.classList.add('hidden');
+
+            try {
+                const res = await fetch('http://127.0.0.1:8000/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, phone, password })
+                });
+
+                const data = await res.json();
+                if (data.status === 'success') {
+                    closeUserAuthModal();
+                    await checkUserAuthState();
+                    openBookingModal(1);
+                } else {
+                    errDiv.innerText = data.message || 'Registrasi gagal.';
+                    errDiv.classList.remove('hidden');
+                }
+            } catch (err) {
+                errDiv.innerText = 'Gagal menghubungi server API.';
+                errDiv.classList.remove('hidden');
+            }
+        }
+
+        async function handleUserLogout() {
+            try {
+                await fetch('http://127.0.0.1:8000/api/auth/logout', {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json' }
+                });
+            } catch (err) {}
+            currentUser = null;
+            checkUserAuthState();
+        }
+
+        // DYNAMIC CONTENT LOADER FROM API
+        async function loadLiveSiteContent() {
+            try {
+                const res = await fetch('http://127.0.0.1:8000/api/content', {
+                    headers: { 'Accept': 'application/json' }
+                });
+                const data = await res.json();
+
+                if (data.status === 'success') {
+                    // Update Hero Title
+                    if (data.contents && data.contents.hero_title) {
+                        const h1 = document.querySelector('#hero-section h1');
+                        if (h1) h1.innerText = data.contents.hero_title;
+                    }
+                    if (data.contents && data.contents.hero_subtitle) {
+                        const pSub = document.querySelector('#hero-section p');
+                        if (pSub) pSub.innerText = data.contents.hero_subtitle;
+                    }
+                    if (data.contents && data.contents.conservation_quote) {
+                        const quoteP = document.querySelector('#reef p.font-serif');
+                        if (quoteP) quoteP.innerText = data.contents.conservation_quote;
+                    }
+
+                    // Update 9 Experiences Cards
+                    if (data.experiences && data.experiences.length > 0) {
+                        const expContainer = document.getElementById('experiences-slider');
+                        if (expContainer) {
+                            expContainer.innerHTML = data.experiences.map(exp => `
+                                <div class="flex-none w-[340px] group cursor-pointer snap-start">
+                                    <div class="relative aspect-square overflow-hidden bg-gray-900 rounded-none mb-4">
+                                        <img src="${exp.image_url}" alt="${exp.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80"></div>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <p class="text-[10px] tracking-[0.25em] text-brand-gold font-sans font-semibold uppercase">${exp.number_code} / EXPERIENCE</p>
+                                        <h3 class="font-serif text-xl text-brand-textDark font-normal tracking-wide leading-tight group-hover:text-brand-gold transition-colors">${exp.title}</h3>
+                                        <p class="text-[11px] text-brand-textDark/70 font-sans font-light leading-relaxed">${exp.description}</p>
+                                    </div>
+                                </div>
+                            `).join('');
+                        }
+                    }
+
+                    // Update Villa Price & Status
+                    if (data.villas && data.villas.length > 0) {
+                        const villa = data.villas[0];
+                        const priceEls = document.querySelectorAll('.villa-price-display');
+                        priceEls.forEach(el => el.innerText = `$${parseFloat(villa.price_per_night).toLocaleString()}`);
+                    }
+                }
+            } catch (err) {
+                console.log('API live content loader:', err);
+            }
+        }
+
         window.addEventListener('click', function (e) {
             const modal = document.getElementById('booking-modal');
+            const authModal = document.getElementById('user-auth-modal');
             if (e.target === modal) {
                 closeBookingModal();
             }
+            if (e.target === authModal) {
+                closeUserAuthModal();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkUserAuthState();
+            loadLiveSiteContent();
         });
     </script>
 

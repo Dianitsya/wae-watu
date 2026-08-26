@@ -6,10 +6,55 @@ use App\Models\Villa;
 use App\Models\Booking;
 use App\Models\Inquiry;
 use App\Models\Promotion;
+use App\Models\SiteContent;
+use App\Models\Experience;
+use App\Models\DiningItem;
+use App\Models\ConservationCard;
+use App\Models\GalleryPhoto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
+    // Admin Authentication Methods
+    public function loginForm()
+    {
+        if (Auth::check() && Auth::user()->isAdmin()) {
+            return redirect('/admin');
+        }
+        return view('admin.login');
+    }
+
+    public function login(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            if ($user->isAdmin()) {
+                $request->session()->regenerate();
+                return redirect('/admin')->with('success', 'Selamat datang kembali, Admin!');
+            }
+            Auth::logout();
+            return redirect('/admin/login')->with('error', 'Akun Anda bukan merupakan akun Admin.');
+        }
+
+        return redirect('/admin/login')->with('error', 'Email atau password Admin tidak valid.');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/admin/login')->with('success', 'Anda telah keluar dari Admin Panel.');
+    }
+
+    // Dashboard Overview
     public function dashboard()
     {
         $villasCount = Villa::count();
@@ -29,6 +74,60 @@ class AdminController extends Controller
         ));
     }
 
+    // Full CMS Editor for All Website Content
+    public function cms()
+    {
+        $contents = SiteContent::all()->pluck('value', 'key')->toArray();
+        $experiences = Experience::orderBy('sort_order', 'asc')->get();
+        $diningItems = DiningItem::orderBy('sort_order', 'asc')->get();
+        $conservationCards = ConservationCard::orderBy('sort_order', 'asc')->get();
+        $galleryPhotos = GalleryPhoto::orderBy('sort_order', 'asc')->get();
+
+        return view('admin.cms', compact(
+            'contents',
+            'experiences',
+            'diningItems',
+            'conservationCards',
+            'galleryPhotos'
+        ));
+    }
+
+    public function updateCms(Request $request)
+    {
+        $inputs = $request->except(['_token', 'experiences', 'dining', 'conservation']);
+
+        foreach ($inputs as $key => $value) {
+            SiteContent::updateOrCreate(
+                ['key' => $key],
+                ['value' => $value, 'type' => 'text']
+            );
+        }
+
+        // Batch Update Experiences
+        if ($request->has('experiences')) {
+            foreach ($request->input('experiences') as $id => $data) {
+                Experience::where('id', $id)->update($data);
+            }
+        }
+
+        // Batch Update Dining
+        if ($request->has('dining')) {
+            foreach ($request->input('dining') as $id => $data) {
+                DiningItem::where('id', $id)->update($data);
+            }
+        }
+
+        // Batch Update Conservation Cards
+        if ($request->has('conservation')) {
+            foreach ($request->input('conservation') as $id => $data) {
+                ConservationCard::where('id', $id)->update($data);
+            }
+        }
+
+        return redirect()->back()->with('success', 'Seluruh konten & foto website berhasil diperbarui!');
+    }
+
+    // Room & Pricing Management
     public function villas()
     {
         $villas = Villa::all();
@@ -52,9 +151,10 @@ class AdminController extends Controller
         return redirect()->back()->with('success', "Updated {$villa->name} details & pricing successfully!");
     }
 
+    // Reservations & Booking Management
     public function bookings()
     {
-        $bookings = Booking::with('villa')->latest()->get();
+        $bookings = Booking::with(['villa', 'user'])->latest()->get();
         return view('admin.bookings', compact('bookings'));
     }
 
@@ -70,6 +170,7 @@ class AdminController extends Controller
         return redirect()->back()->with('success', "Booking {$booking->booking_code} status updated to {$booking->status}!");
     }
 
+    // Advertised Banner CMS
     public function promotions()
     {
         $promotions = Promotion::all();

@@ -6,12 +6,23 @@ use App\Http\Controllers\VillaController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\PromotionController;
+use App\Http\Controllers\ContentController;
+use App\Http\Controllers\UserAuthController;
 
 /*
 |--------------------------------------------------------------------------
 | Wae Watu Reef Resort API Routes
 |--------------------------------------------------------------------------
 */
+
+// Full CMS Live Content Endpoint for Frontend
+Route::get('/content', [ContentController::class, 'index']);
+
+// Guest User Auth Endpoints
+Route::post('/auth/register', [UserAuthController::class, 'register']);
+Route::post('/auth/login', [UserAuthController::class, 'login']);
+Route::post('/auth/logout', [UserAuthController::class, 'logout']);
+Route::get('/auth/me', [UserAuthController::class, 'me']);
 
 // Villa endpoints
 Route::get('/villas', [VillaController::class, 'index']);
