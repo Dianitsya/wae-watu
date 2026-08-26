@@ -2087,6 +2087,9 @@
         }
 
         function getApiBase() {
+            if (window.location.hostname === 'dianitsya.github.io' || window.location.protocol === 'https:') {
+                return 'https://wae-watu-production.up.railway.app';
+            }
             if (window.location.hostname && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
                 return `http://${window.location.hostname}:8000`;
             }
