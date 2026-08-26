@@ -38,7 +38,7 @@
         <div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200 flex flex-col justify-between">
             <span class="text-[10px] tracking-[0.2em] font-bold text-slate-400 uppercase">Pendapatan Terkonfirmasi</span>
             <div class="mt-4 flex items-baseline justify-between">
-                <span class="font-serif text-3xl text-brand-gold font-semibold">${{ number_format($totalRevenue, 2) }}</span>
+                <span class="font-serif text-2xl sm:text-3xl text-brand-gold font-semibold">Rp {{ number_format($totalRevenue, 0, ',', '.') }}</span>
                 <span class="text-[10px] text-slate-400 uppercase">Confirmed</span>
             </div>
         </div>
@@ -81,7 +81,7 @@
                                     <td class="py-3 font-mono font-bold text-brand-dark">{{ $booking->booking_code }}</td>
                                     <td class="py-3 font-medium">{{ $booking->guest_name }}</td>
                                     <td class="py-3 text-slate-600">{{ $booking->villa->name ?? 'Villa' }}</td>
-                                    <td class="py-3 font-semibold text-slate-900">${{ number_format($booking->total_price, 2) }}</td>
+                                    <td class="py-3 font-semibold text-slate-900">Rp {{ number_format($booking->total_price, 0, ',', '.') }}</td>
                                     <td class="py-3 text-center">
                                         <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider
                                             {{ $booking->status === 'confirmed' ? 'bg-emerald-100 text-emerald-800' : ($booking->status === 'pending' ? 'bg-amber-100 text-amber-800' : 'bg-rose-100 text-rose-800') }}">

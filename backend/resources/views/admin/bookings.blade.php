@@ -44,7 +44,7 @@
                                     {{ \Carbon\Carbon::parse($booking->check_in)->format('d M Y') }} — {{ \Carbon\Carbon::parse($booking->check_out)->format('d M Y') }}
                                     <span class="block text-[10px] text-slate-400">({{ $booking->guests }} Tamu)</span>
                                 </td>
-                                <td class="py-4 px-2 font-bold text-slate-900">${{ number_format($booking->total_price, 2) }}</td>
+                                <td class="py-4 px-2 font-bold text-slate-900">Rp {{ number_format($booking->total_price, 0, ',', '.') }}</td>
                                 <td class="py-4 px-2 text-center">
                                     <form action="{{ url('/admin/bookings/' . $booking->id . '/status') }}" method="POST">
                                         @csrf

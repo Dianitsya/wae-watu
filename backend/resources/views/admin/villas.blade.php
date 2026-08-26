@@ -42,8 +42,8 @@
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Harga Per Malam ($ USD)</label>
-                                <input type="number" step="0.01" name="price_per_night" value="{{ old('price_per_night', $villa->price_per_night) }}" required
+                                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Harga Per Malam (Rp Rupiah)</label>
+                                <input type="number" step="1000" name="price_per_night" value="{{ old('price_per_night', $villa->price_per_night) }}" required
                                     class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2 text-xs font-bold text-brand-dark focus:ring-2 focus:ring-brand-gold">
                             </div>
                         </div>
