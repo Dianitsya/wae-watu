@@ -16,6 +16,8 @@ RUN apt-get update && apt-get install -y \
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV APP_KEY=base64:gtqmEKRtEE7Mn+/MKWRw4wxb6gBuEDHUOFHaia9whwg=
+ENV DB_CONNECTION=sqlite
+ENV DB_DATABASE=/app/database/database.sqlite
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -29,6 +31,8 @@ RUN composer install --no-dev --optimize-autoloader --no-scripts --ignore-platfo
 
 RUN mkdir -p storage/framework/views storage/framework/sessions storage/framework/cache storage/logs bootstrap/cache database \
     && touch database/database.sqlite \
-    && chmod -R 777 storage bootstrap/cache database
+    && chmod -R 777 storage bootstrap/cache database \
+    && php artisan migrate --force \
+    && php artisan db:seed --force
 
-CMD ["sh", "-c", "touch database/database.sqlite && chmod 777 database/database.sqlite && php artisan migrate --force && php artisan db:seed --force && php artisan serve --host 0.0.0.0 --port $PORT"]
+CMD ["sh", "-c", "php artisan serve --host 0.0.0.0 --port $PORT"]
