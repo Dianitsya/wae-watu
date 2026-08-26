@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat Reservasi Saya — Wae Watu Reef Resort</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            gold: '#D4AF37',
+                            goldHover: '#C5A028',
+                            dark: '#0A1826',
+                            darker: '#050D15',
+                            cream: '#F9F8F3',
+                            textDark: '#1C2930',
+                            textMuted: '#6B7A82'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'Georgia', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0A1826;
+            color: #F9F8F3;
+        }
+
+        .luxury-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+
+<body
+    class="antialiased selection:bg-brand-gold selection:text-brand-darker min-h-screen flex flex-col justify-between">
+
+    <!-- HEADER / NAVIGATION BAR -->
+    <header class="fixed top-0 left-0 w-full z-50 bg-[#0A1826]/95 backdrop-blur-md border-b border-white/10">
+        <div class="max-w-[1500px] mx-auto px-4 md:px-8 xl:px-12 h-20 flex items-center justify-between">
+            <!-- Brand Logo with Terra Emblem -->
+            <a href="index.html" class="flex items-center space-x-2.5 md:space-x-3 group shrink-0">
+                <img src="terra-logo.png" alt="Terra Emblem" class="h-8 md:h-9 w-auto object-contain mix-blend-lighten">
+                <div class="flex flex-col text-left">
+                    <span
+                        class="font-serif text-base md:text-xl tracking-[0.2em] md:tracking-[0.25em] text-white uppercase font-normal leading-tight">WAE
+                        WATU</span>
+                    <span
+                        class="text-[7px] md:text-[9px] tracking-[0.25em] md:tracking-[0.3em] text-gray-400 uppercase font-sans font-light">REEF
+                        RESORT</span>
+                </div>
+            </a>
+
+
+            <!-- Far-Right User Profile Dropdown Banner -->
+            <div class="flex items-center space-x-3 md:space-x-4 shrink-0">
+                <a href="index.html#the-villa"
+                    class="inline-block bg-brand-gold hover:bg-brand-goldHover text-brand-darker px-5 xl:px-7 py-2.5 xl:py-3 text-[9px] xl:text-[10px] font-semibold tracking-[0.2em] uppercase transition-all shadow-md">
+                    + PESAN VILA BARU
+                </a>
+
+                <!-- Profile Dropdown Banner (Shown at Far Right) -->
+                <div id="user-header-auth" class="relative">
+                    <button onclick="toggleProfileDropdown()"
+                        class="flex items-center space-x-2.5 bg-stone-900/90 hover:bg-stone-800 text-stone-200 border border-brand-gold/50 hover:border-brand-gold px-3.5 py-1.5 rounded-full shadow-lg transition-all cursor-pointer">
+                        <div id="user-avatar-initial"
+                            class="w-6 h-6 rounded-full bg-brand-gold text-brand-dark font-bold text-[11px] flex items-center justify-center font-serif">
+                            G
+                        </div>
+                        <span id="user-display-name"
+                            class="font-sans text-[10px] font-bold text-brand-gold uppercase tracking-wider">
+                            TAMU
+                        </span>
+                        <svg class="w-3 h-3 text-brand-gold transition-transform duration-200" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </button>
+
+                    <!-- Dropdown Floating Menu -->
+                    <div id="profile-dropdown-menu"
+                        class="hidden absolute right-0 mt-2 w-56 bg-[#0E2033] border border-brand-gold/30 rounded-2xl shadow-2xl p-3 z-50 space-y-2 backdrop-blur-md">
+                        <div class="px-3 py-2 border-b border-white/10 space-y-0.5">
+                            <p id="user-dropdown-name" class="text-xs font-semibold text-white tracking-wide">Pengunjung
+                                Tamu</p>
+                            <p id="user-dropdown-email" class="text-[10px] text-stone-400 font-mono truncate">
+                                guest@waewatu.com</p>
+                        </div>
+
+                        <div class="space-y-1 text-xs">
+                            <a href="my-bookings.html"
+                                class="flex items-center space-x-2 px-3 py-2 rounded-xl text-brand-gold bg-white/10 font-semibold transition-colors">
+                                <span>🏨</span>
+                                <span>Reservasi Saya</span>
+                            </a>
+                            <button onclick="handleUserLogout()"
+                                class="w-full flex items-center space-x-2 px-3 py-2 rounded-xl text-rose-400 hover:bg-rose-900/40 hover:text-rose-200 transition-colors text-left font-semibold cursor-pointer">
+                                <span>🚪</span>
+                                <span>Keluar (Logout)</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT: MY RESERVATIONS PAGE -->
+    <main class="pt-32 pb-24 px-4 md:px-8 xl:px-12 max-w-[1300px] mx-auto w-full flex-grow">
+
+        <!-- Page Title & Header Info -->
+        <div
+            class="flex flex-col md:flex-row justify-between items-start md:items-end pb-8 border-b border-white/10 gap-6">
+            <div class="space-y-2">
+                <span class="text-[10px] tracking-[0.3em] font-sans text-brand-gold uppercase font-bold">RESERVASI VILA
+                    TAMU</span>
+                <h1 class="font-serif text-3xl md:text-5xl text-white font-normal leading-tight">Riwayat Reservasi Saya
+                </h1>
+                <p class="text-xs md:text-sm text-stone-400 font-light max-w-xl">
+                    Daftar seluruh pesanan kamar vila overwater Wae Watu Reef Resort yang terdaftar pada akun Anda.
+                </p>
+            </div>
+
+            <!-- Filter Status Tabs -->
+            <div
+                class="flex items-center bg-white/5 border border-white/10 rounded-2xl p-1 text-[11px] font-semibold text-stone-300 self-stretch md:self-auto justify-around">
+                <button onclick="filterBookings('all')" id="filter-btn-all"
+                    class="px-4 py-2 rounded-xl bg-brand-gold text-brand-dark font-bold transition-all">Semua</button>
+                <button onclick="filterBookings('confirmed')" id="filter-btn-confirmed"
+                    class="px-4 py-2 rounded-xl hover:text-white transition-all">Terkonfirmasi</button>
+                <button onclick="filterBookings('pending')" id="filter-btn-pending"
+                    class="px-4 py-2 rounded-xl hover:text-white transition-all">Pending</button>
+            </div>
+        </div>
+
+        <!-- Bookings Container Grid -->
+        <div id="my-bookings-container" class="mt-10 space-y-6">
+            <!-- Loading Skeleton -->
+            <div class="text-center py-20 luxury-card rounded-3xl border border-white/10 space-y-3">
+                <div class="inline-block animate-spin text-3xl text-brand-gold">⏳</div>
+                <p class="text-xs text-stone-300 font-light tracking-wider uppercase">Memuat riwayat pemesanan vila
+                    Anda...</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-brand-darker border-t border-white/10 py-8 text-center text-xs text-stone-500 font-light">
+        <p>© 2026 Wae Watu Reef Resort · Ecosystem by TERRA. All rights reserved.</p>
+    </footer>
+
+    <!-- SCRIPT FOR FETCHING MY BOOKINGS -->
+    <script>
+        let currentUser = null;
+        let allBookings = [];
+        let currentFilter = 'all';
+
+        function getApiBase() {
+            if (window.location.hostname && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+                return `http://${window.location.hostname}:8000`;
+            }
+            return 'http://127.0.0.1:8000';
+        }
+
+        function toggleProfileDropdown() {
+            const menu = document.getElementById('profile-dropdown-menu');
+            if (menu) menu.classList.toggle('hidden');
+        }
+
+        function closeProfileDropdown() {
+            const menu = document.getElementById('profile-dropdown-menu');
+            if (menu) menu.classList.add('hidden');
+        }
+
+        function loadUserData() {
+            const stored = localStorage.getItem('waewatu_user');
+            if (stored) {
+                try {
+                    currentUser = JSON.parse(stored);
+                    if (currentUser && currentUser.name) {
+                        document.getElementById('user-display-name').innerText = currentUser.name.split(' ')[0].toUpperCase();
+                        document.getElementById('user-avatar-initial').innerText = currentUser.name.charAt(0).toUpperCase();
+                        document.getElementById('user-dropdown-name').innerText = currentUser.name;
+                        document.getElementById('user-dropdown-email').innerText = currentUser.email || '';
+                    }
+                } catch (e) { }
+            }
+        }
+
+        let resortWaNumber = '6281234567890';
+
+        async function loadResortSettings() {
+            const urls = [
+                `${getApiBase()}/api/content`,
+                'http://127.0.0.1:8000/api/content',
+                'http://localhost:8000/api/content'
+            ];
+            for (const url of urls) {
+                try {
+                    const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data && data.contents && data.contents.footer_whatsapp) {
+                            const cleaned = data.contents.footer_whatsapp.replace(/[^0-9]/g, '');
+                            if (cleaned) resortWaNumber = cleaned;
+                        }
+                        return;
+                    }
+                } catch (e) {}
+            }
+        }
+
+        async function fetchMyBookings() {
+            loadUserData();
+            await loadResortSettings();
+            const container = document.getElementById('my-bookings-container');
+
+            if (!currentUser || !currentUser.email) {
+                container.innerHTML = `
+                    <div class="text-center py-16 luxury-card rounded-3xl border border-white/10 p-8 space-y-4 max-w-lg mx-auto">
+                        <span class="text-5xl block">🔑</span>
+                        <h3 class="font-serif text-2xl text-white">Sesi Login Berakhir</h3>
+                        <p class="text-xs text-stone-400 font-light leading-relaxed">Silakan masuk ke akun Anda terlebih dahulu dari halaman utama untuk melihat riwayat reservasi vila.</p>
+                        <a href="index.html" class="inline-block bg-brand-gold hover:bg-brand-goldHover text-brand-dark px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all">
+                            Kembali ke Beranda →
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            try {
+                const userIdParam = currentUser && currentUser.id ? `&user_id=${currentUser.id}` : '';
+                const res = await fetch(`${getApiBase()}/api/auth/my-bookings?email=${encodeURIComponent(currentUser.email)}${userIdParam}`, {
+                    headers: { 'Accept': 'application/json' }
+                });
+                const data = await res.json();
+
+                if (data.status === 'success' && data.bookings) {
+                    allBookings = data.bookings;
+                    renderBookings();
+                } else {
+                    renderBookings();
+                }
+            } catch (err) {
+                container.innerHTML = `
+                    <div class="text-center py-16 luxury-card rounded-3xl border border-rose-500/20 p-8 space-y-3 max-w-md mx-auto">
+                        <span class="text-4xl block">⚠️</span>
+                        <h3 class="font-serif text-xl text-rose-300">Gagal Terhubung ke Server</h3>
+                        <p class="text-xs text-stone-400 font-light">Pastikan server API backend berjalan di ${getApiBase()}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function filterBookings(status) {
+            currentFilter = status;
+            ['all', 'confirmed', 'pending'].forEach(st => {
+                const btn = document.getElementById(`filter-btn-${st}`);
+                if (btn) {
+                    if (st === status) {
+                        btn.className = "px-4 py-2 rounded-xl bg-brand-gold text-brand-dark font-bold transition-all";
+                    } else {
+                        btn.className = "px-4 py-2 rounded-xl hover:text-white transition-all";
+                    }
+                }
+            });
+            renderBookings();
+        }
+
+        function renderBookings() {
+            const container = document.getElementById('my-bookings-container');
+            const filtered = currentFilter === 'all'
+                ? allBookings
+                : allBookings.filter(b => b.status === currentFilter);
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-16 luxury-card rounded-3xl border border-white/10 p-8 space-y-4 max-w-md mx-auto">
+                        <span class="text-5xl block">🏝️</span>
+                        <h3 class="font-serif text-2xl text-white">Belum Ada Reservasi</h3>
+                        <p class="text-xs text-stone-400 font-light leading-relaxed">
+                            ${currentFilter === 'all'
+                        ? 'Anda belum memiliki riwayat reservasi vila. Pesan kamar vila overwater impian Anda sekarang!'
+                        : `Tidak ada reservasi dengan status "${currentFilter}".`}
+                        </p>
+                        <a href="index.html#the-villa" class="inline-block bg-brand-gold hover:bg-brand-goldHover text-brand-dark px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all">
+                            Pesan Vila Sekarang →
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filtered.map(b => {
+                const formattedPrice = 'Rp ' + parseInt(b.total_price).toLocaleString('id-ID');
+                const checkInFormatted = new Date(b.check_in).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+                const checkOutFormatted = new Date(b.check_out).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
+                const statusBadge = b.status === 'confirmed'
+                    ? '<span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">Terkonfirmasi</span>'
+                    : (b.status === 'pending'
+                        ? '<span class="bg-amber-500/20 text-amber-300 border border-amber-500/40 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">Menunggu Konfirmasi</span>'
+                        : '<span class="bg-rose-500/20 text-rose-300 border border-rose-500/40 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">Dibatalkan</span>');
+
+                const villaImg = (b.villa && b.villa.image_url)
+                    ? b.villa.image_url
+                    : 'https://images.unsplash.com/photo-1512100356356-de1b84283e18?auto=format&fit=crop&w=1200&q=80';
+
+                return `
+                    <div class="luxury-card border border-white/10 rounded-3xl p-6 md:p-8 space-y-6 hover:border-brand-gold/40 transition-all">
+                        <!-- Card Header -->
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-5 border-b border-white/10">
+                            <div class="space-y-1">
+                                <span class="text-[10px] text-stone-400 uppercase tracking-widest block font-sans">KODE BOOKING TAMU</span>
+                                <span class="font-mono text-lg font-bold text-brand-gold tracking-wider">${b.booking_code}</span>
+                            </div>
+                            <div>
+                                ${statusBadge}
+                            </div>
+                        </div>
+
+                        <!-- Card Content Grid -->
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                            <!-- Left Villa Image -->
+                            <div class="lg:col-span-4 aspect-[4/3] rounded-2xl overflow-hidden bg-stone-800">
+                                <img src="${villaImg}" alt="${b.villa ? b.villa.name : 'Villa'}" class="w-full h-full object-cover">
+                            </div>
+
+                            <!-- Right Villa Specs & Dates -->
+                            <div class="lg:col-span-8 space-y-5">
+                                <div>
+                                    <span class="text-[9px] tracking-[0.25em] text-brand-gold font-semibold uppercase">OVERWATER VILLA</span>
+                                    <h3 class="font-serif text-2xl md:text-3xl text-white font-normal mt-0.5">${b.villa ? b.villa.name : 'The Reef Villa'}</h3>
+                                </div>
+
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs bg-white/5 border border-white/10 rounded-2xl p-4 text-stone-300">
+                                    <div>
+                                        <span class="block text-[9px] uppercase tracking-wider text-stone-400">Nama Tamu Menginap</span>
+                                        <span class="font-semibold text-white mt-1 block truncate">${b.guest_name || 'Tamu Wae Watu'}</span>
+                                    </div>
+                                    <div>
+                                        <span class="block text-[9px] uppercase tracking-wider text-stone-400">Jadwal Check-in</span>
+                                        <span class="font-semibold text-white mt-1 block">${checkInFormatted}</span>
+                                    </div>
+                                    <div>
+                                        <span class="block text-[9px] uppercase tracking-wider text-stone-400">Jadwal Check-out</span>
+                                        <span class="font-semibold text-white mt-1 block">${checkOutFormatted}</span>
+                                    </div>
+                                    <div>
+                                        <span class="block text-[9px] uppercase tracking-wider text-stone-400">Kapasitas Tamu</span>
+                                        <span class="font-semibold text-white mt-1 block">${b.guests} Tamu</span>
+                                    </div>
+                                </div>
+
+                                ${b.special_notes ? `
+                                    <div class="text-xs bg-stone-900/60 border border-white/5 rounded-xl p-3 text-stone-400">
+                                        <span class="font-semibold text-stone-200 block text-[10px] uppercase tracking-wider mb-0.5">Catatan Khusus Tamu:</span>
+                                        "${b.special_notes}"
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+
+                        <!-- Card Footer Price & Action -->
+                        <div class="flex flex-col sm:flex-row justify-between items-center pt-5 border-t border-white/10 gap-4">
+                            <div>
+                                <span class="text-[10px] text-stone-400 uppercase tracking-widest block">TOTAL HARI & BIAYA</span>
+                                <span class="font-serif text-2xl font-bold text-brand-gold">${formattedPrice}</span>
+                            </div>
+
+                            <div class="flex items-center space-x-3 w-full sm:w-auto">
+                                <button onclick="window.print()" class="flex-1 sm:flex-none border border-white/20 hover:border-white text-white px-5 py-2.5 rounded-xl text-xs font-semibold uppercase tracking-wider transition-all">
+                                    🖨️ Cetak Ringkasan
+                                </button>
+                                <a href="https://wa.me/${resortWaNumber}?text=Halo%20Wae%20Watu,%20saya%20ingin%20tanya%20mengenai%20booking%20kode%20${b.booking_code}" 
+                                   target="_blank" 
+                                   class="flex-1 sm:flex-none bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2.5 rounded-xl text-xs font-semibold uppercase tracking-wider transition-all text-center">
+                                    💬 Bantuan WA
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function handleUserLogout() {
+            localStorage.removeItem('waewatu_user');
+            window.location.href = 'index.html';
+        }
+
+        window.addEventListener('click', function (e) {
+            const authBar = document.getElementById('user-header-auth');
+            if (authBar && !authBar.contains(e.target)) {
+                closeProfileDropdown();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', fetchMyBookings);
+    </script>
+</body>
+
+</html>

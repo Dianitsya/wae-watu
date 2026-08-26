@@ -141,6 +141,9 @@ class DatabaseSeeder extends Seeder
             'footer_phone' => '+62 385 892 104',
             'footer_whatsapp' => '+62 812 3456 7890',
             'footer_email' => 'reservations@waewatu.com',
+            'tax_enabled' => '0',
+            'tax_percentage' => '10',
+            'tax_label' => 'Pajak & Layanan',
         ];
 
         foreach ($contents as $key => $val) {

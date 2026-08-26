@@ -6,7 +6,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 
 class UserAuthController extends Controller
 {
@@ -49,7 +48,9 @@ class UserAuthController extends Controller
         ]);
 
         if (Auth::attempt(['email' => strtolower($credentials['email']), 'password' => $credentials['password']])) {
-            $request->session()->regenerate();
+            if ($request->hasSession()) {
+                $request->session()->regenerate();
+            }
             $user = Auth::user();
 
             return response()->json([
@@ -96,12 +97,54 @@ class UserAuthController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        if ($request->hasSession()) {
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
 
         return response()->json([
             'status' => 'success',
             'message' => 'Anda telah keluar (logout).'
+        ]);
+    }
+
+    public function myBookings(Request $request)
+    {
+        $email = $request->query('email');
+        $userId = $request->query('user_id');
+
+        if (!$email && !$userId && Auth::check()) {
+            $email = Auth::user()->email;
+            $userId = Auth::id();
+        }
+
+        if (!$email && !$userId) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Email atau User ID tamu diperlukan.'
+            ], 400);
+        }
+
+        $cleanEmail = $email ? strtolower(trim($email)) : null;
+
+        $bookings = \App\Models\Booking::with('villa')
+            ->where(function($query) use ($cleanEmail, $userId) {
+                if ($cleanEmail) {
+                    $query->whereRaw('LOWER(guest_email) = ?', [$cleanEmail]);
+                }
+                if ($userId) {
+                    $query->orWhere('user_id', $userId);
+                }
+                if (Auth::check()) {
+                    $query->orWhere('user_id', Auth::id());
+                }
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'bookings' => $bookings
         ]);
     }
 }

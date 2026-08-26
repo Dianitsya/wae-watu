@@ -46,6 +46,7 @@ class BookingController extends Controller
             'guest_email' => 'required|email|max:255',
             'guest_phone' => 'required|string|max:50',
             'special_notes' => 'nullable|string',
+            'user_id' => 'nullable|integer',
         ]);
 
         $villa = Villa::findOrFail($validated['villa_id']);
@@ -59,7 +60,8 @@ class BookingController extends Controller
         // Generate unique booking code e.g. WW-2026-8942
         $bookingCode = 'WW-' . date('Y') . '-' . strtoupper(Str::random(4));
 
-        $userId = \Illuminate\Support\Facades\Auth::check() ? \Illuminate\Support\Facades\Auth::id() : null;
+        $userId = $request->input('user_id') ?: (\Illuminate\Support\Facades\Auth::check() ? \Illuminate\Support\Facades\Auth::id() : null);
+        $cleanEmail = strtolower(trim($validated['guest_email']));
 
         $booking = Booking::create([
             'booking_code' => $bookingCode,
@@ -70,7 +72,7 @@ class BookingController extends Controller
             'guests' => $validated['guests'],
             'total_price' => $totalPrice,
             'guest_name' => $validated['guest_name'],
-            'guest_email' => $validated['guest_email'],
+            'guest_email' => $cleanEmail,
             'guest_phone' => $validated['guest_phone'],
             'special_notes' => $validated['special_notes'] ?? null,
             'status' => 'pending',

@@ -73,15 +73,14 @@
             transform: scale(1.03);
         }
 
-        /* Modal custom scrollbar cleanly inset inside rounded container */
         .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
+            height: 6px;
         }
 
         .custom-scrollbar::-webkit-scrollbar-track {
-            background: transparent;
-            margin-top: 24px;
-            margin-bottom: 24px;
+            background: rgba(0, 0, 0, 0.03);
+            border-radius: 9999px;
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb {
@@ -90,7 +89,7 @@
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #B59555;
+            background: #164E63;
         }
     </style>
 </head>
@@ -98,24 +97,24 @@
 <body class="antialiased selection:bg-brand-gold selection:text-brand-darker">
 
     <!-- HEADER / NAVIGATION BAR -->
-    <header class="fixed top-0 left-0 w-full z-50 bg-[#0A1826] border-b border-white/5">
-        <div class="max-w-[1400px] mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
+    <header class="fixed top-0 left-0 w-full z-50 bg-[#0A1826]/95 backdrop-blur-md border-b border-white/5">
+        <div class="max-w-[1500px] mx-auto px-4 md:px-8 xl:px-12 h-20 flex items-center justify-between">
             <!-- Brand Logo with Terra Emblem -->
-            <a href="#" class="flex items-center space-x-3 group">
-                <img src="terra-logo.png" alt="Terra Emblem" class="h-9 w-auto object-contain mix-blend-lighten">
+            <a href="#" class="flex items-center space-x-2.5 md:space-x-3 group shrink-0">
+                <img src="terra-logo.png" alt="Terra Emblem" class="h-8 md:h-9 w-auto object-contain mix-blend-lighten">
                 <div class="flex flex-col text-left">
                     <span
-                        class="font-serif text-lg md:text-xl tracking-[0.25em] text-white uppercase font-normal leading-tight">WAE
+                        class="font-serif text-base md:text-xl tracking-[0.2em] md:tracking-[0.25em] text-white uppercase font-normal leading-tight">WAE
                         WATU</span>
                     <span
-                        class="text-[8px] md:text-[9px] tracking-[0.3em] text-gray-400 uppercase font-sans font-light">REEF
+                        class="text-[7px] md:text-[9px] tracking-[0.25em] md:tracking-[0.3em] text-gray-400 uppercase font-sans font-light">REEF
                         RESORT</span>
                 </div>
             </a>
 
             <!-- Nav Links -->
             <nav
-                class="hidden lg:flex items-center space-x-7 text-[10px] tracking-[0.25em] font-medium text-gray-300 uppercase">
+                class="hidden lg:flex items-center space-x-4 xl:space-x-7 text-[9px] xl:text-[10px] tracking-[0.2em] xl:tracking-[0.25em] font-medium text-gray-300 uppercase">
                 <a href="#experiences" class="hover:text-brand-gold transition-colors">EXPERIENCES</a>
                 <a href="#dining" class="hover:text-brand-gold transition-colors">DINING</a>
                 <a href="#reef" class="hover:text-brand-gold transition-colors">REEF</a>
@@ -125,20 +124,62 @@
                 <a href="#contact" class="hover:text-brand-gold transition-colors">CONTACT</a>
             </nav>
 
-            <!-- Book Now & User Auth Buttons -->
-            <div class="flex items-center space-x-3">
-                <div id="user-header-auth" class="hidden items-center space-x-2 text-[10px] tracking-wider text-stone-300">
-                    <span id="user-display-name" class="font-semibold text-brand-gold">👤 TAMU</span>
-                    <button onclick="handleUserLogout()" class="hover:text-rose-400 underline text-[9px] uppercase">LOGOUT</button>
-                </div>
-                <button id="user-login-btn" onclick="openUserAuthModal()"
-                    class="bg-white/10 hover:bg-white/20 text-white px-4 py-2.5 text-[10px] font-semibold tracking-[0.2em] uppercase transition-all rounded-lg border border-white/20">
-                    🔑 MASUK / DAFTAR
-                </button>
+            <!-- Right Controls: Book Now & Far-Right User Profile Dropdown Banner -->
+            <div class="flex items-center space-x-3 md:space-x-4 shrink-0">
                 <button onclick="handleBookNowClick()"
-                    class="inline-block bg-brand-gold hover:bg-brand-goldHover text-brand-darker px-7 py-3 text-[10px] font-semibold tracking-[0.22em] uppercase transition-all shadow-md">
+                    class="inline-block bg-brand-gold hover:bg-brand-goldHover text-brand-darker px-5 xl:px-7 py-2.5 xl:py-3 text-[9px] xl:text-[10px] font-semibold tracking-[0.2em] uppercase transition-all shadow-md">
                     BOOK NOW
                 </button>
+
+                <!-- Guest Login Button (Shown when not logged in) -->
+                <button id="user-login-btn" onclick="openUserAuthModal()"
+                    class="text-stone-300 hover:text-brand-gold text-[9px] xl:text-[10px] font-semibold tracking-[0.2em] uppercase transition-all px-3 py-2 rounded-xl border border-white/10 hover:border-brand-gold/40 bg-white/5 flex items-center space-x-1.5">
+                    <span>🔑 MASUK / DAFTAR</span>
+                </button>
+
+                <!-- Profile Dropdown Banner (Shown at Far Right when logged in) -->
+                <div id="user-header-auth" class="relative hidden">
+                    <button onclick="toggleProfileDropdown()"
+                        class="flex items-center space-x-2.5 bg-stone-900/90 hover:bg-stone-800 text-stone-200 border border-brand-gold/50 hover:border-brand-gold px-3.5 py-1.5 rounded-full shadow-lg transition-all cursor-pointer">
+                        <div id="user-avatar-initial"
+                            class="w-6 h-6 rounded-full bg-brand-gold text-brand-dark font-bold text-[11px] flex items-center justify-center font-serif">
+                            C
+                        </div>
+                        <span id="user-display-name"
+                            class="font-sans text-[10px] font-bold text-brand-gold uppercase tracking-wider">
+                            COBA
+                        </span>
+                        <svg class="w-3 h-3 text-brand-gold transition-transform duration-200" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </button>
+
+                    <!-- Dropdown Floating Menu -->
+                    <div id="profile-dropdown-menu"
+                        class="hidden absolute right-0 mt-2 w-56 bg-[#0E2033] border border-brand-gold/30 rounded-2xl shadow-2xl p-3 z-50 space-y-2 backdrop-blur-md">
+                        <div class="px-3 py-2 border-b border-white/10 space-y-0.5">
+                            <p id="user-dropdown-name" class="text-xs font-semibold text-white tracking-wide">Coba Guest
+                            </p>
+                            <p id="user-dropdown-email" class="text-[10px] text-stone-400 font-mono truncate">
+                                coba@gmail.com</p>
+                        </div>
+
+                        <div class="space-y-1 text-xs">
+                            <a href="my-bookings.html"
+                                class="flex items-center space-x-2 px-3 py-2 rounded-xl text-stone-300 hover:bg-white/10 hover:text-white transition-colors cursor-pointer">
+                                <span>🏨</span>
+                                <span>Reservasi Saya</span>
+                            </a>
+                            <button onclick="handleUserLogout(); closeProfileDropdown();"
+                                class="w-full flex items-center space-x-2 px-3 py-2 rounded-xl text-rose-400 hover:bg-rose-900/40 hover:text-rose-200 transition-colors text-left font-semibold cursor-pointer">
+                                <span>🚪</span>
+                                <span>Keluar (Logout)</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -171,7 +212,7 @@
             <div class="flex flex-col items-center mb-6">
                 <img src="terra-logo.png" alt="Terra Ecosystem Emblem"
                     class="h-16 md:h-20 w-auto mb-2 opacity-95 drop-shadow-md mix-blend-lighten">
-                <span class="text-[9px] md:text-[10px] tracking-[0.4em] text-brand-gold uppercase font-medium">BY TERRA
+                <span id="hero-badge" class="text-[9px] md:text-[10px] tracking-[0.4em] text-brand-gold uppercase font-medium">BY TERRA
                     ECOSYSTEM</span>
             </div>
 
@@ -187,7 +228,7 @@
             </h1>
 
             <!-- Subheading -->
-            <p
+            <p id="hero-subtitle"
                 class="text-[10px] md:text-[11px] tracking-[0.3em] text-brand-textDark uppercase font-medium max-w-xl mb-12 leading-relaxed drop-shadow-sm">
                 A PRIVATE REEF SANCTUARY WHERE LUXURY MEETS NATURE
             </p>
@@ -451,7 +492,7 @@
             </div>
 
             <!-- Bottom Dining 4 Image Grid (All Featuring Ocean / Sea Views) -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-16 items-start">
+            <div id="dining-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-16 items-start">
                 <!-- Item 1: A TABLE FOR TWO -->
                 <div class="group flex flex-col">
                     <div class="img-container aspect-[4/5] mb-3 bg-navy-900">
@@ -563,7 +604,7 @@
             </div>
 
             <!-- 3 Underwater Reef Image Cards (Matching User's Reference Screenshot) -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-16 items-start">
+            <div id="conservation-cards-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-16 items-start">
                 <!-- Card 1: THE CORAL NURSERY -->
                 <div class="group flex flex-col">
                     <div class="img-container aspect-[3/4] mb-4 bg-brand-dark relative">
@@ -824,9 +865,13 @@
                 </div>
 
                 <!-- Right Description & Specs Table -->
+                <div class="lg:col-span-6 space-y-7">
                     <div>
                         <h2 class="font-serif text-4xl md:text-5xl text-brand-textDark font-normal">The Reef Villa</h2>
-                        <span class="villa-price-display font-serif italic text-2xl text-brand-gold font-bold block mt-1">Rp 15.000.000 <span class="font-sans text-xs not-italic text-stone-500 font-normal">/ malam</span></span>
+                        <span
+                            class="villa-price-display font-serif italic text-2xl text-brand-gold font-bold block mt-1">Rp
+                            15.000.000 <span class="font-sans text-xs not-italic text-stone-500 font-normal">/
+                                malam</span></span>
                     </div>
 
                     <p class="text-xs md:text-[13px] text-brand-textMuted font-light leading-relaxed max-w-lg">
@@ -858,40 +903,41 @@
 
                     <!-- Reserve Button -->
                     <div class="pt-2">
-                        <button onclick="openBookingModal(1)"
+                        <button onclick="handleBookNowClick()"
                             class="inline-block border border-brand-textDark/60 text-brand-textDark hover:bg-brand-textDark hover:text-white px-8 py-3 text-[10px] tracking-[0.25em] font-medium uppercase transition-all duration-300">
                             RESERVE A VILLA
                         </button>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Bottom Block: Two Side-by-Side Cards (INSIDE THE VILLA & THE PRIVATE SEA DECK) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
-                <!-- Card 1: INSIDE THE VILLA -->
-                <div class="flex flex-col">
-                    <div class="img-container aspect-[4/3] mb-3 bg-stone-200">
-                        <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1000&q=80"
-                            alt="Inside The Villa" class="w-full h-full object-cover">
-                    </div>
-                    <p
-                        class="text-[9px] md:text-[10px] tracking-[0.25em] text-brand-textMuted uppercase font-medium text-left">
-                        INSIDE THE VILLA
-                    </p>
+        <!-- Bottom Block: Two Side-by-Side Cards (INSIDE THE VILLA & THE PRIVATE SEA DECK) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+            <!-- Card 1: INSIDE THE VILLA -->
+            <div class="flex flex-col">
+                <div class="img-container aspect-[4/3] mb-3 bg-stone-200">
+                    <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1000&q=80"
+                        alt="Inside The Villa" class="w-full h-full object-cover">
                 </div>
-
-                <!-- Card 2: THE PRIVATE SEA DECK -->
-                <div class="flex flex-col">
-                    <div class="img-container aspect-[4/3] mb-3 bg-stone-200">
-                        <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1000&q=80"
-                            alt="The Private Sea Deck" class="w-full h-full object-cover">
-                    </div>
-                    <p
-                        class="text-[9px] md:text-[10px] tracking-[0.25em] text-brand-textMuted uppercase font-medium text-left">
-                        THE PRIVATE SEA DECK
-                    </p>
-                </div>
+                <p
+                    class="text-[9px] md:text-[10px] tracking-[0.25em] text-brand-textMuted uppercase font-medium text-left">
+                    INSIDE THE VILLA
+                </p>
             </div>
+
+            <!-- Card 2: THE PRIVATE SEA DECK -->
+            <div class="flex flex-col">
+                <div class="img-container aspect-[4/3] mb-3 bg-stone-200">
+                    <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1000&q=80"
+                        alt="The Private Sea Deck" class="w-full h-full object-cover">
+                </div>
+                <p
+                    class="text-[9px] md:text-[10px] tracking-[0.25em] text-brand-textMuted uppercase font-medium text-left">
+                    THE PRIVATE SEA DECK
+                </p>
+            </div>
+        </div>
 
         </div>
     </section>
@@ -1012,9 +1058,9 @@
 
                     <!-- Contact Info -->
                     <div class="space-y-3 text-[11px] tracking-[0.2em] font-medium text-stone-200 uppercase">
-                        <p><a href="mailto:RES@WAEWATU.COM"
+                        <p><a id="footer-email-link" href="mailto:RES@WAEWATU.COM"
                                 class="hover:text-brand-gold transition-colors">RES@WAEWATU.COM</a></p>
-                        <p><a href="tel:+62385898710" class="hover:text-brand-gold transition-colors">+62 385 898710</a>
+                        <p><a id="footer-phone-link" href="tel:+62385898710" class="hover:text-brand-gold transition-colors">+62 385 898710</a>
                         </p>
                         <p class="text-brand-textLightMuted text-[10px]">Labuan Bajo Reception · Flores, NTT, Indonesia
                         </p>
@@ -1025,7 +1071,7 @@
                         class="flex items-center space-x-6 text-[9px] tracking-[0.25em] text-brand-textLightMuted uppercase font-medium">
                         <a href="#" class="hover:text-brand-gold transition-colors">INSTAGRAM</a>
                         <span class="text-white/20">·</span>
-                        <a href="#" class="hover:text-brand-gold transition-colors">WHATSAPP</a>
+                        <a id="footer-whatsapp-link" href="#" class="hover:text-brand-gold transition-colors">WHATSAPP</a>
                         <span class="text-white/20">·</span>
                         <a href="#" class="hover:text-brand-gold transition-colors">JOURNAL</a>
                     </div>
@@ -1066,7 +1112,8 @@
 
 
     <!-- USER LOGIN / REGISTER MODAL POPUP -->
-    <div id="user-auth-modal" class="fixed inset-0 z-[110] bg-black/75 backdrop-blur-md hidden items-center justify-center p-4">
+    <div id="user-auth-modal"
+        class="fixed inset-0 z-[110] bg-black/75 backdrop-blur-md hidden items-center justify-center p-4">
         <div class="bg-white text-gray-900 rounded-3xl shadow-2xl max-w-md w-full p-8 relative border border-stone-200">
             <button onclick="closeUserAuthModal()"
                 class="absolute top-6 right-6 text-gray-400 hover:text-gray-900 transition-colors p-2 text-xl font-bold leading-none">
@@ -1076,28 +1123,36 @@
             <!-- Header -->
             <div class="text-center mb-6 space-y-1">
                 <h3 class="font-serif text-2xl text-brand-dark font-medium">AKUN TAMU WAE WATU</h3>
-                <p class="text-[11px] text-gray-500 tracking-wide">Silakan masuk atau mendaftar akun terlebih dahulu untuk melakukan reservasi vila.</p>
+                <p class="text-[11px] text-gray-500 tracking-wide">Silakan masuk atau mendaftar akun terlebih dahulu
+                    untuk melakukan reservasi vila.</p>
             </div>
 
             <!-- Tabs Switcher -->
             <div class="flex border-b border-stone-200 mb-6 text-xs font-semibold uppercase tracking-wider text-center">
-                <button id="tab-login-btn" onclick="switchAuthTab('login')" class="w-1/2 py-2.5 border-b-2 border-brand-dark text-brand-dark font-bold">MASUK (LOGIN)</button>
-                <button id="tab-register-btn" onclick="switchAuthTab('register')" class="w-1/2 py-2.5 border-b-2 border-transparent text-gray-400 hover:text-gray-700">DAFTAR (REGISTER)</button>
+                <button id="tab-login-btn" onclick="switchAuthTab('login')"
+                    class="w-1/2 py-2.5 border-b-2 border-brand-dark text-brand-dark font-bold">MASUK (LOGIN)</button>
+                <button id="tab-register-btn" onclick="switchAuthTab('register')"
+                    class="w-1/2 py-2.5 border-b-2 border-transparent text-gray-400 hover:text-gray-700">DAFTAR
+                    (REGISTER)</button>
             </div>
 
             <!-- Login Form -->
             <form id="user-login-form" onsubmit="submitUserLogin(event)" class="space-y-4">
                 <div>
                     <label class="block text-[10px] font-semibold text-gray-600 uppercase mb-1">Email Anda</label>
-                    <input type="email" id="login-email" required placeholder="tamu@waewatu.com" value="guest@waewatu.com"
+                    <input type="email" id="login-email" required placeholder="tamu@waewatu.com"
+                        value="guest@waewatu.com"
                         class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2.5 text-xs text-gray-900 focus:ring-2 focus:ring-brand-dark">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-semibold text-gray-600 uppercase mb-1">Kata Sandi (Password)</label>
+                    <label class="block text-[10px] font-semibold text-gray-600 uppercase mb-1">Kata Sandi
+                        (Password)</label>
                     <input type="password" id="login-password" required placeholder="••••••••" value="guestpassword123"
                         class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2.5 text-xs text-gray-900 focus:ring-2 focus:ring-brand-dark">
                 </div>
-                <div id="login-error" class="hidden text-[11px] font-semibold text-rose-600 bg-rose-50 p-2.5 rounded-xl text-center"></div>
+                <div id="login-error"
+                    class="hidden text-[11px] font-semibold text-rose-600 bg-rose-50 p-2.5 rounded-xl text-center">
+                </div>
                 <button type="submit"
                     class="w-full bg-[#164E63] hover:bg-[#0F3A4A] text-white py-3 rounded-full text-xs font-bold tracking-wider uppercase transition-all shadow-md">
                     MASUK SEKARANG
@@ -1117,16 +1172,20 @@
                         class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2 text-xs text-gray-900">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-semibold text-gray-600 uppercase mb-1">Nomor Telepon / WhatsApp</label>
+                    <label class="block text-[10px] font-semibold text-gray-600 uppercase mb-1">Nomor Telepon /
+                        WhatsApp</label>
                     <input type="text" id="reg-phone" placeholder="+62 812 3456 7890"
                         class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2 text-xs text-gray-900">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-semibold text-gray-600 uppercase mb-1">Kata Sandi (Min 6 Karakter)</label>
+                    <label class="block text-[10px] font-semibold text-gray-600 uppercase mb-1">Kata Sandi (Min 6
+                        Karakter)</label>
                     <input type="password" id="reg-password" required placeholder="••••••••"
                         class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2 text-xs text-gray-900">
                 </div>
-                <div id="register-error" class="hidden text-[11px] font-semibold text-rose-600 bg-rose-50 p-2.5 rounded-xl text-center"></div>
+                <div id="register-error"
+                    class="hidden text-[11px] font-semibold text-rose-600 bg-rose-50 p-2.5 rounded-xl text-center">
+                </div>
                 <button type="submit"
                     class="w-full bg-[#164E63] hover:bg-[#0F3A4A] text-white py-3 rounded-full text-xs font-bold tracking-wider uppercase transition-all shadow-md">
                     DAFTAR AKUN SEKARANG
@@ -1137,101 +1196,108 @@
 
     <!-- BOOKING MODAL POPUP (MULTI-STEP) -->
     <div id="booking-modal"
-        class="fixed inset-0 z-[100]  hidden items-center justify-center p-3 md:p-6 transition-all duration-300">
+        class="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md hidden items-center justify-center p-3 md:p-6 transition-all duration-300">
 
         <!-- MAIN FORM MODAL CONTAINER WITH CLEAN ROUNDED CORNERS & INSET SCROLLBAR -->
         <div id="modal-form-card"
-            class="bg-white text-gray-900 rounded-3xl shadow-2xl max-w-5xl w-full relative max-h-[90vh] overflow-hidden border border-stone-200 flex flex-col">
+            class="bg-white text-gray-900 rounded-3xl shadow-2xl max-w-5xl w-full relative h-[88vh] max-h-[820px] overflow-hidden border border-stone-200 flex flex-col z-10">
 
             <!-- Close Button X (Fixed at top right) -->
             <button onclick="closeBookingModal()"
-                class="absolute top-5 right-5 text-gray-900 hover:text-red-500 transition-colors p-2 text-2xl font-bold leading-none z-30">
+                class="absolute top-5 right-5 text-stone-600 hover:text-red-500 transition-colors p-2 text-2xl font-bold leading-none z-30 cursor-pointer">
                 &#10005;
             </button>
 
-            <!-- Scrollable Inner Body -->
-            <div class="overflow-y-auto p-6 md:p-8 custom-scrollbar max-h-[90vh] rounded-3xl">
+            <!-- Fixed Header Bar (Sticky at Top) -->
+            <div
+                class="px-8 md:px-12 pt-6 pb-5 border-b border-stone-200 flex-none bg-stone-50/95 backdrop-blur-md rounded-t-3xl z-20 shadow-xs">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pr-10">
+                    <div>
+                        <span class="text-[10px] tracking-[0.2em] uppercase font-bold text-brand-gold">RESERVASI WAE
+                            WATU</span>
+                        <h2 class="font-serif text-2xl md:text-3xl text-brand-dark font-medium leading-tight">
+                            Reservation Detail</h2>
+                    </div>
 
-                <!-- Modal Title & Progress Bar -->
-                <div class="mb-6 pr-10">
-                    <h2 class="font-serif text-2xl md:text-3xl text-brand-dark font-medium mb-4">Reservation Detail</h2>
-
-                    <!-- 3 Step Progress Bar -->
-                    <div class="relative flex items-center justify-between max-w-2xl mx-auto pt-2">
-                        <div class="absolute top-1/2 left-0 w-full h-[2px] bg-gray-200 -z-0"></div>
-                        <div id="progress-bar-line"
-                            class="absolute top-1/2 left-0 h-[3px] bg-brand-dark transition-all duration-500 -z-0 w-1/3">
-                        </div>
-
-                        <!-- Step 1 Indicator -->
+                    <!-- 3 Step Nav Tabs -->
+                    <div class="flex items-center space-x-1 bg-stone-200/80 p-1 rounded-2xl border border-stone-300">
                         <button onclick="goToStep(1)" id="step-tab-1"
-                            class="flex flex-col items-center bg-white px-3 z-10 focus:outline-none">
-                            <span class="text-[11px] font-bold text-brand-dark tracking-tight">1. Guest & Stay
-                                Info</span>
+                            class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer bg-brand-dark text-white shadow-sm">
+                            1. Guest & Stay Info
                         </button>
-
-                        <!-- Step 2 Indicator -->
                         <button onclick="goToStep(2)" id="step-tab-2"
-                            class="flex flex-col items-center bg-white px-3 z-10 focus:outline-none">
-                            <span class="text-[11px] font-medium text-gray-400 tracking-tight">2. Extras &
-                                Requests</span>
+                            class="px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer text-stone-600 hover:text-stone-900">
+                            2. Extras & Requests
                         </button>
-
-                        <!-- Step 3 Indicator -->
                         <button onclick="goToStep(3)" id="step-tab-3"
-                            class="flex flex-col items-center bg-white px-3 z-10 focus:outline-none">
-                            <span class="text-[11px] font-medium text-gray-400 tracking-tight">Step 3: Payment</span>
+                            class="px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer text-stone-600 hover:text-stone-900">
+                            3. Payment
                         </button>
                     </div>
                 </div>
+            </div>
 
+            <!-- Scrollable Inner Body (Smooth Flex Scroll with Generous Padding) -->
+            <div class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden px-8 md:px-12 py-8 custom-scrollbar rounded-b-3xl"
+                style="overscroll-behavior-y: contain; scrollbar-gutter: stable;">
                 <!-- STEP 1 CONTENT -->
-                <div id="step-1-content" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <div id="step-1-content" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pt-2 pb-6">
                     <!-- Column 1: Contact Info -->
                     <div class="lg:col-span-4 space-y-4">
                         <h3 class="font-serif text-lg font-medium text-brand-dark mb-2">Contact Information</h3>
 
                         <div>
                             <label class="block text-[11px] font-medium text-gray-700 mb-1">Full Name (as on ID)</label>
-                            <input type="text" placeholder="John Doe"
-                                class="w-full bg-[#D8C4A0] text-gray-900 px-4 py-2.5 rounded-full border border-[#C5B08D] focus:outline-none focus:ring-2 focus:ring-brand-gold text-xs font-medium">
+                            <input type="text" id="booking-guest-name" placeholder="John Doe"
+                                class="w-full bg-stone-100 text-stone-900 px-4 py-3 rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-brand-gold text-xs font-semibold shadow-xs transition-all">
                         </div>
 
                         <div>
                             <label class="block text-[11px] font-medium text-gray-700 mb-1">WhatsApp/Phone
                                 Number</label>
-                            <input type="text" placeholder="+62 812 3456 7890"
-                                class="w-full bg-[#D8C4A0] text-gray-900 px-4 py-2.5 rounded-full border border-[#C5B08D] focus:outline-none focus:ring-2 focus:ring-brand-gold text-xs font-medium">
+                            <input type="text" id="booking-guest-phone" placeholder="+62 812 3456 7890"
+                                class="w-full bg-stone-100 text-stone-900 px-4 py-3 rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-brand-gold text-xs font-semibold shadow-xs transition-all">
                         </div>
 
                         <div>
                             <label class="block text-[11px] font-medium text-gray-700 mb-1">Email Address</label>
-                            <input type="email" placeholder="guest@example.com"
-                                class="w-full bg-[#D8C4A0] text-gray-900 px-4 py-2.5 rounded-full border border-[#C5B08D] focus:outline-none focus:ring-2 focus:ring-brand-gold text-xs font-medium">
+                            <input type="email" id="booking-guest-email" placeholder="guest@example.com"
+                                class="w-full bg-stone-100 text-stone-900 px-4 py-3 rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-brand-gold text-xs font-semibold shadow-xs transition-all">
                         </div>
 
                         <div>
-                            <label class="block text-[11px] font-medium text-gray-700 mb-1">Check-in & Check-out
+                            <label class="block text-[11px] font-semibold text-gray-700 mb-1">Check-in & Check-out
                                 Date</label>
-                            <div class="relative">
-                                <input type="text" value="Mar 15, 2025 - Mar 17, 2025 (2 Nights)" readonly
-                                    class="w-full bg-white text-gray-900 px-4 py-2.5 rounded-full border border-gray-800 text-xs font-semibold pr-8 shadow-sm">
-                                <span class="absolute right-3 top-2.5 text-gray-600 text-xs">📅</span>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <span
+                                        class="block text-[9px] uppercase text-gray-500 font-semibold mb-0.5">Check-in</span>
+                                    <input type="date" id="booking-check-in" onchange="calculateNightsAndTotal()"
+                                        class="w-full bg-stone-100 text-stone-900 px-3 py-2.5 rounded-xl border border-stone-300 text-xs font-semibold shadow-xs focus:ring-2 focus:ring-brand-gold">
+                                </div>
+                                <div>
+                                    <span
+                                        class="block text-[9px] uppercase text-gray-500 font-semibold mb-0.5">Check-out</span>
+                                    <input type="date" id="booking-check-out" onchange="calculateNightsAndTotal()"
+                                        class="w-full bg-stone-100 text-stone-900 px-3 py-2.5 rounded-xl border border-stone-300 text-xs font-semibold shadow-xs focus:ring-2 focus:ring-brand-gold">
+                                </div>
                             </div>
+                            <span id="booking-nights-badge" class="text-[10px] font-medium text-stone-500 mt-1 block">📅
+                                Silakan pilih tanggal check-in & check-out</span>
                         </div>
 
                         <div>
                             <label class="block text-[11px] font-medium text-gray-700 mb-1">Number of Guests</label>
                             <div class="grid grid-cols-2 gap-2">
                                 <select
-                                    class="w-full bg-[#D8C4A0] text-gray-900 px-3 py-2 rounded-full border border-[#C5B08D] text-xs font-medium">
+                                    class="w-full bg-stone-100 text-stone-900 px-3 py-2.5 rounded-xl border border-stone-300 text-xs font-semibold shadow-xs">
                                     <option>👨‍💼 Adult (2 Adults)</option>
                                     <option>1 Adult</option>
                                     <option selected>2 Adults</option>
                                     <option>3 Adults</option>
                                 </select>
                                 <select
-                                    class="w-full bg-[#D8C4A0] text-gray-900 px-3 py-2 rounded-full border border-[#C5B08D] text-xs font-medium">
+                                    class="w-full bg-stone-100 text-stone-900 px-3 py-2.5 rounded-xl border border-stone-300 text-xs font-semibold shadow-xs">
                                     <option>👶 Child (1 Child)</option>
                                     <option>0 Child</option>
                                     <option selected>1 Child</option>
@@ -1244,7 +1310,7 @@
                             <label class="block text-[11px] font-medium text-gray-700 mb-1">Villa Type
                                 Preference</label>
                             <select
-                                class="w-full bg-[#D8C4A0] text-gray-900 px-4 py-2.5 rounded-full border border-[#C5B08D] text-xs font-medium">
+                                class="w-full bg-stone-100 text-stone-900 px-4 py-3 rounded-xl border border-stone-300 text-xs font-semibold shadow-xs">
                                 <option selected>The Reef Villa (Ocean View Pool Villa)</option>
                             </select>
                         </div>
@@ -1282,7 +1348,7 @@
                         <div class="pt-2">
                             <label class="block text-[11px] font-medium text-gray-700 mb-1">Special Requests or
                                 Notes</label>
-                            <textarea rows="3" placeholder="Dietary restrictions, anniversary surprise..."
+                            <textarea id="booking-step1-notes" rows="3" placeholder="Dietary restrictions, anniversary surprise..."
                                 class="w-full bg-stone-50 text-gray-900 p-3 rounded-xl border border-stone-300 text-xs font-light focus:outline-none focus:ring-2 focus:ring-brand-gold"></textarea>
                         </div>
 
@@ -1290,7 +1356,7 @@
                             <label class="block text-[11px] font-medium text-gray-700 mb-1">Bed Preference
                                 (King/Twin)</label>
                             <select
-                                class="w-full bg-[#D8C4A0] text-gray-900 px-4 py-2.5 rounded-full border border-[#C5B08D] text-xs font-medium">
+                                class="w-full bg-stone-100 text-stone-900 px-4 py-3 rounded-xl border border-stone-300 text-xs font-semibold shadow-xs">
                                 <option selected>King Size Bed</option>
                                 <option>Twin Beds</option>
                             </select>
@@ -1301,50 +1367,51 @@
                     <div class="lg:col-span-4">
                         <div
                             class="bg-[#F0F3F4] rounded-2xl p-5 border border-stone-200 shadow-sm text-gray-800 space-y-4">
-                            <h3 class="font-serif text-xl font-medium text-brand-dark">Booking Summary</h3>
+                            <h3 class="font-serif text-lg font-medium text-brand-dark">Booking Summary</h3>
 
                             <div class="aspect-[16/9] rounded-xl overflow-hidden bg-stone-300 shadow-sm">
-                                <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=80"
-                                    alt="Resort Villa" class="w-full h-full object-cover">
+                                <img src="https://images.unsplash.com/photo-1512100356356-de1b84283e18?auto=format&fit=crop&w=1200&q=80"
+                                    alt="The Reef Villa" class="summary-villa-img w-full h-full object-cover">
                             </div>
 
                             <div class="space-y-1.5 text-xs">
                                 <p><strong class="font-semibold text-gray-900">Resort:</strong> Wae Watu Reef Resort,
                                     Flores</p>
-                                <p><strong class="font-semibold text-gray-900">Villa:</strong> Ocean View Pool Villa</p>
-                                <p><strong class="font-semibold text-gray-900">Dates:</strong> Mar 15 - Mar 17, 2025 (2
-                                    Nights)</p>
-                                <p><strong class="font-semibold text-gray-900">Guests:</strong> 2 Adults</p>
+                                <p><strong class="font-semibold text-gray-900">Vila:</strong> <span
+                                        class="summary-villa-name font-bold text-brand-dark">The Reef Villa</span></p>
+                                <p><strong class="font-semibold text-gray-900">Jadwal:</strong> <span
+                                        class="summary-booking-dates">Belum Dipilih</span></p>
+                                <p><strong class="font-semibold text-gray-900">Tamu:</strong> <span
+                                        class="summary-booking-guests">2 Dewasa</span></p>
                             </div>
 
                             <hr class="border-stone-300">
 
                             <div class="space-y-1 text-xs">
-                                <p class="text-gray-700 font-semibold mb-1">Price Breakdown:</p>
+                                <p class="text-gray-700 font-semibold mb-1">Rincian Harga:</p>
                                 <div class="flex justify-between text-gray-600">
-                                    <span>Villa Rate (per night)</span>
-                                    <span>$450 x 2</span>
+                                    <span>Sewa Vila</span>
+                                    <span class="summary-rate-display">Rp 15.000.000 x 1 Malam</span>
                                 </div>
-                                <div class="flex justify-between text-gray-600">
-                                    <span>Taxes & Fees</span>
-                                    <span>$150</span>
+                                <div class="flex justify-between text-gray-600 summary-tax-row hidden">
+                                    <span class="summary-tax-label">Pajak & Layanan (10%)</span>
+                                    <span class="summary-tax-display">Rp 0</span>
                                 </div>
                             </div>
 
                             <hr class="border-stone-300">
 
                             <div>
-                                <p class="text-xs font-semibold text-gray-800">Total Payable</p>
+                                <p class="text-xs font-semibold text-gray-800">Total Biaya Pemesanan</p>
                                 <div class="flex items-baseline justify-between mt-1">
                                     <span class="text-xs text-gray-600">Total:</span>
-                                    <span class="text-2xl font-bold text-gray-900">$1,050.00</span>
+                                    <span class="text-xl font-bold text-brand-dark summary-total-display">Rp 0</span>
                                 </div>
-                                <p class="text-[9px] text-gray-500 text-right">Price is in USD</p>
                             </div>
 
                             <div class="pt-2">
                                 <button onclick="goToStep(2)"
-                                    class="w-full bg-[#164E63] hover:bg-[#0F3A4A] text-white py-3 rounded-full text-xs font-bold tracking-wider uppercase transition-all shadow-md">
+                                    class="w-full bg-[#164E63] hover:bg-[#0F3A4A] text-white py-3 rounded-full text-xs font-bold tracking-wider uppercase transition-all shadow-md cursor-pointer">
                                     CONFIRM BOOKING & PAY &rarr;
                                 </button>
                             </div>
@@ -1353,14 +1420,16 @@
                 </div>
 
                 <!-- STEP 2 CONTENT -->
-                <div id="step-2-content" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start hidden">
+                <div id="step-2-content" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pt-2 pb-6 hidden">
                     <!-- Column 1: Transfer & Preferences -->
                     <div class="lg:col-span-4 space-y-4">
+                        <h3 class="font-serif text-lg font-medium text-brand-dark mb-2">Transfer & Preferences</h3>
+
                         <div>
                             <label class="block text-[11px] font-medium text-gray-700 mb-1">Airport Transfer
                                 (Return)</label>
                             <select
-                                class="w-full bg-[#D8C4A0] text-gray-900 px-4 py-2.5 rounded-full border border-[#C5B08D] text-xs font-medium">
+                                class="w-full bg-stone-100 text-stone-900 px-4 py-3 rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-brand-gold text-xs font-semibold shadow-xs transition-all">
                                 <option selected>Select Transfer Service</option>
                                 <option>Private Car</option>
                                 <option>Shuttle Bus</option>
@@ -1369,9 +1438,10 @@
                         </div>
 
                         <div>
-                            <label class="block text-[11px] font-medium text-gray-700 mb-1">Breakfast Preference</label>
+                            <label class="block text-[11px] font-medium text-gray-700 mb-1">Breakfast
+                                Preference</label>
                             <select
-                                class="w-full bg-[#D8C4A0] text-gray-900 px-4 py-2.5 rounded-full border border-[#C5B08D] text-xs font-medium">
+                                class="w-full bg-stone-100 text-stone-900 px-4 py-3 rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-brand-gold text-xs font-semibold shadow-xs transition-all">
                                 <option selected>American Breakfast</option>
                                 <option>Indonesian Breakfast</option>
                                 <option>Healthy Start</option>
@@ -1383,7 +1453,7 @@
                             <label class="block text-[11px] font-medium text-gray-700 mb-1">Special Dietary
                                 Needs</label>
                             <select
-                                class="w-full bg-[#D8C4A0] text-gray-900 px-4 py-2.5 rounded-full border border-[#C5B08D] text-xs font-medium">
+                                class="w-full bg-stone-100 text-stone-900 px-4 py-3 rounded-xl border border-stone-300 focus:outline-none focus:ring-2 focus:ring-brand-gold text-xs font-semibold shadow-xs transition-all">
                                 <option selected>None</option>
                                 <option>Gluten-Free</option>
                                 <option>Vegetarian</option>
@@ -1397,21 +1467,22 @@
 
                     <!-- Column 2: Spa, Activities & Notes -->
                     <div class="lg:col-span-4 space-y-4">
+                        <h3 class="font-serif text-lg font-medium text-brand-dark mb-2">Spa & Activities</h3>
                         <div>
                             <label class="block text-[11px] font-medium text-gray-700 mb-2">Spa & Wellness
                                 Bookings</label>
                             <div class="space-y-2">
                                 <div
                                     class="bg-stone-50 border border-stone-300 rounded-xl p-2.5 flex items-center justify-between text-xs cursor-pointer hover:border-brand-gold">
-                                    <span>🌺 Balinese Massage (60 min) - $85</span>
+                                    <span>🌺 Balinese Massage (60 min) - Rp 850.000</span>
                                 </div>
                                 <div
                                     class="bg-stone-50 border border-stone-300 rounded-xl p-2.5 flex items-center justify-between text-xs cursor-pointer hover:border-brand-gold">
-                                    <span>🧖‍♀️ Couple's Spa Ritual (90 min) - $250</span>
+                                    <span>🧖‍♀️ Couple's Spa Ritual (90 min) - Rp 2.500.000</span>
                                 </div>
                                 <div
                                     class="bg-stone-50 border border-stone-300 rounded-xl p-2.5 flex items-center justify-between text-xs cursor-pointer hover:border-brand-gold">
-                                    <span>🧘‍♀️ Yoga Session (Private) - $110</span>
+                                    <span>🧘‍♀️ Yoga Session (Private) - Rp 1.100.000</span>
                                 </div>
                             </div>
                         </div>
@@ -1437,8 +1508,8 @@
                         <div>
                             <label class="block text-[11px] font-medium text-gray-700 mb-1">Additional Requests or
                                 Notes</label>
-                            <textarea rows="3"
-                                class="w-full bg-stone-50 text-gray-900 p-3 rounded-xl border border-stone-300 text-xs font-light">We are celebrating our anniversary. Please prepare a small surprise setup.</textarea>
+                            <textarea id="booking-special-notes" rows="3" placeholder="Tuliskan catatan atau permintaan khusus Anda di sini..."
+                                class="w-full bg-stone-50 text-gray-900 p-3 rounded-xl border border-stone-300 text-xs font-light"></textarea>
                         </div>
                     </div>
 
@@ -1446,42 +1517,47 @@
                     <div class="lg:col-span-4">
                         <div
                             class="bg-[#F0F3F4] rounded-2xl p-5 border border-stone-200 shadow-sm text-gray-800 space-y-4">
-                            <h3 class="font-serif text-xl font-medium text-brand-dark">Payment Summary</h3>
+                            <h3 class="font-serif text-lg font-medium text-brand-dark">Payment Summary</h3>
 
                             <div class="aspect-[16/9] rounded-xl overflow-hidden bg-stone-300 shadow-sm">
-                                <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=80"
-                                    alt="Resort Villa" class="w-full h-full object-cover">
+                                <img src="https://images.unsplash.com/photo-1512100356356-de1b84283e18?auto=format&fit=crop&w=1200&q=80"
+                                    alt="The Reef Villa" class="summary-villa-img w-full h-full object-cover">
                             </div>
 
                             <div class="space-y-1.5 text-xs">
-                                <p><strong class="font-semibold text-gray-900">Resort:</strong> Wae Watu Reef Resort,
-                                    Flores</p>
-                                <p><strong class="font-semibold text-gray-900">Villa:</strong> Ocean View Pool Villa</p>
-                                <p><strong class="font-semibold text-gray-900">Dates:</strong> Mar 15 - Mar 17, 2025 (2
-                                    Nights)</p>
-                                <p><strong class="font-semibold text-gray-900">Guests:</strong> 2 Adults</p>
+                                <p><strong class="font-semibold text-gray-900">Resort:</strong> Wae Watu Reef
+                                    Resort, Flores
+                                </p>
+                                <p><strong class="font-semibold text-gray-900">Vila:</strong> <span
+                                        class="summary-villa-name font-bold text-brand-dark">The Reef Villa</span>
+                                </p>
+                                <p><strong class="font-semibold text-gray-900">Jadwal:</strong> <span
+                                        class="summary-booking-dates">Belum Dipilih</span></p>
+                                <p><strong class="font-semibold text-gray-900">Tamu:</strong> <span
+                                        class="summary-booking-guests">2 Dewasa</span></p>
                             </div>
 
                             <hr class="border-stone-300">
 
                             <div class="space-y-1 text-xs">
-                                <p class="text-gray-700 font-semibold mb-1">Price Breakdown:</p>
+                                <p class="text-gray-700 font-semibold mb-1">Rincian Harga:</p>
                                 <div class="flex justify-between text-gray-600">
-                                    <span>Villa Rate (per night)</span>
-                                    <span>$450 x 2</span>
+                                    <span>Sewa Vila</span>
+                                    <span class="summary-rate-display">Rp 15.000.000 x 1 Malam</span>
                                 </div>
-                                <div class="flex justify-between text-gray-600">
-                                    <span>Taxes & Fees</span>
-                                    <span>$150</span>
+                                <div class="flex justify-between text-gray-600 summary-tax-row hidden">
+                                    <span class="summary-tax-label">Pajak & Layanan (10%)</span>
+                                    <span class="summary-tax-display">Rp 0</span>
                                 </div>
                             </div>
 
                             <hr class="border-stone-300">
 
                             <div>
-                                <p class="text-xs font-semibold text-gray-800">Total Payable</p>
+                                <p class="text-xs font-semibold text-gray-800">Total Biaya Pemesanan</p>
                                 <div class="flex items-baseline justify-between mt-1">
-                                    <span class="text-2xl font-bold text-gray-900">$1,050.00</span>
+                                    <span class="text-xl font-bold text-brand-dark summary-total-display">Rp
+                                        16.500.000</span>
                                 </div>
                             </div>
 
@@ -1496,23 +1572,12 @@
                                 </button>
                             </div>
 
-                            <!-- Payment Methods Icons -->
-                            <div class="pt-2 text-center border-t border-stone-300">
-                                <p class="text-[9px] text-gray-500 mb-2 uppercase tracking-wider font-semibold">Payment
-                                    Method:</p>
-                                <div
-                                    class="flex items-center justify-center space-x-4 text-xs font-medium text-gray-700">
-                                    <span>💳 Credit Card</span>
-                                    <span>PayPal</span>
-                                    <span>🏦 Bank Transfer</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- STEP 3 CONTENT (PAYMENT) -->
-                <div id="step-3-content" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start hidden">
+                <div id="step-3-content" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pt-2 pb-6 hidden">
                     <!-- Column 1: Billing Info -->
                     <div class="lg:col-span-4 space-y-3">
                         <h3 class="font-serif text-lg font-medium text-brand-dark">Payment Details</h3>
@@ -1525,7 +1590,8 @@
                         </div>
 
                         <div>
-                            <label class="block text-[10px] font-medium text-gray-600 mb-0.5">Billing Address</label>
+                            <label class="block text-[10px] font-medium text-gray-600 mb-0.5">Billing
+                                Address</label>
                             <input type="text" value="123 Ocean Breeze Ave, Bali"
                                 class="w-full bg-stone-100 text-gray-900 px-3 py-2 rounded-xl border border-stone-300 text-xs">
                         </div>
@@ -1537,7 +1603,8 @@
                                     class="w-full bg-stone-100 text-gray-900 px-3 py-2 rounded-xl border border-stone-300 text-xs">
                             </div>
                             <div>
-                                <label class="block text-[10px] font-medium text-gray-600 mb-0.5">Postal Code</label>
+                                <label class="block text-[10px] font-medium text-gray-600 mb-0.5">Postal
+                                    Code</label>
                                 <input type="text" value="80361"
                                     class="w-full bg-stone-100 text-gray-900 px-3 py-2 rounded-xl border border-stone-300 text-xs">
                             </div>
@@ -1590,7 +1657,8 @@
                         <!-- Card Form -->
                         <div class="space-y-3 pt-2">
                             <div>
-                                <label class="block text-[10px] font-medium text-gray-600 mb-0.5">Card Number</label>
+                                <label class="block text-[10px] font-medium text-gray-600 mb-0.5">Card
+                                    Number</label>
                                 <input type="text" value="1234 5678 9012 3456"
                                     class="w-full bg-stone-100 text-gray-900 px-3 py-2 rounded-xl border border-stone-300 text-xs font-mono">
                             </div>
@@ -1627,39 +1695,38 @@
                     <div class="lg:col-span-4">
                         <div
                             class="bg-[#F0F3F4] rounded-2xl p-5 border border-stone-200 shadow-sm text-gray-800 space-y-3">
-                            <h3 class="font-serif text-xl font-medium text-brand-dark">Payment Summary</h3>
+                            <h3 class="font-serif text-lg font-medium text-brand-dark">Payment Summary</h3>
 
                             <div class="aspect-[16/9] rounded-xl overflow-hidden bg-stone-300 shadow-sm">
-                                <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=80"
-                                    alt="Resort Villa" class="w-full h-full object-cover">
+                                <img src="https://images.unsplash.com/photo-1512100356356-de1b84283e18?auto=format&fit=crop&w=1200&q=80"
+                                    alt="The Reef Villa" class="summary-villa-img w-full h-full object-cover">
                             </div>
 
-                            <div class="space-y-1 text-[11px]">
-                                <p><strong class="font-semibold">Resort:</strong> Wae Watu Reef Resort, Flores</p>
-                                <p><strong class="font-semibold">Villa:</strong> Ocean View Pool Villa</p>
-                                <p><strong class="font-semibold">Guests:</strong> Mar 15-17</p>
+                            <div class="space-y-1.5 text-xs">
+                                <p><strong class="font-semibold text-gray-900">Resort:</strong> Wae Watu Reef
+                                    Resort, Flores
+                                </p>
+                                <p><strong class="font-semibold text-gray-900">Vila:</strong> <span
+                                        class="summary-villa-name font-bold text-brand-dark">The Reef Villa</span>
+                                </p>
+                                <p><strong class="font-semibold text-gray-900">Jadwal:</strong> <span
+                                        class="summary-booking-dates">Belum Dipilih</span></p>
+                                <p><strong class="font-semibold text-gray-900">Pemesan:</strong> <span
+                                        class="summary-guest-name font-bold text-brand-dark">Tamu Wae Watu</span>
+                                </p>
                             </div>
 
                             <hr class="border-stone-300">
 
-                            <!-- IDR & USD Price Breakdown -->
-                            <div class="space-y-1 text-[11px]">
-                                <p class="font-semibold text-gray-700">Price Breakdown:</p>
+                            <div class="space-y-1 text-xs">
+                                <p class="text-gray-700 font-semibold mb-1">Rincian Pembayaran:</p>
                                 <div class="flex justify-between text-gray-600">
-                                    <span>Villa Rate (per night)</span>
-                                    <span>$450 x 2</span>
+                                    <span>Sewa Vila</span>
+                                    <span class="summary-rate-display">Rp 15.000.000 x 1 Malam</span>
                                 </div>
-                                <div class="flex justify-between text-gray-600">
-                                    <span>Villa Rate (per night)</span>
-                                    <span>Rp 7.500.000 x 2</span>
-                                </div>
-                                <div class="flex justify-between text-gray-600">
-                                    <span>Villa Rate (per night)</span>
-                                    <span>Rp 15.000.000</span>
-                                </div>
-                                <div class="flex justify-between text-gray-600">
-                                    <span>Pajak & Layanan</span>
-                                    <span>Rp 1.650.000</span>
+                                <div class="flex justify-between text-gray-600 summary-tax-row hidden">
+                                    <span class="summary-tax-label">Pajak & Layanan (10%)</span>
+                                    <span class="summary-tax-display">Rp 0</span>
                                 </div>
                             </div>
 
@@ -1667,64 +1734,106 @@
 
                             <div class="space-y-1">
                                 <div class="flex justify-between items-baseline">
-                                    <span class="text-xs font-semibold">Total Payable</span>
-                                    <span class="text-lg font-bold">$1,050.00</span>
+                                    <span class="text-xs font-semibold text-gray-800">Total Pembayaran</span>
+                                    <span class="text-xl font-bold text-brand-dark summary-total-display">Rp
+                                        16.500.000</span>
                                 </div>
-                                <p class="text-[11px] font-semibold text-gray-900">Total yang Harus Dibayar - Rp
-                                    16.650.000</p>
-                                <p class="text-[10px] text-gray-600">Selected Payment Method: Credit Card - VISA ****
-                                    3456</p>
                             </div>
 
-                            <div class="pt-2 space-y-2">
+                            <div class="pt-2">
                                 <button onclick="completeBooking()"
-                                    class="w-full bg-[#164E63] hover:bg-[#0F3A4A] text-white py-3 rounded-full text-xs font-bold tracking-wider uppercase transition-all shadow-md flex items-center justify-center space-x-2">
-                                    <span>PAY $1,050.00 NOW</span>
+                                    class="w-full bg-[#164E63] hover:bg-[#0F3A4A] text-white py-3 rounded-full text-xs font-bold tracking-wider uppercase transition-all shadow-md flex items-center justify-center space-x-2 cursor-pointer">
+                                    <span class="summary-pay-btn-label">BAYAR SEKARANG</span>
                                     <span>🔒</span>
                                 </button>
-                                <p class="text-[9px] text-gray-500 text-center uppercase tracking-wider font-semibold">
-                                    BAYAR Rp 16.650.000 SEKARANG</p>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
+
+        </div>
+    </div>
+
+    <!-- SUCCESS MODAL POPUP (STEP 4) -->
+    <div id="modal-success-card"
+        class="bg-white text-gray-900 rounded-3xl shadow-2xl max-w-md w-full p-10 relative hidden flex-col items-center justify-center text-center border border-stone-200">
+        <!-- Close Button X -->
+        <button onclick="closeBookingModal()"
+            class="absolute top-6 right-6 text-gray-900 hover:text-red-500 transition-colors p-2 text-2xl font-bold leading-none">
+            &#10005;
+        </button>
+
+        <!-- Verified Star Badge Icon -->
+        <div class="w-20 h-20 mb-8 flex items-center justify-center text-navy-900">
+            <svg class="w-full h-full" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <!-- Star-like badge outer contour -->
+                <path
+                    d="M12 2l2.4 2.4 3.4-.5.8 3.3 3.1 1.5-1 3.3 2 2.7-2.4 2.4.5 3.4-3.3.8-1.5 3.1-3.3-1-2.7 2L9.6 22l-3.4.5-.8-3.3-3.1-1.5 1-3.3-2-2.7 2.4-2.4-.5-3.4 3.3-.8 1.5-3.1 3.3 1L12 2z"
+                    stroke-linecap="round" stroke-linejoin="round" />
+                <!-- Checkmark inside -->
+                <path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+            </svg>
         </div>
 
-        <!-- SUCCESS MODAL POPUP (STEP 4) -->
-        <div id="modal-success-card"
-            class="bg-white text-gray-900 rounded-3xl shadow-2xl max-w-md w-full p-10 relative hidden flex-col items-center justify-center text-center border border-stone-200">
-            <!-- Close Button X -->
-            <button onclick="closeBookingModal()"
-                class="absolute top-6 right-6 text-gray-900 hover:text-red-500 transition-colors p-2 text-2xl font-bold leading-none">
-                &#10005;
+        <!-- Success Text -->
+        <h3 class="text-sm font-bold tracking-[0.2em] text-brand-dark uppercase mb-2">
+            RESERVASI BERHASIL DIBUAT!
+        </h3>
+        <p id="booking-code-badge"
+            class="font-mono text-xs font-bold text-emerald-800 bg-emerald-100 border border-emerald-300 px-4 py-1.5 rounded-lg mb-3 inline-block">
+            BOOKING CODE: WW-2026-8942
+        </p>
+        <p class="text-[11px] text-gray-500 font-medium mb-5">
+            Mengalihkan ke halaman Reservasi Saya dalam 2 detik...
+        </p>
+        <button onclick="window.location.href='my-bookings.html'"
+            class="w-full bg-[#164E63] hover:bg-[#0F3A4A] text-white py-3 rounded-full text-xs font-bold tracking-wider uppercase transition-all shadow-md cursor-pointer flex items-center justify-center space-x-2">
+            <span>LIHAT RESERVASI SAYA</span>
+            <span>&rarr;</span>
+        </button>
+    </div>
+
+    </div>
+
+    <!-- MY RESERVATIONS MODAL -->
+    <div id="my-bookings-modal"
+        class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 md:p-6 overflow-y-auto">
+        <div
+            class="bg-[#0A1826] border border-brand-gold/30 text-white rounded-3xl w-full max-w-2xl p-6 md:p-8 shadow-2xl relative space-y-6 my-auto">
+            <!-- Close X Button -->
+            <button onclick="closeMyBookingsModal()"
+                class="absolute top-6 right-6 text-stone-400 hover:text-white transition-colors text-2xl font-bold cursor-pointer">
+                ✕
             </button>
 
-            <!-- Verified Star Badge Icon -->
-            <div class="w-20 h-20 mb-8 flex items-center justify-center text-navy-900">
-                <svg class="w-full h-full" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <!-- Star-like badge outer contour -->
-                    <path
-                        d="M12 2l2.4 2.4 3.4-.5.8 3.3 3.1 1.5-1 3.3 2 2.7-2.4 2.4.5 3.4-3.3.8-1.5 3.1-3.3-1-2.7 2L9.6 22l-3.4.5-.8-3.3-3.1-1.5 1-3.3-2-2.7 2.4-2.4-.5-3.4 3.3-.8 1.5-3.1 3.3 1L12 2z"
-                        stroke-linecap="round" stroke-linejoin="round" />
-                    <!-- Checkmark inside -->
-                    <path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                </svg>
+            <!-- Header -->
+            <div class="border-b border-white/10 pb-4">
+                <span class="text-[10px] tracking-[0.3em] font-sans text-brand-gold uppercase font-semibold">RESERVASI
+                    VILA TAMU</span>
+                <h3 class="font-serif text-3xl text-white font-normal mt-1">Reservasi Saya</h3>
+                <p class="text-xs text-stone-400 font-light mt-1">Daftar riwayat pemesanan kamar vila Wae Watu Reef
+                    Resort Anda.</p>
             </div>
 
-            <!-- Success Text -->
-            <h3 class="text-xs font-semibold tracking-[0.25em] text-gray-900 uppercase mb-2">
-                BOOKING SUCCESSFULLY !
-            </h3>
-            <p id="booking-code-badge" class="font-mono text-xs font-bold text-emerald-800 bg-emerald-100 border border-emerald-300 px-4 py-1.5 rounded-lg mb-3 inline-block">
-                BOOKING CODE: WW-2026-8942
-            </p>
-            <p class="text-[10px] tracking-[0.3em] text-gray-600 uppercase font-medium">
-                CHECK YOUR WHATSAPP
-            </p>
-        </div>
+            <!-- Bookings List Container -->
+            <div id="my-bookings-list" class="space-y-4 max-h-[420px] overflow-y-auto pr-1">
+                <!-- Loading State -->
+                <div class="text-center py-10 space-y-2 text-stone-400">
+                    <div class="inline-block animate-spin text-2xl">⏳</div>
+                    <p class="text-xs font-light">Memuat riwayat reservasi Anda...</p>
+                </div>
+            </div>
 
+            <!-- Footer Action -->
+            <div class="pt-2 flex justify-between items-center border-t border-white/10 text-xs">
+                <span class="text-stone-400 text-[11px]">Butuh bantuan reservasi? Hubungi tim staf kami.</span>
+                <button onclick="closeMyBookingsModal()"
+                    class="bg-white/10 hover:bg-white/20 text-white px-5 py-2 rounded-xl font-semibold uppercase text-[10px] tracking-wider transition-all cursor-pointer">
+                    Tutup
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- JAVASCRIPT FOR HERO SLIDESHOW & MULTI-STEP MODAL -->
@@ -1782,13 +1891,146 @@
             }
         }
 
+        let currentVillaName = "The Reef Villa";
+        let currentVillaPrice = 15000000;
+        let currentVillaImg = "https://images.unsplash.com/photo-1512100356356-de1b84283e18?auto=format&fit=crop&w=1200&q=80";
+
+        let siteTaxEnabled = false;
+        let siteTaxPercentage = 10;
+        let siteTaxLabel = "Pajak & Layanan";
+
+        function updateBookingSummaryUI() {
+            const checkInInput = document.getElementById('booking-check-in');
+            const checkOutInput = document.getElementById('booking-check-out');
+
+            let diffDays = 0;
+            let datesText = "Belum Dipilih";
+
+            if (checkInInput && checkOutInput && checkInInput.value && checkOutInput.value) {
+                const checkInDate = new Date(checkInInput.value);
+                const checkOutDate = new Date(checkOutInput.value);
+
+                if (checkOutDate > checkInDate) {
+                    const diffTime = Math.abs(checkOutDate - checkInDate);
+                    diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1;
+                    datesText = `${checkInInput.value} s/d ${checkOutInput.value} (${diffDays} Malam)`;
+                }
+            }
+
+            const guestName = currentUser ? currentUser.name : "Tamu Wae Watu";
+            document.querySelectorAll('.summary-villa-name').forEach(el => el.innerText = currentVillaName);
+            document.querySelectorAll('.summary-villa-img').forEach(el => {
+                el.src = currentVillaImg;
+                el.alt = currentVillaName;
+            });
+            document.querySelectorAll('.summary-booking-dates').forEach(el => el.innerText = datesText);
+            document.querySelectorAll('.summary-booking-guests').forEach(el => el.innerText = "2 Dewasa");
+            document.querySelectorAll('.summary-guest-name').forEach(el => el.innerText = guestName);
+
+            // Handle Tax Row Visibility & Label
+            const taxRows = document.querySelectorAll('.summary-tax-row');
+            if (siteTaxEnabled && siteTaxPercentage > 0) {
+                taxRows.forEach(row => row.classList.remove('hidden'));
+                const labelText = `${siteTaxLabel} (${siteTaxPercentage}%)`;
+                document.querySelectorAll('.summary-tax-label').forEach(el => el.innerText = labelText);
+            } else {
+                taxRows.forEach(row => row.classList.add('hidden'));
+            }
+
+            if (diffDays === 0) {
+                const formattedRate = 'Rp ' + currentVillaPrice.toLocaleString('id-ID') + ' / malam';
+                document.querySelectorAll('.summary-rate-display').forEach(el => el.innerText = formattedRate);
+                document.querySelectorAll('.summary-tax-display').forEach(el => el.innerText = "Rp 0");
+                document.querySelectorAll('.summary-total-display').forEach(el => el.innerText = "Rp 0");
+                document.querySelectorAll('.summary-pay-btn-label').forEach(el => el.innerText = "PILIH TANGGAL SEKARANG");
+                return;
+            }
+
+            const subtotal = currentVillaPrice * diffDays;
+            let taxAmount = 0;
+            if (siteTaxEnabled && siteTaxPercentage > 0) {
+                taxAmount = subtotal * (siteTaxPercentage / 100);
+            }
+            const totalPayable = subtotal + taxAmount;
+
+            const formattedRate = `${'Rp ' + currentVillaPrice.toLocaleString('id-ID')} x ${diffDays} Malam`;
+            const formattedTax = 'Rp ' + Math.round(taxAmount).toLocaleString('id-ID');
+            const formattedTotal = 'Rp ' + Math.round(totalPayable).toLocaleString('id-ID');
+
+            document.querySelectorAll('.summary-rate-display').forEach(el => el.innerText = formattedRate);
+            document.querySelectorAll('.summary-tax-display').forEach(el => el.innerText = formattedTax);
+            document.querySelectorAll('.summary-total-display').forEach(el => el.innerText = formattedTotal);
+            document.querySelectorAll('.summary-pay-btn-label').forEach(el => el.innerText = `BAYAR ${formattedTotal} SEKARANG`);
+        }
+
+        function calculateNightsAndTotal() {
+            const checkInInput = document.getElementById('booking-check-in');
+            const checkOutInput = document.getElementById('booking-check-out');
+            const nightsBadge = document.getElementById('booking-nights-badge');
+
+            if (!checkInInput || !checkOutInput || !checkInInput.value || !checkOutInput.value) {
+                if (nightsBadge) {
+                    nightsBadge.className = 'text-[10px] font-medium text-stone-500 mt-1 block';
+                    nightsBadge.innerText = '📅 Silakan pilih tanggal check-in & check-out';
+                }
+                updateBookingSummaryUI();
+                return;
+            }
+
+            if (checkOutInput.value <= checkInInput.value) {
+                const nextDay = new Date(checkInInput.value);
+                nextDay.setDate(nextDay.getDate() + 1);
+                checkOutInput.value = nextDay.toISOString().split('T')[0];
+            }
+
+            const diffTime = Math.abs(new Date(checkOutInput.value) - new Date(checkInInput.value));
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1;
+
+            const totalPrice = currentVillaPrice * diffDays;
+            const formattedTotal = 'Rp ' + totalPrice.toLocaleString('id-ID');
+
+            if (nightsBadge) {
+                nightsBadge.className = 'text-[10px] font-bold text-emerald-800 mt-1 block';
+                nightsBadge.innerText = `📅 Total: ${diffDays} Malam (${formattedTotal})`;
+            }
+
+            updateBookingSummaryUI();
+        }
+
+        function initDefaultBookingDates() {
+            const checkInInput = document.getElementById('booking-check-in');
+            const checkOutInput = document.getElementById('booking-check-out');
+            const todayStr = new Date().toISOString().split('T')[0];
+
+            if (checkInInput) {
+                checkInInput.min = todayStr;
+            }
+            if (checkOutInput) {
+                checkOutInput.min = todayStr;
+            }
+            calculateNightsAndTotal();
+        }
 
         // BOOKING MODAL LOGIC
         function openBookingModal(step = 1) {
             const modal = document.getElementById('booking-modal');
+            const innerScroll = document.querySelector('#modal-form-card .overflow-y-auto');
+            if (innerScroll) innerScroll.scrollTop = 0;
+
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             document.body.style.overflow = 'hidden';
+            initDefaultBookingDates();
+
+            if (currentUser) {
+                const nameIn = document.getElementById('booking-guest-name');
+                const emailIn = document.getElementById('booking-guest-email');
+                const phoneIn = document.getElementById('booking-guest-phone');
+                if (nameIn && !nameIn.value) nameIn.value = currentUser.name || '';
+                if (emailIn && !emailIn.value) emailIn.value = currentUser.email || '';
+                if (phoneIn && !phoneIn.value && currentUser.phone) phoneIn.value = currentUser.phone;
+            }
+
             goToStep(step);
         }
 
@@ -1800,43 +2042,81 @@
         }
 
         function goToStep(step) {
-            document.getElementById('modal-form-card').classList.remove('hidden');
-            document.getElementById('modal-success-card').classList.add('hidden');
-            document.getElementById('modal-success-card').classList.remove('flex');
+            const formCard = document.getElementById('modal-form-card');
+            const successCard = document.getElementById('modal-success-card');
+            if (formCard) formCard.classList.remove('hidden');
+            if (successCard) {
+                successCard.classList.add('hidden');
+                successCard.classList.remove('flex');
+            }
 
-            document.getElementById('step-1-content').classList.add('hidden');
-            document.getElementById('step-2-content').classList.add('hidden');
-            document.getElementById('step-3-content').classList.add('hidden');
+            const step1 = document.getElementById('step-1-content');
+            const step2 = document.getElementById('step-2-content');
+            const step3 = document.getElementById('step-3-content');
 
-            document.getElementById(`step-${step}-content`).classList.remove('hidden');
+            if (step1) step1.classList.add('hidden');
+            if (step2) step2.classList.add('hidden');
+            if (step3) step3.classList.add('hidden');
 
-            const line = document.getElementById('progress-bar-line');
-            const tab1 = document.getElementById('step-tab-1').querySelector('span');
-            const tab2 = document.getElementById('step-tab-2').querySelector('span');
-            const tab3 = document.getElementById('step-tab-3').querySelector('span');
+            const tab1 = document.getElementById('step-tab-1');
+            const tab2 = document.getElementById('step-tab-2');
+            const tab3 = document.getElementById('step-tab-3');
 
-            tab1.className = "text-[11px] font-medium text-gray-400 tracking-tight";
-            tab2.className = "text-[11px] font-medium text-gray-400 tracking-tight";
-            tab3.className = "text-[11px] font-medium text-gray-400 tracking-tight";
+            const inactiveClass = "px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer text-stone-600 hover:text-stone-900 bg-transparent";
+            const activeClass = "px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer bg-brand-dark text-white shadow-sm";
+
+            if (tab1) tab1.className = inactiveClass;
+            if (tab2) tab2.className = inactiveClass;
+            if (tab3) tab3.className = inactiveClass;
 
             if (step === 1) {
-                line.style.width = '33%';
-                tab1.className = "text-[11px] font-bold text-brand-dark tracking-tight";
+                if (step1) step1.classList.remove('hidden');
+                if (tab1) tab1.className = activeClass;
             } else if (step === 2) {
-                line.style.width = '66%';
-                tab2.className = "text-[11px] font-bold text-brand-dark tracking-tight";
+                if (step2) step2.classList.remove('hidden');
+                if (tab2) tab2.className = activeClass;
             } else if (step === 3) {
-                line.style.width = '100%';
-                tab3.className = "text-[11px] font-bold text-brand-dark tracking-tight";
+                if (step3) step3.classList.remove('hidden');
+                if (tab3) tab3.className = activeClass;
             }
+
+            const innerScroll = document.querySelector('#modal-form-card .overflow-y-auto');
+            if (innerScroll) innerScroll.scrollTop = 0;
+
+            updateBookingSummaryUI();
+        }
+
+        function getApiBase() {
+            if (window.location.hostname && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+                return `http://${window.location.hostname}:8000`;
+            }
+            return 'http://127.0.0.1:8000';
         }
 
         async function completeBooking() {
             const payBtn = document.querySelector('#modal-form-card button[onclick="completeBooking()"]');
             if (payBtn) payBtn.innerHTML = '<span>SAVING RESERVATION...</span>';
 
+            const checkInVal = document.getElementById('booking-check-in') ? document.getElementById('booking-check-in').value : '2026-10-15';
+            const checkOutVal = document.getElementById('booking-check-out') ? document.getElementById('booking-check-out').value : '2026-10-18';
+            
+            const nameInput = document.getElementById('booking-guest-name');
+            const phoneInput = document.getElementById('booking-guest-phone');
+            const emailInput = document.getElementById('booking-guest-email');
+            const notes1Input = document.getElementById('booking-step1-notes');
+            const notes2Input = document.getElementById('booking-special-notes');
+
+            const guestNameVal = (nameInput && nameInput.value.trim()) ? nameInput.value.trim() : (currentUser ? currentUser.name : 'Guest Wae Watu');
+            const guestEmailVal = (emailInput && emailInput.value.trim()) ? emailInput.value.trim() : (currentUser ? currentUser.email : 'guest@waewatu.com');
+            const guestPhoneVal = (phoneInput && phoneInput.value.trim()) ? phoneInput.value.trim() : (currentUser && currentUser.phone ? currentUser.phone : '+6281234567890');
+
+            const notes1 = (notes1Input && notes1Input.value.trim()) ? notes1Input.value.trim() : '';
+            const notes2 = (notes2Input && notes2Input.value.trim()) ? notes2Input.value.trim() : '';
+            const combinedNotes = [notes1, notes2].filter(Boolean).join(' | ');
+            const specialNotesVal = combinedNotes || 'Tidak ada catatan khusus';
+
             try {
-                const response = await fetch('http://127.0.0.1:8000/api/bookings', {
+                const response = await fetch(`${getApiBase()}/api/bookings`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1844,13 +2124,13 @@
                     },
                     body: JSON.stringify({
                         villa_id: 1,
-                        check_in: '2026-10-15',
-                        check_out: '2026-10-18',
+                        check_in: checkInVal,
+                        check_out: checkOutVal,
                         guests: 2,
-                        guest_name: 'Guest Wae Watu',
-                        guest_email: 'guest@waewatu.com',
-                        guest_phone: '+628123456789',
-                        special_notes: 'Honeymoon arrangement request'
+                        guest_name: guestNameVal,
+                        guest_email: guestEmailVal,
+                        guest_phone: guestPhoneVal,
+                        special_notes: specialNotesVal
                     })
                 });
 
@@ -1868,50 +2148,200 @@
             document.getElementById('modal-form-card').classList.add('hidden');
             document.getElementById('modal-success-card').classList.remove('hidden');
             document.getElementById('modal-success-card').classList.add('flex');
-            if (payBtn) payBtn.innerHTML = '<span>PAY $1,050.00 NOW</span> <span>🔒</span>';
+            if (payBtn) payBtn.innerHTML = '<span>BAYAR SEKARANG</span> <span>🔒</span>';
+
+            // Auto redirect to my-bookings.html
+            setTimeout(() => {
+                window.location.href = 'my-bookings.html';
+            }, 2000);
         }
 
         // USER AUTH & BOOKING AUTHORIZATION LOGIC
         let currentUser = null;
 
-        async function checkUserAuthState() {
+        function saveUserToStorage(user) {
+            currentUser = user;
+            const authBar = document.getElementById('user-header-auth');
+            const loginBtn = document.getElementById('user-login-btn');
+            const nameSpan = document.getElementById('user-display-name');
+            const avatarInitial = document.getElementById('user-avatar-initial');
+            const dropdownName = document.getElementById('user-dropdown-name');
+            const dropdownEmail = document.getElementById('user-dropdown-email');
+
+            if (user && user.name) {
+                localStorage.setItem('waewatu_user', JSON.stringify(user));
+                if (authBar) {
+                    authBar.classList.remove('hidden');
+                    authBar.classList.add('block');
+                }
+                if (loginBtn) loginBtn.classList.add('hidden');
+                if (nameSpan) nameSpan.innerText = user.name.split(' ')[0].toUpperCase();
+                if (avatarInitial) avatarInitial.innerText = user.name.charAt(0).toUpperCase();
+                if (dropdownName) dropdownName.innerText = user.name;
+                if (dropdownEmail) dropdownEmail.innerText = user.email || '';
+            } else {
+                localStorage.removeItem('waewatu_user');
+                if (authBar) {
+                    authBar.classList.add('hidden');
+                    authBar.classList.remove('block');
+                }
+                if (loginBtn) loginBtn.classList.remove('hidden');
+            }
+        }
+
+        function toggleProfileDropdown() {
+            const menu = document.getElementById('profile-dropdown-menu');
+            if (menu) menu.classList.toggle('hidden');
+        }
+
+        function closeProfileDropdown() {
+            const menu = document.getElementById('profile-dropdown-menu');
+            if (menu) menu.classList.add('hidden');
+        }
+
+        async function openMyBookingsModal() {
+            closeProfileDropdown();
+            const modal = document.getElementById('my-bookings-modal');
+            const listContainer = document.getElementById('my-bookings-list');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                document.body.style.overflow = 'hidden';
+            }
+
+            if (!currentUser || !currentUser.email) {
+                listContainer.innerHTML = `
+                    <div class="text-center py-10 text-stone-400 space-y-2">
+                        <p class="text-sm">Silakan login terlebih dahulu untuk melihat riwayat reservasi Anda.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            listContainer.innerHTML = `
+                <div class="text-center py-10 space-y-2 text-stone-400">
+                    <div class="inline-block animate-spin text-2xl">⏳</div>
+                    <p class="text-xs font-light">Memuat riwayat reservasi Anda...</p>
+                </div>
+            `;
+
             try {
-                const res = await fetch('http://127.0.0.1:8000/api/auth/me', {
+                const res = await fetch(`${getApiBase()}/api/auth/my-bookings?email=${encodeURIComponent(currentUser.email)}`, {
+                    headers: { 'Accept': 'application/json' }
+                });
+                const data = await res.json();
+
+                if (data.status === 'success' && data.bookings && data.bookings.length > 0) {
+                    listContainer.innerHTML = data.bookings.map(b => {
+                        const formattedPrice = 'Rp ' + parseInt(b.total_price).toLocaleString('id-ID');
+                        const statusBadge = b.status === 'confirmed'
+                            ? '<span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Terkonfirmasi</span>'
+                            : (b.status === 'pending'
+                                ? '<span class="bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Menunggu Konfirmasi</span>'
+                                : '<span class="bg-rose-500/20 text-rose-300 border border-rose-500/40 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Dibatalkan</span>');
+
+                        return `
+                            <div class="bg-white/5 border border-white/10 rounded-2xl p-5 space-y-3">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <span class="font-mono text-xs font-bold text-brand-gold tracking-wider">${b.booking_code}</span>
+                                        <h4 class="font-serif text-xl text-white font-normal mt-0.5">${b.villa ? b.villa.name : 'The Reef Villa'}</h4>
+                                    </div>
+                                    ${statusBadge}
+                                </div>
+                                <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-xs border-t border-b border-white/10 py-3 text-stone-300">
+                                    <div>
+                                        <span class="block text-[9px] uppercase tracking-wider text-stone-400">Check-in</span>
+                                        <span class="font-semibold text-white">${b.check_in}</span>
+                                    </div>
+                                    <div>
+                                        <span class="block text-[9px] uppercase tracking-wider text-stone-400">Check-out</span>
+                                        <span class="font-semibold text-white">${b.check_out}</span>
+                                    </div>
+                                    <div>
+                                        <span class="block text-[9px] uppercase tracking-wider text-stone-400">Tamu</span>
+                                        <span class="font-semibold text-white">${b.guests} Tamu</span>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center pt-1">
+                                    <span class="text-xs text-stone-400">Total Biaya Pemesanan</span>
+                                    <span class="font-serif text-lg font-bold text-brand-gold">${formattedPrice}</span>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    listContainer.innerHTML = `
+                        <div class="text-center py-12 space-y-3 bg-white/5 border border-white/10 rounded-2xl p-6">
+                            <span class="text-4xl block">🏝️</span>
+                            <h4 class="font-serif text-xl text-white">Belum Ada Reservasi</h4>
+                            <p class="text-xs text-stone-400 max-w-sm mx-auto font-light leading-relaxed">Anda belum melakukan reservasi vila di Wae Watu. Klik tombol di bawah untuk memilih jadwal dan kamar vila impian Anda.</p>
+                            <button onclick="closeMyBookingsModal(); handleBookNowClick();" class="mt-2 inline-block bg-brand-gold text-brand-dark px-6 py-2.5 text-[10px] font-bold tracking-widest uppercase rounded-xl hover:bg-brand-goldHover transition-all cursor-pointer">
+                                Pesan Kamar Sekarang →
+                            </button>
+                        </div>
+                    `;
+                }
+            } catch (err) {
+                listContainer.innerHTML = `
+                    <div class="text-center py-8 text-rose-400 text-xs">
+                        Gagal memuat data reservasi. Silakan periksa koneksi internet Anda.
+                    </div>
+                `;
+            }
+        }
+
+        function closeMyBookingsModal() {
+            const modal = document.getElementById('my-bookings-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        async function checkUserAuthState() {
+            const stored = localStorage.getItem('waewatu_user');
+            if (stored) {
+                try {
+                    const parsed = JSON.parse(stored);
+                    saveUserToStorage(parsed);
+                } catch (e) { }
+            }
+
+            try {
+                const res = await fetch(`${getApiBase()}/api/auth/me`, {
                     headers: { 'Accept': 'application/json' }
                 });
                 const data = await res.json();
                 if (data.logged_in && data.user) {
-                    currentUser = data.user;
-                    document.getElementById('user-header-auth').classList.remove('hidden');
-                    document.getElementById('user-header-auth').classList.add('flex');
-                    document.getElementById('user-login-btn').classList.add('hidden');
-                    document.getElementById('user-display-name').innerText = `👤 TAMU: ${currentUser.name.toUpperCase()}`;
-                } else {
-                    currentUser = null;
-                    document.getElementById('user-header-auth').classList.add('hidden');
-                    document.getElementById('user-header-auth').classList.remove('flex');
-                    document.getElementById('user-login-btn').classList.remove('hidden');
+                    saveUserToStorage(data.user);
                 }
             } catch (err) {
                 console.log('User auth check offline');
             }
         }
 
+        let authTriggeredByBooking = false;
+
         function handleBookNowClick() {
             if (!currentUser) {
-                openUserAuthModal();
+                authTriggeredByBooking = true;
+                openUserAuthModal(true);
             } else {
                 openBookingModal(1);
             }
         }
 
-        function openUserAuthModal() {
+        function openUserAuthModal(isBooking = false) {
+            authTriggeredByBooking = isBooking;
             document.getElementById('user-auth-modal').classList.remove('hidden');
             document.getElementById('user-auth-modal').classList.add('flex');
             document.body.style.overflow = 'hidden';
         }
 
         function closeUserAuthModal() {
+            authTriggeredByBooking = false;
             document.getElementById('user-auth-modal').classList.add('hidden');
             document.getElementById('user-auth-modal').classList.remove('flex');
             document.body.style.overflow = 'auto';
@@ -1944,7 +2374,7 @@
             errDiv.classList.add('hidden');
 
             try {
-                const res = await fetch('http://127.0.0.1:8000/api/auth/login', {
+                const res = await fetch(`${getApiBase()}/api/auth/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1954,10 +2384,13 @@
                 });
 
                 const data = await res.json();
-                if (data.status === 'success') {
+                if (data.status === 'success' && data.user) {
+                    saveUserToStorage(data.user);
+                    const shouldOpenBooking = authTriggeredByBooking;
                     closeUserAuthModal();
-                    await checkUserAuthState();
-                    openBookingModal(1);
+                    if (shouldOpenBooking) {
+                        openBookingModal(1);
+                    }
                 } else {
                     errDiv.innerText = data.message || 'Login gagal.';
                     errDiv.classList.remove('hidden');
@@ -1978,7 +2411,7 @@
             errDiv.classList.add('hidden');
 
             try {
-                const res = await fetch('http://127.0.0.1:8000/api/auth/register', {
+                const res = await fetch(`${getApiBase()}/api/auth/register`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1988,10 +2421,13 @@
                 });
 
                 const data = await res.json();
-                if (data.status === 'success') {
+                if (data.status === 'success' && data.user) {
+                    saveUserToStorage(data.user);
+                    const shouldOpenBooking = authTriggeredByBooking;
                     closeUserAuthModal();
-                    await checkUserAuthState();
-                    openBookingModal(1);
+                    if (shouldOpenBooking) {
+                        openBookingModal(1);
+                    }
                 } else {
                     errDiv.innerText = data.message || 'Registrasi gagal.';
                     errDiv.classList.remove('hidden');
@@ -2004,79 +2440,181 @@
 
         async function handleUserLogout() {
             try {
-                await fetch('http://127.0.0.1:8000/api/auth/logout', {
+                await fetch(`${getApiBase()}/api/auth/logout`, {
                     method: 'POST',
                     headers: { 'Accept': 'application/json' }
                 });
-            } catch (err) {}
-            currentUser = null;
-            checkUserAuthState();
+            } catch (err) { }
+            saveUserToStorage(null);
         }
 
-        // DYNAMIC CONTENT LOADER FROM API
+        // DYNAMIC CONTENT LOADER FROM API WITH FALLBACK HOST CONNECTIVITY
+        async function fetchContentApi() {
+            const urls = [
+                `${getApiBase()}/api/content`,
+                'http://127.0.0.1:8000/api/content',
+                'http://localhost:8000/api/content'
+            ];
+            for (const url of urls) {
+                try {
+                    const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+                    if (res.ok) {
+                        return await res.json();
+                    }
+                } catch (e) {}
+            }
+            return null;
+        }
+
         async function loadLiveSiteContent() {
             try {
-                const res = await fetch('http://127.0.0.1:8000/api/content', {
-                    headers: { 'Accept': 'application/json' }
-                });
-                const data = await res.json();
+                const data = await fetchContentApi();
+                if (!data || data.status !== 'success') return;
 
-                if (data.status === 'success') {
-                    // Update Hero Title
-                    if (data.contents && data.contents.hero_title) {
+                // 1. Update Hero & Text Contents
+                if (data.contents) {
+                    if (data.contents.hero_title) {
                         const h1 = document.querySelector('#hero-section h1');
                         if (h1) h1.innerText = data.contents.hero_title;
                     }
-                    if (data.contents && data.contents.hero_subtitle) {
-                        const pSub = document.querySelector('#hero-section p');
+                    if (data.contents.hero_subtitle) {
+                        const pSub = document.getElementById('hero-subtitle');
                         if (pSub) pSub.innerText = data.contents.hero_subtitle;
                     }
-                    if (data.contents && data.contents.conservation_quote) {
+                    if (data.contents.hero_badge) {
+                        const badge = document.getElementById('hero-badge');
+                        if (badge) badge.innerText = data.contents.hero_badge;
+                    }
+                    if (data.contents.conservation_quote) {
                         const quoteP = document.querySelector('#reef p.font-serif');
                         if (quoteP) quoteP.innerText = data.contents.conservation_quote;
                     }
 
-                    // Update 9 Experiences Cards
-                    if (data.experiences && data.experiences.length > 0) {
-                        const expContainer = document.getElementById('experiences-slider');
-                        if (expContainer) {
-                            expContainer.innerHTML = data.experiences.map(exp => `
-                                <div class="flex-none w-[340px] group cursor-pointer snap-start">
-                                    <div class="relative aspect-square overflow-hidden bg-gray-900 rounded-none mb-4">
-                                        <img src="${exp.image_url}" alt="${exp.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80"></div>
-                                    </div>
-                                    <div class="space-y-1">
-                                        <p class="text-[10px] tracking-[0.25em] text-brand-gold font-sans font-semibold uppercase">${exp.number_code} / EXPERIENCE</p>
-                                        <h3 class="font-serif text-xl text-brand-textDark font-normal tracking-wide leading-tight group-hover:text-brand-gold transition-colors">${exp.title}</h3>
-                                        <p class="text-[11px] text-brand-textDark/70 font-sans font-light leading-relaxed">${exp.description}</p>
-                                    </div>
-                                </div>
-                            `).join('');
+                    // Parse Footer Contact Info
+                    if (data.contents.footer_email) {
+                        const emailEl = document.getElementById('footer-email-link');
+                        if (emailEl) {
+                            emailEl.href = `mailto:${data.contents.footer_email}`;
+                            emailEl.innerText = data.contents.footer_email.toUpperCase();
+                        }
+                    }
+                    if (data.contents.footer_phone) {
+                        const phoneEl = document.getElementById('footer-phone-link');
+                        if (phoneEl) {
+                            phoneEl.href = `tel:${data.contents.footer_phone.replace(/\s+/g, '')}`;
+                            phoneEl.innerText = data.contents.footer_phone;
+                        }
+                    }
+                    if (data.contents.footer_whatsapp) {
+                        const waEl = document.getElementById('footer-whatsapp-link');
+                        if (waEl) {
+                            const waNum = data.contents.footer_whatsapp.replace(/[^0-9]/g, '');
+                            waEl.href = `https://wa.me/${waNum}`;
                         }
                     }
 
-                    // Update Villa Price & Status
-                    if (data.villas && data.villas.length > 0) {
-                        const villa = data.villas[0];
-                        const formattedPrice = 'Rp ' + parseInt(villa.price_per_night).toLocaleString('id-ID');
-                        const priceEls = document.querySelectorAll('.villa-price-display');
-                        priceEls.forEach(el => el.innerText = formattedPrice);
+                    // Parse Tax & Service Settings from CMS
+                    if (data.contents.tax_enabled !== undefined) {
+                        siteTaxEnabled = String(data.contents.tax_enabled) === '1';
+                    }
+                    if (data.contents.tax_percentage !== undefined) {
+                        siteTaxPercentage = parseFloat(data.contents.tax_percentage) || 0;
+                    }
+                    if (data.contents.tax_label) {
+                        siteTaxLabel = data.contents.tax_label;
                     }
                 }
+
+                // 2. Update 9 Experiences Cards
+                if (data.experiences && data.experiences.length > 0) {
+                    const expContainer = document.getElementById('experiences-slider');
+                    if (expContainer) {
+                        expContainer.innerHTML = data.experiences.map(exp => `
+                            <div class="flex-none w-[340px] group cursor-pointer snap-start">
+                                <div class="relative aspect-square overflow-hidden bg-gray-900 rounded-none mb-4">
+                                    <img src="${exp.image_url}" alt="${exp.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80"></div>
+                                </div>
+                                <div class="space-y-1">
+                                    <p class="text-[10px] tracking-[0.25em] text-brand-gold font-sans font-semibold uppercase">${exp.number_code} / EXPERIENCE</p>
+                                    <h3 class="font-serif text-xl text-brand-textDark font-normal tracking-wide leading-tight group-hover:text-brand-gold transition-colors">${exp.title}</h3>
+                                    <p class="text-[11px] text-brand-textDark/70 font-sans font-light leading-relaxed">${exp.description}</p>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                }
+
+                // 3. Update 4 Dining Items
+                if (data.dining_items && data.dining_items.length > 0) {
+                    const diningContainer = document.getElementById('dining-grid');
+                    if (diningContainer) {
+                        diningContainer.innerHTML = data.dining_items.map(item => `
+                            <div class="group flex flex-col">
+                                <div class="img-container aspect-[4/5] mb-3 bg-navy-900 overflow-hidden">
+                                    <img src="${item.image_url}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                </div>
+                                <p class="text-[9px] md:text-[10px] tracking-[0.2em] text-brand-textLightMuted uppercase text-left font-medium leading-relaxed">
+                                    ${item.title}
+                                </p>
+                            </div>
+                        `).join('');
+                    }
+                }
+
+                // 4. Update 3 Conservation Cards
+                if (data.conservation_cards && data.conservation_cards.length > 0) {
+                    const consContainer = document.getElementById('conservation-cards-grid');
+                    if (consContainer) {
+                        consContainer.innerHTML = data.conservation_cards.map(card => `
+                            <div class="group flex flex-col">
+                                <div class="img-container aspect-[3/4] mb-4 bg-brand-dark relative overflow-hidden">
+                                    <img src="${card.image_url}" alt="${card.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                    <span class="absolute bottom-3 left-3 bg-black/50 text-[8px] md:text-[9px] text-stone-300 px-2 py-0.5 font-light">${card.photographer_credit}</span>
+                                </div>
+                                <p class="text-[9px] md:text-[10px] tracking-[0.25em] text-brand-textLightMuted uppercase font-medium text-left">
+                                    ${card.title}
+                                </p>
+                            </div>
+                        `).join('');
+                    }
+                }
+
+                // 5. Update Villa Price & Status
+                if (data.villas && data.villas.length > 0) {
+                    const villa = data.villas[0];
+                    currentVillaName = villa.name;
+                    currentVillaPrice = parseInt(villa.price_per_night);
+                    if (villa.image_url) {
+                        currentVillaImg = villa.image_url;
+                    }
+                    const formattedPrice = 'Rp ' + currentVillaPrice.toLocaleString('id-ID');
+                    const priceEls = document.querySelectorAll('.villa-price-display');
+                    priceEls.forEach(el => el.innerText = formattedPrice);
+                }
+
+                updateBookingSummaryUI();
             } catch (err) {
-                console.log('API live content loader:', err);
+                console.log('API live content loader error:', err);
             }
         }
 
         window.addEventListener('click', function (e) {
             const modal = document.getElementById('booking-modal');
             const authModal = document.getElementById('user-auth-modal');
+            const myBookingsModal = document.getElementById('my-bookings-modal');
+            const authBar = document.getElementById('user-header-auth');
             if (e.target === modal) {
                 closeBookingModal();
             }
             if (e.target === authModal) {
                 closeUserAuthModal();
+            }
+            if (e.target === myBookingsModal) {
+                closeMyBookingsModal();
+            }
+            if (authBar && !authBar.contains(e.target)) {
+                closeProfileDropdown();
             }
         });
 

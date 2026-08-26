@@ -23,6 +23,7 @@ Route::post('/auth/register', [UserAuthController::class, 'register']);
 Route::post('/auth/login', [UserAuthController::class, 'login']);
 Route::post('/auth/logout', [UserAuthController::class, 'logout']);
 Route::get('/auth/me', [UserAuthController::class, 'me']);
+Route::get('/auth/my-bookings', [UserAuthController::class, 'myBookings']);
 
 // Villa endpoints
 Route::get('/villas', [VillaController::class, 'index']);

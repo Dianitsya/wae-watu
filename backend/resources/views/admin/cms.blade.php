@@ -160,6 +160,33 @@
                     class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-medium text-slate-900">
             </div>
         </div>
+    <!-- Section 6: Tax & Service Charge Settings -->
+    <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-stone-200 space-y-6">
+        <h3 class="font-serif text-2xl text-brand-dark font-medium border-b border-stone-200 pb-3 flex items-center space-x-2">
+            <span>🏷️ Section 6 — Pengaturan Pajak & Layanan (Tax & Service Charge)</span>
+        </h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Status Pajak & Layanan</label>
+                <select name="tax_enabled" class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-medium text-slate-900 focus:ring-2 focus:ring-brand-gold">
+                    <option value="0" {{ ($contents['tax_enabled'] ?? '0') == '0' ? 'selected' : '' }}>Nonaktif (Harga Nett / Tanpa Pajak)</option>
+                    <option value="1" {{ ($contents['tax_enabled'] ?? '0') == '1' ? 'selected' : '' }}>Aktif (Tambahkan Pajak ke Total)</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Persentase Pajak (%)</label>
+                <input type="number" step="0.1" name="tax_percentage" value="{{ $contents['tax_percentage'] ?? '10' }}"
+                    class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-medium text-slate-900" placeholder="10">
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Nama / Label Pajak</label>
+                <input type="text" name="tax_label" value="{{ $contents['tax_label'] ?? 'Pajak & Layanan' }}"
+                    class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-medium text-slate-900" placeholder="Pajak & Layanan">
+            </div>
+        </div>
     </div>
 
     <div class="flex justify-end pt-4">
