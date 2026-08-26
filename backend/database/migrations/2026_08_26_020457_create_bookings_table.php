@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bookings', function (Blueprint $table) {
+        if (!Schema::hasTable('wae_watu_bookings')) {
+            Schema::create('wae_watu_bookings', function (Blueprint $table) {
             $table->id();
             $table->string('booking_code')->unique();
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
@@ -27,6 +28,7 @@ return new class extends Migration
             $table->enum('status', ['pending', 'confirmed', 'cancelled'])->default('pending');
             $table->timestamps();
         });
+        }
     }
 
     /**

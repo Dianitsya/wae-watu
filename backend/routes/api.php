@@ -39,3 +39,8 @@ Route::get('/bookings/{code}', [BookingController::class, 'show']);
 
 // Inquiry endpoints
 Route::post('/inquiries', [InquiryController::class, 'store']);
+
+// Midtrans Payment Gateway Endpoints
+Route::post('/midtrans/notification', [BookingController::class, 'midtransNotification']);
+Route::get('/midtrans/config', [BookingController::class, 'midtransConfig']);
+

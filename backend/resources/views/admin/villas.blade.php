@@ -26,6 +26,12 @@
                             {{ $villa->status === 'available' ? 'Dijual (Available)' : ($villa->status === 'sold_out' ? 'Habis (Sold Out)' : 'Perbaikan (Maintenance)') }}
                         </span>
                     </div>
+                    <div class="flex justify-between items-center text-xs pt-1">
+                        <span class="font-medium text-slate-500">Sisa Unit Tersedia:</span>
+                        <span class="font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-lg border border-emerald-200 text-xs">
+                            {{ $villa->available_units ?? 28 }} Kamar
+                        </span>
+                    </div>
                 </div>
 
                 <!-- Update Form -->
@@ -34,7 +40,7 @@
                         @csrf
                         @method('PUT')
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
                                 <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Nama Kamar Vila</label>
                                 <input type="text" name="name" value="{{ old('name', $villa->name) }}" required
@@ -42,9 +48,15 @@
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Harga Per Malam (Rp Rupiah)</label>
+                                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Harga Per Malam (Rp)</label>
                                 <input type="number" step="1000" name="price_per_night" value="{{ old('price_per_night', $villa->price_per_night) }}" required
                                     class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2 text-xs font-bold text-brand-dark focus:ring-2 focus:ring-brand-gold">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Sisa Unit Kamar (Stock)</label>
+                                <input type="number" name="available_units" value="{{ old('available_units', $villa->available_units ?? 28) }}" min="0" required
+                                    class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2 text-xs font-bold text-emerald-700 focus:ring-2 focus:ring-brand-gold">
                             </div>
                         </div>
 
@@ -59,7 +71,7 @@
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Kapasitas Maksimal Tamu</label>
+                                <label class="block text-[11px] font-semibold text-slate-700 uppercase tracking-wider mb-1">Kapasitas Maksimal Tamu</label>
                                 <input type="number" name="capacity" value="{{ old('capacity', $villa->capacity) }}" required
                                     class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2 text-xs font-medium text-slate-900">
                             </div>

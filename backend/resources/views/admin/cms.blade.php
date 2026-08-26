@@ -224,6 +224,35 @@
         </div>
     </div>
 
+    <!-- Section 7: Midtrans Payment Gateway Settings -->
+    <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-stone-200 space-y-6">
+        <h3 class="font-serif text-2xl text-brand-dark font-medium border-b border-stone-200 pb-3 flex items-center space-x-2">
+            <span>💳 Section 7 — Pengaturan Midtrans Payment Gateway</span>
+        </h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Mode Lingkungan Midtrans</label>
+                <select name="midtrans_is_production" class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-medium text-slate-900 focus:ring-2 focus:ring-brand-gold">
+                    <option value="0" {{ ($contents['midtrans_is_production'] ?? '0') == '0' ? 'selected' : '' }}>🟡 Sandbox (Mode Uji Coba)</option>
+                    <option value="1" {{ ($contents['midtrans_is_production'] ?? '0') == '1' ? 'selected' : '' }}>🟢 Production (Mode Transaksi Live)</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Midtrans Server Key</label>
+                <input type="text" name="midtrans_server_key" value="{{ $contents['midtrans_server_key'] ?? config('midtrans.server_key') }}"
+                    class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-mono text-slate-900" placeholder="SB-Mid-server-xxxx">
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Midtrans Client Key</label>
+                <input type="text" name="midtrans_client_key" value="{{ $contents['midtrans_client_key'] ?? config('midtrans.client_key') }}"
+                    class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-mono text-slate-900" placeholder="SB-Mid-client-xxxx">
+            </div>
+        </div>
+    </div>
+
     <div class="flex justify-end pt-4">
         <button type="submit" class="bg-brand-dark hover:bg-brand-teal text-white px-10 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-xl">
             💾 SIMPAN SEMUA PERUBAHAN KONTEN WEBSITE

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Booking extends Model
 {
+    protected $table = 'wae_watu_bookings';
+
     protected $fillable = [
         'booking_code',
         'user_id',

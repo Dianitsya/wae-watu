@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wae Watu Reef Resort | Flores Sea, Indonesia</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
@@ -126,8 +127,8 @@
 
             <!-- Right Controls: Book Now & Far-Right User Profile Dropdown Banner -->
             <div class="flex items-center space-x-3 md:space-x-4 shrink-0">
-                <button onclick="handleBookNowClick()"
-                    class="inline-block bg-brand-gold hover:bg-brand-goldHover text-brand-darker px-5 xl:px-7 py-2.5 xl:py-3 text-[9px] xl:text-[10px] font-semibold tracking-[0.2em] uppercase transition-all shadow-md">
+                <button id="btn-book-now-nav"
+                    class="inline-block bg-brand-gold hover:bg-brand-goldHover text-brand-darker px-5 xl:px-7 py-2.5 xl:py-3 text-[9px] xl:text-[10px] font-semibold tracking-[0.2em] uppercase transition-all shadow-md cursor-pointer">
                     BOOK NOW
                 </button>
 
@@ -167,10 +168,10 @@
                         </div>
 
                         <div class="space-y-1 text-xs">
-                            <a href="my-bookings.html"
+                            <a onclick="window.location.href = getPmsBookingCartUrl()"
                                 class="flex items-center space-x-2 px-3 py-2 rounded-xl text-stone-300 hover:bg-white/10 hover:text-white transition-colors cursor-pointer">
-                                <span>🏨</span>
-                                <span>Reservasi Saya</span>
+                                <span>🛒</span>
+                                <span>Booking Cart - Terra</span>
                             </a>
                             <button onclick="handleUserLogout(); closeProfileDropdown();"
                                 class="w-full flex items-center space-x-2 px-3 py-2 rounded-xl text-rose-400 hover:bg-rose-900/40 hover:text-rose-200 transition-colors text-left font-semibold cursor-pointer">
@@ -898,15 +899,79 @@
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="text-brand-textMuted">VILLAS ON THE REEF</span>
-                            <span>28</span>
+                            <span id="villa-available-count">28</span>
                         </div>
                     </div>
 
-                    <!-- Reserve Button -->
-                    <div class="pt-2">
-                        <button onclick="handleBookNowClick()"
-                            class="inline-block border border-brand-textDark/60 text-brand-textDark hover:bg-brand-textDark hover:text-white px-8 py-3 text-[10px] tracking-[0.25em] font-medium uppercase transition-all duration-300">
-                            RESERVE A VILLA
+                    <!-- Inline Reservation Form -->
+                    <div class="pt-4 border-t border-stone-300/60 space-y-3">
+                        <p class="text-[9px] font-bold uppercase tracking-[0.2em] text-stone-500">Reservasi Langsung</p>
+
+                        <!-- Row 1: Check-in & Check-out -->
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label
+                                    class="block text-[8px] uppercase tracking-widest text-stone-500 font-semibold mb-1">Check-in</label>
+                                <input type="date" id="villa-checkin"
+                                    class="w-full bg-white border border-stone-300 px-3 py-2 text-[11px] font-semibold text-stone-800 focus:outline-none focus:border-stone-600">
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-[8px] uppercase tracking-widest text-stone-500 font-semibold mb-1">Check-out</label>
+                                <input type="date" id="villa-checkout"
+                                    class="w-full bg-white border border-stone-300 px-3 py-2 text-[11px] font-semibold text-stone-800 focus:outline-none focus:border-stone-600">
+                            </div>
+                        </div>
+
+                        <!-- Row 2: Adults, Children, Rooms -->
+                        <div class="grid grid-cols-3 gap-2">
+                            <div>
+                                <label
+                                    class="block text-[8px] uppercase tracking-widest text-stone-500 font-semibold mb-1">Dewasa</label>
+                                <select id="villa-adults"
+                                    class="w-full bg-white border border-stone-300 px-2 py-2 text-[11px] font-semibold text-stone-800 focus:outline-none focus:border-stone-600">
+                                    <option value="1">1</option>
+                                    <option value="2" selected>2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-[8px] uppercase tracking-widest text-stone-500 font-semibold mb-1">Anak-anak</label>
+                                <select id="villa-children"
+                                    class="w-full bg-white border border-stone-300 px-2 py-2 text-[11px] font-semibold text-stone-800 focus:outline-none focus:border-stone-600">
+                                    <option value="0" selected>0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-[8px] uppercase tracking-widest text-stone-500 font-semibold mb-1">Kamar</label>
+                                <select id="villa-rooms"
+                                    class="w-full bg-white border border-stone-300 px-2 py-2 text-[11px] font-semibold text-stone-800 focus:outline-none focus:border-stone-600">
+                                    <option value="1" selected>1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Nights & price estimate -->
+                        <p id="villa-nights-label" class="text-[9px] text-stone-500 font-medium">Pilih tanggal untuk
+                            melihat estimasi biaya</p>
+
+                        <!-- Reserve Button -->
+                        <button id="btn-reserve-villa-main"
+                            class="w-full bg-brand-textDark hover:bg-brand-darker text-white px-8 py-3.5 text-[10px] tracking-[0.25em] font-semibold uppercase transition-all duration-300 cursor-pointer mt-1">
+                            RESERVE A VILLA →
                         </button>
                     </div>
                 </div>
@@ -1081,8 +1146,8 @@
 
                     <!-- CTA Button -->
                     <div class="pt-2">
-                        <button onclick="openBookingModal(1)"
-                            class="inline-block bg-brand-gold hover:bg-brand-goldHover text-brand-darker px-8 py-3.5 text-[10px] font-semibold tracking-[0.25em] uppercase transition-all shadow-md">
+                        <button id="btn-book-your-stay"
+                            class="inline-block bg-brand-gold hover:bg-brand-goldHover text-brand-darker px-8 py-3.5 text-[10px] font-semibold tracking-[0.25em] uppercase transition-all shadow-md cursor-pointer">
                             BOOK YOUR STAY
                         </button>
                     </div>
@@ -1199,7 +1264,7 @@
 
     <!-- BOOKING MODAL POPUP (MULTI-STEP) -->
     <div id="booking-modal"
-        class="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md hidden items-center justify-center p-3 md:p-6 transition-all duration-300">
+        class="fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm hidden items-center justify-center p-3 md:p-6 transition-all duration-300">
 
         <!-- MAIN FORM MODAL CONTAINER WITH CLEAN ROUNDED CORNERS & INSET SCROLLBAR -->
         <div id="modal-form-card"
@@ -1212,8 +1277,7 @@
             </button>
 
             <!-- Fixed Header Bar (Sticky at Top) -->
-            <div
-                class="px-8 md:px-12 pt-6 pb-5 border-b border-stone-200 flex-none bg-stone-50/95 backdrop-blur-md rounded-t-3xl z-20 shadow-xs">
+            <div class="px-8 md:px-12 pt-6 pb-5 border-b border-stone-200 flex-none rounded-t-3xl z-20 shadow-xs">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pr-10">
                     <div>
                         <span class="text-[10px] tracking-[0.2em] uppercase font-bold text-brand-gold">RESERVASI WAE
@@ -1583,8 +1647,8 @@
 
                 <!-- STEP 3 CONTENT (PAYMENT) -->
                 <div id="step-3-content" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pt-2 pb-6 hidden">
-                    <!-- Column 1: Billing Info -->
-                    <div class="lg:col-span-4 space-y-3">
+                    <!-- Column 1: Billing Info (Payment Details) -->
+                    <div id="column-payment-details" class="lg:col-span-4 space-y-3">
                         <h3 class="font-serif text-lg font-medium text-brand-dark">Payment Details</h3>
                         <p class="text-xs font-semibold text-gray-800">Billing Information</p>
 
@@ -1629,14 +1693,15 @@
                     </div>
 
                     <!-- Column 2: Payment Method Choice -->
-                    <div class="lg:col-span-4 space-y-4">
+                    <div id="column-payment-method" class="lg:col-span-4 space-y-4">
                         <h3 class="font-serif text-lg font-medium text-brand-dark">Payment Method</h3>
 
                         <div class="space-y-3">
-                            <label
-                                class="flex items-center justify-between bg-stone-50 border border-brand-gold rounded-xl p-3 cursor-pointer">
+                            <label id="payment-label-card"
+                                class="flex items-center justify-between bg-stone-50 border border-brand-gold rounded-xl p-3 cursor-pointer transition-all">
                                 <div class="flex items-center space-x-2">
-                                    <input type="radio" name="payment-method" checked class="text-brand-dark">
+                                    <input type="radio" name="payment-method" id="pay-method-card" value="card" checked
+                                        onchange="togglePaymentMethodUI()" class="text-brand-dark cursor-pointer">
                                     <span class="text-xs font-semibold text-gray-900">Credit Card</span>
                                 </div>
                                 <div class="flex space-x-1 text-[10px] font-bold text-blue-900">
@@ -1645,10 +1710,11 @@
                                 </div>
                             </label>
 
-                            <label
-                                class="flex items-center justify-between bg-stone-50 border border-stone-200 rounded-xl p-3 cursor-pointer">
+                            <label id="payment-label-bank"
+                                class="flex items-center justify-between bg-stone-50 border border-stone-200 rounded-xl p-3 cursor-pointer transition-all">
                                 <div class="flex items-center space-x-2">
-                                    <input type="radio" name="payment-method" class="text-brand-dark">
+                                    <input type="radio" name="payment-method" id="pay-method-bank" value="bank"
+                                        onchange="togglePaymentMethodUI()" class="text-brand-dark cursor-pointer">
                                     <span class="text-xs font-semibold text-gray-900">Bank Transfer</span>
                                 </div>
                                 <div class="flex space-x-1 text-[10px] text-gray-600">
@@ -1659,8 +1725,8 @@
                             </label>
                         </div>
 
-                        <!-- Card Form -->
-                        <div class="space-y-3 pt-2">
+                        <!-- Card Form (Payment Details for Credit Card) -->
+                        <div id="payment-details-card" class="space-y-3 pt-2">
                             <div>
                                 <label class="block text-[10px] font-medium text-gray-600 mb-0.5">Card
                                     Number</label>
@@ -1694,10 +1760,104 @@
                                 <span class="text-[11px] text-gray-600">Save card for future use</span>
                             </label>
                         </div>
+
+                        <!-- Bank Transfer Details (Hidden by default when Credit Card is selected) -->
+                        <div id="payment-details-bank" class="space-y-3 pt-2 hidden">
+                            <label class="block text-[11px] font-semibold text-gray-700 uppercase tracking-wider">Pilih
+                                Bank Tujuan Transfer:</label>
+
+                            <div class="grid grid-cols-2 gap-2.5">
+                                <!-- Bank BCA Option -->
+                                <div id="bank-opt-bca" onclick="selectBankOption('bca')"
+                                    class="p-2.5 rounded-xl border border-brand-gold bg-white shadow-sm cursor-pointer transition-all flex items-center justify-between">
+                                    <div class="flex items-center space-x-2">
+                                        <input type="radio" name="selected-bank" id="radio-bank-bca" value="bca" checked
+                                            class="text-brand-dark cursor-pointer">
+                                        <span class="text-xs font-bold text-gray-900">BCA</span>
+                                    </div>
+                                    <span
+                                        class="text-[10px] font-semibold text-blue-900 bg-blue-50 px-2 py-0.5 rounded">VA</span>
+                                </div>
+
+                                <!-- Bank Mandiri Option -->
+                                <div id="bank-opt-mandiri" onclick="selectBankOption('mandiri')"
+                                    class="p-2.5 rounded-xl border border-stone-200 bg-stone-50 cursor-pointer transition-all flex items-center justify-between hover:border-stone-400">
+                                    <div class="flex items-center space-x-2">
+                                        <input type="radio" name="selected-bank" id="radio-bank-mandiri" value="mandiri"
+                                            class="text-brand-dark cursor-pointer">
+                                        <span class="text-xs font-bold text-gray-900">Mandiri</span>
+                                    </div>
+                                    <span
+                                        class="text-[10px] font-semibold text-amber-900 bg-amber-50 px-2 py-0.5 rounded">Livin</span>
+                                </div>
+
+                                <!-- Bank BNI Option -->
+                                <div id="bank-opt-bni" onclick="selectBankOption('bni')"
+                                    class="p-2.5 rounded-xl border border-stone-200 bg-stone-50 cursor-pointer transition-all flex items-center justify-between hover:border-stone-400">
+                                    <div class="flex items-center space-x-2">
+                                        <input type="radio" name="selected-bank" id="radio-bank-bni" value="bni"
+                                            class="text-brand-dark cursor-pointer">
+                                        <span class="text-xs font-bold text-gray-900">BNI</span>
+                                    </div>
+                                    <span
+                                        class="text-[10px] font-semibold text-teal-900 bg-teal-50 px-2 py-0.5 rounded">Mobile</span>
+                                </div>
+
+                                <!-- Bank BRI Option -->
+                                <div id="bank-opt-bri" onclick="selectBankOption('bri')"
+                                    class="p-2.5 rounded-xl border border-stone-200 bg-stone-50 cursor-pointer transition-all flex items-center justify-between hover:border-stone-400">
+                                    <div class="flex items-center space-x-2">
+                                        <input type="radio" name="selected-bank" id="radio-bank-bri" value="bri"
+                                            class="text-brand-dark cursor-pointer">
+                                        <span class="text-xs font-bold text-gray-900">BRI</span>
+                                    </div>
+                                    <span
+                                        class="text-[10px] font-semibold text-blue-800 bg-blue-50 px-2 py-0.5 rounded">BRIMO</span>
+                                </div>
+                            </div>
+
+                            <!-- Selected Bank Details Box -->
+                            <div
+                                class="bg-stone-100 p-3.5 rounded-xl border border-stone-200 text-xs space-y-2.5 text-slate-700">
+                                <div class="flex justify-between items-center pb-2 border-b border-stone-200">
+                                    <span class="font-bold text-brand-dark flex items-center space-x-1.5">
+                                        <span>🏦</span>
+                                        <span id="selected-bank-name">Bank BCA</span>
+                                    </span>
+                                    <span
+                                        class="text-[10px] font-semibold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full uppercase tracking-wider">Virtual
+                                        Account</span>
+                                </div>
+
+                                <div class="space-y-1">
+                                    <span
+                                        class="text-[10px] text-gray-500 uppercase tracking-wider block font-semibold">Nomor
+                                        Virtual Account</span>
+                                    <div
+                                        class="flex justify-between items-center bg-white p-2 rounded-lg border border-stone-300">
+                                        <span id="selected-bank-va"
+                                            class="font-mono text-xs font-bold text-brand-dark tracking-wider">88012 385
+                                            892 104</span>
+                                        <button type="button" onclick="copyBankVA()"
+                                            class="text-[10px] bg-stone-800 hover:bg-brand-teal text-white font-semibold px-2.5 py-1 rounded transition-colors cursor-pointer">
+                                            📋 COPY
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-0.5 pt-0.5 text-[11px]">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-500">Nama Pemilik Rekening:</span>
+                                        <span id="selected-bank-holder" class="font-bold text-gray-900">PT WAE WATU REEF
+                                            RESORT</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Column 3: Detailed Payment Summary -->
-                    <div class="lg:col-span-4">
+                    <div id="column-payment-summary" class="lg:col-span-4">
                         <div
                             class="bg-[#F0F3F4] rounded-2xl p-5 border border-stone-200 shadow-sm text-gray-800 space-y-3">
                             <h3 class="font-serif text-lg font-medium text-brand-dark">Payment Summary</h3>
@@ -1752,801 +1912,1301 @@
                                     <span>🔒</span>
                                 </button>
                             </div>
+                            <!-- STEP 4 CONTENT (SUCCESS) -->
+                            <div id="step-4-content"
+                                class="hidden flex-col items-center justify-center text-center py-12 px-6 space-y-5">
+                                <div
+                                    class="w-16 h-16 flex items-center justify-center text-emerald-700 bg-emerald-100 rounded-full border border-emerald-300 shadow-sm">
+                                    <svg class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path
+                                            d="M12 2l2.4 2.4 3.4-.5.8 3.3 3.1 1.5-1 3.3 2 2.7-2.4 2.4.5 3.4-3.3.8-1.5 3.1-3.3-1-2.7 2L9.6 22l-3.4.5-.8-3.3-3.1-1.5 1-3.3-2-2.7 2.4-2.4-.5-3.4 3.3-.8 1.5-3.1 3.3 1L12 2z"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </div>
+
+                                <div class="space-y-1">
+                                    <span
+                                        class="text-[10px] font-bold tracking-[0.25em] text-brand-dark uppercase">RESERVASI
+                                        BERHASIL DIBUAT!</span>
+                                    <h3 class="font-serif text-2xl md:text-3xl text-brand-dark font-medium">Reservasi
+                                        Anda Telah Diterima</h3>
+                                </div>
+
+                                <p id="booking-code-badge"
+                                    class="font-mono text-xs font-bold text-emerald-900 bg-emerald-100 border border-emerald-300 px-5 py-1.5 rounded-xl shadow-xs inline-block">
+                                    BOOKING CODE: WW-2026-8942
+                                </p>
+
+                                <p class="text-xs text-gray-500 font-light max-w-sm">
+                                    Terima kasih atas pemesanan Anda di Wae Watu Reef Resort. Mengalihkan ke halaman
+                                    <b>Reservasi Saya</b>...
+                                </p>
+
+                                <div class="pt-2">
+                                    <button onclick="window.location.href='my-bookings.html'"
+                                        class="bg-[#164E63] hover:bg-[#0F3A4A] text-white px-8 py-3 rounded-full text-xs font-bold tracking-wider uppercase transition-all shadow-md cursor-pointer flex items-center justify-center space-x-2">
+                                        <span>LIHAT RESERVASI SAYA</span>
+                                        <span>&rarr;</span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-        </div>
-    </div>
+                <!-- MY RESERVATIONS MODAL -->
+                <div id="my-bookings-modal"
+                    class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 md:p-6 overflow-y-auto">
+                    <div
+                        class="bg-white border border-stone-200 text-gray-900 rounded-3xl w-full max-w-2xl p-6 md:p-8 shadow-2xl relative space-y-6 my-auto">
+                        <!-- Close X Button -->
+                        <button onclick="closeMyBookingsModal()"
+                            class="absolute top-6 right-6 text-stone-500 hover:text-red-600 transition-colors text-2xl font-bold cursor-pointer">
+                            ✕
+                        </button>
 
-    <!-- SUCCESS MODAL POPUP (STEP 4) -->
-    <div id="modal-success-card"
-        class="bg-white text-gray-900 rounded-3xl shadow-2xl max-w-md w-full p-10 relative hidden flex-col items-center justify-center text-center border border-stone-200">
-        <!-- Close Button X -->
-        <button onclick="closeBookingModal()"
-            class="absolute top-6 right-6 text-gray-900 hover:text-red-500 transition-colors p-2 text-2xl font-bold leading-none">
-            &#10005;
-        </button>
+                        <!-- Header -->
+                        <div class="border-b border-stone-200 pb-4">
+                            <span
+                                class="text-[10px] tracking-[0.3em] font-sans text-brand-gold uppercase font-bold">RESERVASI
+                                VILA TAMU</span>
+                            <h3 class="font-serif text-3xl text-brand-dark font-medium mt-1">Reservasi Saya</h3>
+                            <p class="text-xs text-gray-600 font-light mt-1">Daftar riwayat pemesanan kamar vila Wae
+                                Watu Reef Resort Anda.</p>
+                        </div>
 
-        <!-- Verified Star Badge Icon -->
-        <div class="w-20 h-20 mb-8 flex items-center justify-center text-navy-900">
-            <svg class="w-full h-full" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <!-- Star-like badge outer contour -->
-                <path
-                    d="M12 2l2.4 2.4 3.4-.5.8 3.3 3.1 1.5-1 3.3 2 2.7-2.4 2.4.5 3.4-3.3.8-1.5 3.1-3.3-1-2.7 2L9.6 22l-3.4.5-.8-3.3-3.1-1.5 1-3.3-2-2.7 2.4-2.4-.5-3.4 3.3-.8 1.5-3.1 3.3 1L12 2z"
-                    stroke-linecap="round" stroke-linejoin="round" />
-                <!-- Checkmark inside -->
-                <path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-            </svg>
-        </div>
+                        <!-- Bookings List Container -->
+                        <div id="my-bookings-list" class="space-y-4 max-h-[420px] overflow-y-auto pr-1">
+                            <!-- Loading State -->
+                            <div class="text-center py-10 space-y-2 text-stone-500">
+                                <div class="inline-block animate-spin text-2xl">⏳</div>
+                                <p class="text-xs font-light">Memuat riwayat reservasi Anda...</p>
+                            </div>
+                        </div>
 
-        <!-- Success Text -->
-        <h3 class="text-sm font-bold tracking-[0.2em] text-brand-dark uppercase mb-2">
-            RESERVASI BERHASIL DIBUAT!
-        </h3>
-        <p id="booking-code-badge"
-            class="font-mono text-xs font-bold text-emerald-800 bg-emerald-100 border border-emerald-300 px-4 py-1.5 rounded-lg mb-3 inline-block">
-            BOOKING CODE: WW-2026-8942
-        </p>
-        <p class="text-[11px] text-gray-500 font-medium mb-5">
-            Mengalihkan ke halaman Reservasi Saya dalam 2 detik...
-        </p>
-        <button onclick="window.location.href='my-bookings.html'"
-            class="w-full bg-[#164E63] hover:bg-[#0F3A4A] text-white py-3 rounded-full text-xs font-bold tracking-wider uppercase transition-all shadow-md cursor-pointer flex items-center justify-center space-x-2">
-            <span>LIHAT RESERVASI SAYA</span>
-            <span>&rarr;</span>
-        </button>
-    </div>
-
-    </div>
-
-    <!-- MY RESERVATIONS MODAL -->
-    <div id="my-bookings-modal"
-        class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 md:p-6 overflow-y-auto">
-        <div
-            class="bg-[#0A1826] border border-brand-gold/30 text-white rounded-3xl w-full max-w-2xl p-6 md:p-8 shadow-2xl relative space-y-6 my-auto">
-            <!-- Close X Button -->
-            <button onclick="closeMyBookingsModal()"
-                class="absolute top-6 right-6 text-stone-400 hover:text-white transition-colors text-2xl font-bold cursor-pointer">
-                ✕
-            </button>
-
-            <!-- Header -->
-            <div class="border-b border-white/10 pb-4">
-                <span class="text-[10px] tracking-[0.3em] font-sans text-brand-gold uppercase font-semibold">RESERVASI
-                    VILA TAMU</span>
-                <h3 class="font-serif text-3xl text-white font-normal mt-1">Reservasi Saya</h3>
-                <p class="text-xs text-stone-400 font-light mt-1">Daftar riwayat pemesanan kamar vila Wae Watu Reef
-                    Resort Anda.</p>
-            </div>
-
-            <!-- Bookings List Container -->
-            <div id="my-bookings-list" class="space-y-4 max-h-[420px] overflow-y-auto pr-1">
-                <!-- Loading State -->
-                <div class="text-center py-10 space-y-2 text-stone-400">
-                    <div class="inline-block animate-spin text-2xl">⏳</div>
-                    <p class="text-xs font-light">Memuat riwayat reservasi Anda...</p>
+                        <!-- Footer Action -->
+                        <div class="pt-2 flex justify-between items-center border-t border-stone-200 text-xs">
+                            <span class="text-stone-500 text-[11px]">Butuh bantuan reservasi? Hubungi tim staf
+                                kami.</span>
+                            <button onclick="closeMyBookingsModal()"
+                                class="bg-stone-100 hover:bg-stone-200 text-stone-800 px-5 py-2 rounded-xl font-semibold uppercase text-[10px] tracking-wider transition-all cursor-pointer border border-stone-300">
+                                Tutup
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Footer Action -->
-            <div class="pt-2 flex justify-between items-center border-t border-white/10 text-xs">
-                <span class="text-stone-400 text-[11px]">Butuh bantuan reservasi? Hubungi tim staf kami.</span>
-                <button onclick="closeMyBookingsModal()"
-                    class="bg-white/10 hover:bg-white/20 text-white px-5 py-2 rounded-xl font-semibold uppercase text-[10px] tracking-wider transition-all cursor-pointer">
-                    Tutup
-                </button>
-            </div>
-        </div>
-    </div>
+                <!-- PRE-BOOKING SELECTION & DETAIL RESERVASI MODAL -->
+                <div id="pre-booking-modal"
+                    style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 999999; background: rgba(0,0,0,0.75); align-items: center; justify-content: center; padding: 1rem;">
+                    <div
+                        class="bg-white rounded-3xl max-w-xl w-full p-6 md:p-8 shadow-2xl space-y-5 relative border border-stone-200 animate-fadeIn max-h-[90vh] overflow-y-auto custom-scrollbar">
+                        <!-- Close Button -->
+                        <button onclick="closePreBookingModal()"
+                            class="absolute top-5 right-5 text-stone-400 hover:text-stone-700 text-xl font-bold p-1 cursor-pointer z-10">
+                            ✕
+                        </button>
 
-    <!-- JAVASCRIPT FOR HERO SLIDESHOW & MULTI-STEP MODAL -->
-    <script>
-        // HERO SLIDESHOW LOGIC
-        let currentHeroSlide = 0;
+                        <!-- Modal Header -->
+                        <div class="space-y-1 pr-6 border-b border-stone-200 pb-4">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-brand-gold"></span>
+                                <span
+                                    class="text-[10px] font-bold tracking-[0.25em] text-brand-gold uppercase block">WAE
+                                    WATU REEF RESORT</span>
+                            </div>
+                            <h3 class="font-serif text-2xl text-brand-dark font-medium">Detail Reservasi Vila</h3>
+                            <p class="text-xs text-stone-500 font-light">Periksa rincian pemesanan Anda sebelum
+                                melanjutkan ke Booking Cart Terra PMS.</p>
+                        </div>
 
-        function setHeroSlide(index) {
-            currentHeroSlide = index;
-            const slides = document.querySelectorAll('.hero-slide');
-            const dots = document.querySelectorAll('.hero-dot');
+                        <!-- Single Comprehensive Detail Reservasi Content -->
+                        <div class="space-y-5">
+                            <!-- 1. Villa Preview Card -->
+                            <div class="flex gap-4 items-center bg-stone-50 p-4 rounded-2xl border border-stone-200">
+                                <img id="detail-villa-img"
+                                    src="https://images.unsplash.com/photo-1512100356356-de1b84283e18?auto=format&fit=crop&w=400&q=80"
+                                    alt="Villa Preview"
+                                    class="w-24 h-24 rounded-xl object-cover border border-stone-300 shrink-0">
+                                <div class="space-y-1 min-w-0 flex-1">
+                                    <span
+                                        class="text-[9px] font-bold uppercase tracking-wider text-brand-gold bg-brand-gold/10 px-2.5 py-0.5 rounded-full inline-block">Unit
+                                        Terpilih</span>
+                                    <h4 id="detail-villa-name-title"
+                                        class="font-serif text-xl font-bold text-stone-900 truncate">The Reef Villa</h4>
+                                    <p id="detail-villa-rate-display" class="text-brand-gold font-bold text-sm">Rp
+                                        15.000.000 <span class="text-[10px] text-stone-500 font-normal">/ malam</span>
+                                    </p>
+                                    <p class="text-[10px] text-stone-500">🏝️ Overwater Cottage · Ladder to Reef · Sea
+                                        Deck</p>
+                                </div>
+                            </div>
 
-            slides.forEach((slide, i) => {
-                if (i === index) {
-                    slide.classList.remove('opacity-0');
-                    slide.classList.add('opacity-100');
-                } else {
-                    slide.classList.remove('opacity-100');
-                    slide.classList.add('opacity-0');
-                }
-            });
+                            <!-- 2. Interactive Detail Inputs (Villa, Dates, Guests, Name) -->
+                            <div class="space-y-3.5 bg-stone-50/60 p-4.5 rounded-2xl border border-stone-200/80">
+                                <span
+                                    class="text-[10px] font-bold uppercase tracking-wider text-stone-600 block">Rincian
+                                    Pemesanan</span>
 
-            dots.forEach((dot, i) => {
-                if (i === index) {
-                    dot.className = "hero-dot w-6 h-2 rounded-full bg-brand-textDark transition-all";
-                } else {
-                    dot.className = "hero-dot w-2 h-2 rounded-full bg-brand-textDark/30 transition-all";
-                }
-            });
-        }
+                                <!-- Select Villa Unit -->
+                                <div>
+                                    <label
+                                        class="block text-[10px] font-semibold uppercase tracking-wider text-stone-500 mb-1">Pilih
+                                        Unit Vila</label>
+                                    <select id="prebook-villa-select" onchange="updatePrebookPrice()"
+                                        class="w-full bg-white border border-stone-300 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-stone-800 focus:ring-2 focus:ring-brand-gold focus:outline-none shadow-xs">
+                                        <option value="the-reef-villa" data-name="The Reef Villa" data-price="15000000"
+                                            data-img="https://images.unsplash.com/photo-1512100356356-de1b84283e18?auto=format&fit=crop&w=800&q=80"
+                                            selected>🏝️ The Reef Villa — Rp 15.000.000 / malam</option>
+                                        <option value="overwater-sunset-villa" data-name="Overwater Sunset Villa"
+                                            data-price="18000000"
+                                            data-img="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80">
+                                            🌅 Overwater Sunset Villa — Rp 18.000.000 / malam</option>
+                                        <option value="royal-lagoon-villa" data-name="Royal Lagoon Villa"
+                                            data-price="22000000"
+                                            data-img="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80">
+                                            👑 Royal Lagoon Villa — Rp 22.000.000 / malam</option>
+                                    </select>
+                                </div>
 
-        function nextHeroSlide() {
-            const slides = document.querySelectorAll('.hero-slide');
-            let nextIndex = (currentHeroSlide + 1) % slides.length;
-            setHeroSlide(nextIndex);
-        }
+                                <!-- Tanggal Check-in & Check-out -->
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <span
+                                            class="block text-[9px] uppercase text-stone-500 font-semibold mb-0.5">Tanggal
+                                            Check-in</span>
+                                        <input type="date" id="prebook-check-in" onchange="calculatePrebookNights()"
+                                            class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs font-semibold text-stone-800 focus:ring-2 focus:ring-brand-gold shadow-xs">
+                                    </div>
+                                    <div>
+                                        <span
+                                            class="block text-[9px] uppercase text-stone-500 font-semibold mb-0.5">Tanggal
+                                            Check-out</span>
+                                        <input type="date" id="prebook-check-out" onchange="calculatePrebookNights()"
+                                            class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs font-semibold text-stone-800 focus:ring-2 focus:ring-brand-gold shadow-xs">
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center text-[10px]">
+                                    <span id="prebook-nights-info" class="font-bold text-brand-teal">📅 Durasi: 3
+                                        Malam</span>
+                                    <span id="detail-formatted-dates" class="text-stone-500 font-medium">15 Okt 2026 —
+                                        18 Okt 2026</span>
+                                </div>
 
-        function prevHeroSlide() {
-            const slides = document.querySelectorAll('.hero-slide');
-            let prevIndex = (currentHeroSlide - 1 + slides.length) % slides.length;
-            setHeroSlide(prevIndex);
-        }
+                                <!-- Guest Count & Name -->
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div>
+                                        <label
+                                            class="block text-[10px] font-semibold uppercase tracking-wider text-stone-500 mb-1">Jumlah
+                                            Tamu</label>
+                                        <select id="prebook-guests" onchange="updatePrebookPrice()"
+                                            class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs font-semibold text-stone-800 focus:ring-2 focus:ring-brand-gold focus:outline-none shadow-xs">
+                                            <option value="1">👨 1 Tamu (Single)</option>
+                                            <option value="2" selected>👩‍❤️‍👨 2 Tamu (Standard)</option>
+                                            <option value="3">👨‍👩‍👦 3 Tamu (+ Extra)</option>
+                                            <option value="4">👨‍👩‍👧‍👦 4 Tamu (Family)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label
+                                            class="block text-[10px] font-semibold uppercase tracking-wider text-stone-500 mb-1">Nama
+                                            Pemesan</label>
+                                        <input type="text" id="prebook-guest-name" oninput="updatePrebookPrice()"
+                                            placeholder="Masukkan nama pemesan"
+                                            class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs font-semibold text-stone-800 focus:ring-2 focus:ring-brand-gold focus:outline-none shadow-xs">
+                                    </div>
+                                </div>
+                            </div>
 
-        // Auto transition hero slides every 6 seconds
-        setInterval(nextHeroSlide, 6000);
+                            <!-- 3. Rincian Biaya & Perhitungan -->
+                            <div class="bg-stone-50 rounded-2xl border border-stone-200 p-4 space-y-3 text-xs">
+                                <span
+                                    class="text-[10px] uppercase font-bold text-stone-600 tracking-wider block">Rincian
+                                    Biaya & Fasilitas</span>
 
-        // EXPERIENCES SLIDER LOGIC
-        function scrollExperiences(direction) {
-            const slider = document.getElementById('experiences-slider');
-            const scrollAmount = 380;
-            if (direction === 'left') {
-                slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-            } else {
-                slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-            }
-        }
+                                <div class="space-y-1.5 border-b border-stone-200 pb-3 text-[11px]">
+                                    <div class="flex justify-between text-stone-600">
+                                        <span id="detail-rate-breakdown-label">Biaya Kamar (Rp 15.000.000 × 3
+                                            Malam)</span>
+                                        <span id="detail-subtotal-display" class="font-semibold text-stone-800">Rp
+                                            45.000.000</span>
+                                    </div>
+                                    <div class="flex justify-between text-stone-500 text-[10px]">
+                                        <span>Pajak & Pelayanan Resort</span>
+                                        <span class="text-emerald-700 font-semibold">Termasuk (Included)</span>
+                                    </div>
+                                </div>
 
-        let currentVillaName = "The Reef Villa";
-        let currentVillaPrice = 15000000;
-        let currentVillaImg = "https://images.unsplash.com/photo-1512100356356-de1b84283e18?auto=format&fit=crop&w=1200&q=80";
+                                <!-- Total Highlight -->
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span
+                                            class="font-bold text-stone-800 uppercase tracking-wider text-[11px] block">TOTAL
+                                            PERKIRAAN BIAYA</span>
+                                        <span class="text-[9px] text-stone-500">Akan diteruskan ke Booking Cart Terra
+                                            PMS</span>
+                                    </div>
+                                    <span id="prebook-total-display"
+                                        class="font-serif text-2xl font-bold text-brand-dark">Rp 45.000.000</span>
+                                </div>
 
-        let siteTaxEnabled = false;
-        let siteTaxPercentage = 10;
-        let siteTaxLabel = "Pajak & Layanan";
+                                <!-- Included Perks -->
+                                <div
+                                    class="bg-white/80 rounded-xl p-3 border border-stone-200 text-[10px] text-stone-600 space-y-1">
+                                    <span class="font-bold text-stone-800 block uppercase tracking-wider text-[9px]">✨
+                                        FASILITAS INCLUDED:</span>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 text-[10px]">
+                                        <span>✓ Antar jemput boat marina Labuan Bajo</span>
+                                        <span>✓ Daily gourmet breakfast</span>
+                                        <span>✓ Private Sea Deck & Reef ladder</span>
+                                        <span>✓ Snorkeling gear & Ocean kayak</span>
+                                    </div>
+                                </div>
+                            </div>
 
-        function updateBookingSummaryUI() {
-            const checkInInput = document.getElementById('booking-check-in');
-            const checkOutInput = document.getElementById('booking-check-out');
+                            <!-- 4. Action Buttons -->
+                            <div class="flex gap-3 pt-1">
+                                <button onclick="closePreBookingModal()"
+                                    class="w-1/3 bg-stone-100 hover:bg-stone-200 text-stone-700 py-3.5 px-4 rounded-xl font-bold text-[11px] tracking-wider uppercase transition-all border border-stone-300 cursor-pointer">
+                                    BATAL
+                                </button>
+                                <button onclick="confirmPreBookingAndRedirect()"
+                                    class="w-2/3 bg-brand-gold hover:bg-brand-goldHover text-brand-darker py-3.5 px-6 rounded-xl font-bold text-xs tracking-widest uppercase transition-all shadow-md flex items-center justify-center space-x-2 cursor-pointer">
+                                    <span>OK, LANJUT KE BOOKING CART</span>
+                                    <span>→</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            let diffDays = 0;
-            let datesText = "Belum Dipilih";
+                <!-- JAVASCRIPT FOR HERO SLIDESHOW & MULTI-STEP MODAL -->
+                <script>
+                    // HERO SLIDESHOW LOGIC
+                    let currentHeroSlide = 0;
 
-            if (checkInInput && checkOutInput && checkInInput.value && checkOutInput.value) {
-                const checkInDate = new Date(checkInInput.value);
-                const checkOutDate = new Date(checkOutInput.value);
+                    function setHeroSlide(index) {
+                        currentHeroSlide = index;
+                        const slides = document.querySelectorAll('.hero-slide');
+                        const dots = document.querySelectorAll('.hero-dot');
 
-                if (checkOutDate > checkInDate) {
-                    const diffTime = Math.abs(checkOutDate - checkInDate);
-                    diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1;
-                    datesText = `${checkInInput.value} s/d ${checkOutInput.value} (${diffDays} Malam)`;
-                }
-            }
+                        slides.forEach((slide, i) => {
+                            if (i === index) {
+                                slide.classList.remove('opacity-0');
+                                slide.classList.add('opacity-100');
+                            } else {
+                                slide.classList.remove('opacity-100');
+                                slide.classList.add('opacity-0');
+                            }
+                        });
 
-            const guestName = currentUser ? currentUser.name : "Tamu Wae Watu";
-            document.querySelectorAll('.summary-villa-name').forEach(el => el.innerText = currentVillaName);
-            document.querySelectorAll('.summary-villa-img').forEach(el => {
-                el.src = currentVillaImg;
-                el.alt = currentVillaName;
-            });
-            document.querySelectorAll('.summary-booking-dates').forEach(el => el.innerText = datesText);
-            document.querySelectorAll('.summary-booking-guests').forEach(el => el.innerText = "2 Dewasa");
-            document.querySelectorAll('.summary-guest-name').forEach(el => el.innerText = guestName);
-
-            // Handle Tax Row Visibility & Label
-            const taxRows = document.querySelectorAll('.summary-tax-row');
-            if (siteTaxEnabled && siteTaxPercentage > 0) {
-                taxRows.forEach(row => row.classList.remove('hidden'));
-                const labelText = `${siteTaxLabel} (${siteTaxPercentage}%)`;
-                document.querySelectorAll('.summary-tax-label').forEach(el => el.innerText = labelText);
-            } else {
-                taxRows.forEach(row => row.classList.add('hidden'));
-            }
-
-            if (diffDays === 0) {
-                const formattedRate = 'Rp ' + currentVillaPrice.toLocaleString('id-ID') + ' / malam';
-                document.querySelectorAll('.summary-rate-display').forEach(el => el.innerText = formattedRate);
-                document.querySelectorAll('.summary-tax-display').forEach(el => el.innerText = "Rp 0");
-                document.querySelectorAll('.summary-total-display').forEach(el => el.innerText = "Rp 0");
-                document.querySelectorAll('.summary-pay-btn-label').forEach(el => el.innerText = "PILIH TANGGAL SEKARANG");
-                return;
-            }
-
-            const subtotal = currentVillaPrice * diffDays;
-            let taxAmount = 0;
-            if (siteTaxEnabled && siteTaxPercentage > 0) {
-                taxAmount = subtotal * (siteTaxPercentage / 100);
-            }
-            const totalPayable = subtotal + taxAmount;
-
-            const formattedRate = `${'Rp ' + currentVillaPrice.toLocaleString('id-ID')} x ${diffDays} Malam`;
-            const formattedTax = 'Rp ' + Math.round(taxAmount).toLocaleString('id-ID');
-            const formattedTotal = 'Rp ' + Math.round(totalPayable).toLocaleString('id-ID');
-
-            document.querySelectorAll('.summary-rate-display').forEach(el => el.innerText = formattedRate);
-            document.querySelectorAll('.summary-tax-display').forEach(el => el.innerText = formattedTax);
-            document.querySelectorAll('.summary-total-display').forEach(el => el.innerText = formattedTotal);
-            document.querySelectorAll('.summary-pay-btn-label').forEach(el => el.innerText = `BAYAR ${formattedTotal} SEKARANG`);
-        }
-
-        function calculateNightsAndTotal() {
-            const checkInInput = document.getElementById('booking-check-in');
-            const checkOutInput = document.getElementById('booking-check-out');
-            const nightsBadge = document.getElementById('booking-nights-badge');
-
-            if (!checkInInput || !checkOutInput || !checkInInput.value || !checkOutInput.value) {
-                if (nightsBadge) {
-                    nightsBadge.className = 'text-[10px] font-medium text-stone-500 mt-1 block';
-                    nightsBadge.innerText = '📅 Silakan pilih tanggal check-in & check-out';
-                }
-                updateBookingSummaryUI();
-                return;
-            }
-
-            if (checkOutInput.value <= checkInInput.value) {
-                const nextDay = new Date(checkInInput.value);
-                nextDay.setDate(nextDay.getDate() + 1);
-                checkOutInput.value = nextDay.toISOString().split('T')[0];
-            }
-
-            const diffTime = Math.abs(new Date(checkOutInput.value) - new Date(checkInInput.value));
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1;
-
-            const totalPrice = currentVillaPrice * diffDays;
-            const formattedTotal = 'Rp ' + totalPrice.toLocaleString('id-ID');
-
-            if (nightsBadge) {
-                nightsBadge.className = 'text-[10px] font-bold text-emerald-800 mt-1 block';
-                nightsBadge.innerText = `📅 Total: ${diffDays} Malam (${formattedTotal})`;
-            }
-
-            updateBookingSummaryUI();
-        }
-
-        function initDefaultBookingDates() {
-            const checkInInput = document.getElementById('booking-check-in');
-            const checkOutInput = document.getElementById('booking-check-out');
-            const todayStr = new Date().toISOString().split('T')[0];
-
-            if (checkInInput) {
-                checkInInput.min = todayStr;
-            }
-            if (checkOutInput) {
-                checkOutInput.min = todayStr;
-            }
-            calculateNightsAndTotal();
-        }
-
-        // BOOKING MODAL LOGIC
-        function openBookingModal(step = 1) {
-            const modal = document.getElementById('booking-modal');
-            const innerScroll = document.querySelector('#modal-form-card .overflow-y-auto');
-            if (innerScroll) innerScroll.scrollTop = 0;
-
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            document.body.style.overflow = 'hidden';
-            initDefaultBookingDates();
-
-            if (currentUser) {
-                const nameIn = document.getElementById('booking-guest-name');
-                const emailIn = document.getElementById('booking-guest-email');
-                const phoneIn = document.getElementById('booking-guest-phone');
-                if (nameIn && !nameIn.value) nameIn.value = currentUser.name || '';
-                if (emailIn && !emailIn.value) emailIn.value = currentUser.email || '';
-                if (phoneIn && !phoneIn.value && currentUser.phone) phoneIn.value = currentUser.phone;
-            }
-
-            goToStep(step);
-        }
-
-        function closeBookingModal() {
-            const modal = document.getElementById('booking-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-            document.body.style.overflow = 'auto';
-        }
-
-        function goToStep(step) {
-            const formCard = document.getElementById('modal-form-card');
-            const successCard = document.getElementById('modal-success-card');
-            if (formCard) formCard.classList.remove('hidden');
-            if (successCard) {
-                successCard.classList.add('hidden');
-                successCard.classList.remove('flex');
-            }
-
-            const step1 = document.getElementById('step-1-content');
-            const step2 = document.getElementById('step-2-content');
-            const step3 = document.getElementById('step-3-content');
-
-            if (step1) step1.classList.add('hidden');
-            if (step2) step2.classList.add('hidden');
-            if (step3) step3.classList.add('hidden');
-
-            const tab1 = document.getElementById('step-tab-1');
-            const tab2 = document.getElementById('step-tab-2');
-            const tab3 = document.getElementById('step-tab-3');
-
-            const inactiveClass = "px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer text-stone-600 hover:text-stone-900 bg-transparent";
-            const activeClass = "px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer bg-brand-dark text-white shadow-sm";
-
-            if (tab1) tab1.className = inactiveClass;
-            if (tab2) tab2.className = inactiveClass;
-            if (tab3) tab3.className = inactiveClass;
-
-            if (step === 1) {
-                if (step1) step1.classList.remove('hidden');
-                if (tab1) tab1.className = activeClass;
-            } else if (step === 2) {
-                if (step2) step2.classList.remove('hidden');
-                if (tab2) tab2.className = activeClass;
-            } else if (step === 3) {
-                if (step3) step3.classList.remove('hidden');
-                if (tab3) tab3.className = activeClass;
-            }
-
-            const innerScroll = document.querySelector('#modal-form-card .overflow-y-auto');
-            if (innerScroll) innerScroll.scrollTop = 0;
-
-            updateBookingSummaryUI();
-        }
-
-        function getApiBase() {
-            if (window.location.hostname === 'dianitsya.github.io' || window.location.protocol === 'https:') {
-                return 'https://wae-watu-production.up.railway.app';
-            }
-            if (window.location.hostname && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-                return `http://${window.location.hostname}:8000`;
-            }
-            return 'http://127.0.0.1:8000';
-        }
-
-        function formatImageUrl(url) {
-            if (!url) return '';
-            if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
-                return url;
-            }
-            const apiBase = getApiBase();
-            return `${apiBase}${url.startsWith('/') ? '' : '/'}${url}`;
-        }
-
-        async function completeBooking() {
-            const payBtn = document.querySelector('#modal-form-card button[onclick="completeBooking()"]');
-            if (payBtn) payBtn.innerHTML = '<span>SAVING RESERVATION...</span>';
-
-            const checkInVal = document.getElementById('booking-check-in') ? document.getElementById('booking-check-in').value : '2026-10-15';
-            const checkOutVal = document.getElementById('booking-check-out') ? document.getElementById('booking-check-out').value : '2026-10-18';
-
-            const nameInput = document.getElementById('booking-guest-name');
-            const phoneInput = document.getElementById('booking-guest-phone');
-            const emailInput = document.getElementById('booking-guest-email');
-            const notes1Input = document.getElementById('booking-step1-notes');
-            const notes2Input = document.getElementById('booking-special-notes');
-
-            const guestNameVal = (nameInput && nameInput.value.trim()) ? nameInput.value.trim() : (currentUser ? currentUser.name : 'Guest Wae Watu');
-            const guestEmailVal = (emailInput && emailInput.value.trim()) ? emailInput.value.trim() : (currentUser ? currentUser.email : 'guest@waewatu.com');
-            const guestPhoneVal = (phoneInput && phoneInput.value.trim()) ? phoneInput.value.trim() : (currentUser && currentUser.phone ? currentUser.phone : '+6281234567890');
-
-            const notes1 = (notes1Input && notes1Input.value.trim()) ? notes1Input.value.trim() : '';
-            const notes2 = (notes2Input && notes2Input.value.trim()) ? notes2Input.value.trim() : '';
-            const combinedNotes = [notes1, notes2].filter(Boolean).join(' | ');
-            const specialNotesVal = combinedNotes || 'Tidak ada catatan khusus';
-
-            try {
-                const response = await fetch(`${getApiBase()}/api/bookings`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        villa_id: 1,
-                        check_in: checkInVal,
-                        check_out: checkOutVal,
-                        guests: 2,
-                        guest_name: guestNameVal,
-                        guest_email: guestEmailVal,
-                        guest_phone: guestPhoneVal,
-                        special_notes: specialNotesVal
-                    })
-                });
-
-                const result = await response.json();
-                if (result.status === 'success' && result.data) {
-                    const codeBadge = document.getElementById('booking-code-badge');
-                    if (codeBadge) {
-                        codeBadge.innerText = `BOOKING CODE: ${result.data.booking_code}`;
+                        dots.forEach((dot, i) => {
+                            if (i === index) {
+                                dot.className = "hero-dot w-6 h-2 rounded-full bg-brand-textDark transition-all";
+                            } else {
+                                dot.className = "hero-dot w-2 h-2 rounded-full bg-brand-textDark/30 transition-all";
+                            }
+                        });
                     }
-                }
-            } catch (err) {
-                console.log('Backend API request:', err);
-            }
 
-            document.getElementById('modal-form-card').classList.add('hidden');
-            document.getElementById('modal-success-card').classList.remove('hidden');
-            document.getElementById('modal-success-card').classList.add('flex');
-            if (payBtn) payBtn.innerHTML = '<span>BAYAR SEKARANG</span> <span>🔒</span>';
+                    function nextHeroSlide() {
+                        const slides = document.querySelectorAll('.hero-slide');
+                        let nextIndex = (currentHeroSlide + 1) % slides.length;
+                        setHeroSlide(nextIndex);
+                    }
 
-            // Auto redirect to my-bookings.html
-            setTimeout(() => {
-                window.location.href = 'my-bookings.html';
-            }, 2000);
-        }
+                    function prevHeroSlide() {
+                        const slides = document.querySelectorAll('.hero-slide');
+                        let prevIndex = (currentHeroSlide - 1 + slides.length) % slides.length;
+                        setHeroSlide(prevIndex);
+                    }
 
-        // USER AUTH & BOOKING AUTHORIZATION LOGIC
-        let currentUser = null;
+                    // Auto transition hero slides every 6 seconds
+                    setInterval(nextHeroSlide, 6000);
 
-        function saveUserToStorage(user) {
-            currentUser = user;
-            const authBar = document.getElementById('user-header-auth');
-            const loginBtn = document.getElementById('user-login-btn');
-            const nameSpan = document.getElementById('user-display-name');
-            const avatarInitial = document.getElementById('user-avatar-initial');
-            const dropdownName = document.getElementById('user-dropdown-name');
-            const dropdownEmail = document.getElementById('user-dropdown-email');
+                    // EXPERIENCES SLIDER LOGIC
+                    function scrollExperiences(direction) {
+                        const slider = document.getElementById('experiences-slider');
+                        const scrollAmount = 380;
+                        if (direction === 'left') {
+                            slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+                        } else {
+                            slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                        }
+                    }
 
-            if (user && user.name) {
-                localStorage.setItem('waewatu_user', JSON.stringify(user));
-                if (authBar) {
-                    authBar.classList.remove('hidden');
-                    authBar.classList.add('block');
-                }
-                if (loginBtn) loginBtn.classList.add('hidden');
-                if (nameSpan) nameSpan.innerText = user.name.split(' ')[0].toUpperCase();
-                if (avatarInitial) avatarInitial.innerText = user.name.charAt(0).toUpperCase();
-                if (dropdownName) dropdownName.innerText = user.name;
-                if (dropdownEmail) dropdownEmail.innerText = user.email || '';
-            } else {
-                localStorage.removeItem('waewatu_user');
-                if (authBar) {
-                    authBar.classList.add('hidden');
-                    authBar.classList.remove('block');
-                }
-                if (loginBtn) loginBtn.classList.remove('hidden');
-            }
-        }
+                    let currentVillaName = "The Reef Villa";
+                    let currentVillaPrice = 15000000;
+                    let currentVillaImg = "https://images.unsplash.com/photo-1512100356356-de1b84283e18?auto=format&fit=crop&w=1200&q=80";
 
-        function toggleProfileDropdown() {
-            const menu = document.getElementById('profile-dropdown-menu');
-            if (menu) menu.classList.toggle('hidden');
-        }
+                    let siteTaxEnabled = false;
+                    let siteTaxPercentage = 10;
+                    let siteTaxLabel = "Pajak & Layanan";
 
-        function closeProfileDropdown() {
-            const menu = document.getElementById('profile-dropdown-menu');
-            if (menu) menu.classList.add('hidden');
-        }
+                    function updateBookingSummaryUI() {
+                        const checkInInput = document.getElementById('booking-check-in');
+                        const checkOutInput = document.getElementById('booking-check-out');
 
-        async function openMyBookingsModal() {
-            closeProfileDropdown();
-            const modal = document.getElementById('my-bookings-modal');
-            const listContainer = document.getElementById('my-bookings-list');
-            if (modal) {
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-                document.body.style.overflow = 'hidden';
-            }
+                        let diffDays = 0;
+                        let datesText = "Belum Dipilih";
 
-            if (!currentUser || !currentUser.email) {
-                listContainer.innerHTML = `
+                        if (checkInInput && checkOutInput && checkInInput.value && checkOutInput.value) {
+                            const checkInDate = new Date(checkInInput.value);
+                            const checkOutDate = new Date(checkOutInput.value);
+
+                            if (checkOutDate > checkInDate) {
+                                const diffTime = Math.abs(checkOutDate - checkInDate);
+                                diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1;
+                                datesText = `${checkInInput.value} s/d ${checkOutInput.value} (${diffDays} Malam)`;
+                            }
+                        }
+
+                        const guestName = currentUser ? currentUser.name : "Tamu Wae Watu";
+                        document.querySelectorAll('.summary-villa-name').forEach(el => el.innerText = currentVillaName);
+                        document.querySelectorAll('.summary-villa-img').forEach(el => {
+                            el.src = currentVillaImg;
+                            el.alt = currentVillaName;
+                        });
+                        document.querySelectorAll('.summary-booking-dates').forEach(el => el.innerText = datesText);
+                        document.querySelectorAll('.summary-booking-guests').forEach(el => el.innerText = "2 Dewasa");
+                        document.querySelectorAll('.summary-guest-name').forEach(el => el.innerText = guestName);
+
+                        // Handle Tax Row Visibility & Label
+                        const taxRows = document.querySelectorAll('.summary-tax-row');
+                        if (siteTaxEnabled && siteTaxPercentage > 0) {
+                            taxRows.forEach(row => row.classList.remove('hidden'));
+                            const labelText = `${siteTaxLabel} (${siteTaxPercentage}%)`;
+                            document.querySelectorAll('.summary-tax-label').forEach(el => el.innerText = labelText);
+                        } else {
+                            taxRows.forEach(row => row.classList.add('hidden'));
+                        }
+
+                        if (diffDays === 0) {
+                            const formattedRate = 'Rp ' + currentVillaPrice.toLocaleString('id-ID') + ' / malam';
+                            document.querySelectorAll('.summary-rate-display').forEach(el => el.innerText = formattedRate);
+                            document.querySelectorAll('.summary-tax-display').forEach(el => el.innerText = "Rp 0");
+                            document.querySelectorAll('.summary-total-display').forEach(el => el.innerText = "Rp 0");
+                            document.querySelectorAll('.summary-pay-btn-label').forEach(el => el.innerText = "PILIH TANGGAL SEKARANG");
+                            return;
+                        }
+
+                        const subtotal = currentVillaPrice * diffDays;
+                        let taxAmount = 0;
+                        if (siteTaxEnabled && siteTaxPercentage > 0) {
+                            taxAmount = subtotal * (siteTaxPercentage / 100);
+                        }
+                        const totalPayable = subtotal + taxAmount;
+
+                        const formattedRate = `${'Rp ' + currentVillaPrice.toLocaleString('id-ID')} x ${diffDays} Malam`;
+                        const formattedTax = 'Rp ' + Math.round(taxAmount).toLocaleString('id-ID');
+                        const formattedTotal = 'Rp ' + Math.round(totalPayable).toLocaleString('id-ID');
+
+                        document.querySelectorAll('.summary-rate-display').forEach(el => el.innerText = formattedRate);
+                        document.querySelectorAll('.summary-tax-display').forEach(el => el.innerText = formattedTax);
+                        document.querySelectorAll('.summary-total-display').forEach(el => el.innerText = formattedTotal);
+                        document.querySelectorAll('.summary-pay-btn-label').forEach(el => el.innerText = `BAYAR ${formattedTotal} SEKARANG`);
+                    }
+
+                    function calculateNightsAndTotal() {
+                        const checkInInput = document.getElementById('booking-check-in');
+                        const checkOutInput = document.getElementById('booking-check-out');
+                        const nightsBadge = document.getElementById('booking-nights-badge');
+
+                        if (!checkInInput || !checkOutInput || !checkInInput.value || !checkOutInput.value) {
+                            if (nightsBadge) {
+                                nightsBadge.className = 'text-[10px] font-medium text-stone-500 mt-1 block';
+                                nightsBadge.innerText = '📅 Silakan pilih tanggal check-in & check-out';
+                            }
+                            updateBookingSummaryUI();
+                            return;
+                        }
+
+                        if (checkOutInput.value <= checkInInput.value) {
+                            const nextDay = new Date(checkInInput.value);
+                            nextDay.setDate(nextDay.getDate() + 1);
+                            checkOutInput.value = nextDay.toISOString().split('T')[0];
+                        }
+
+                        const diffTime = Math.abs(new Date(checkOutInput.value) - new Date(checkInInput.value));
+                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1;
+
+                        const totalPrice = currentVillaPrice * diffDays;
+                        const formattedTotal = 'Rp ' + totalPrice.toLocaleString('id-ID');
+
+                        if (nightsBadge) {
+                            nightsBadge.className = 'text-[10px] font-bold text-emerald-800 mt-1 block';
+                            nightsBadge.innerText = `📅 Total: ${diffDays} Malam (${formattedTotal})`;
+                        }
+
+                        updateBookingSummaryUI();
+                    }
+
+                    function initDefaultBookingDates() {
+                        const checkInInput = document.getElementById('booking-check-in');
+                        const checkOutInput = document.getElementById('booking-check-out');
+                        const todayStr = new Date().toISOString().split('T')[0];
+
+                        if (checkInInput) {
+                            checkInInput.min = todayStr;
+                        }
+                        if (checkOutInput) {
+                            checkOutInput.min = todayStr;
+                        }
+                        calculateNightsAndTotal();
+                    }
+
+                    // BOOKING MODAL LOGIC
+                    function openBookingModal(step = 1) {
+                        openPreBookingModal();
+                    }
+
+                    function closeBookingModal() {
+                        const modal = document.getElementById('booking-modal');
+                        modal.classList.add('hidden');
+                        modal.classList.remove('flex');
+                        document.body.style.overflow = 'auto';
+                    }
+
+                    function goToStep(step) {
+                        const formCard = document.getElementById('modal-form-card');
+                        const successCard = document.getElementById('modal-success-card');
+                        if (formCard) formCard.classList.remove('hidden');
+                        if (successCard) {
+                            successCard.classList.add('hidden');
+                            successCard.classList.remove('flex');
+                        }
+
+                        const step1 = document.getElementById('step-1-content');
+                        const step2 = document.getElementById('step-2-content');
+                        const step3 = document.getElementById('step-3-content');
+
+                        if (step1) step1.classList.add('hidden');
+                        if (step2) step2.classList.add('hidden');
+                        if (step3) step3.classList.add('hidden');
+
+                        const tab1 = document.getElementById('step-tab-1');
+                        const tab2 = document.getElementById('step-tab-2');
+                        const tab3 = document.getElementById('step-tab-3');
+
+                        const inactiveClass = "px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer text-stone-600 hover:text-stone-900 bg-transparent";
+                        const activeClass = "px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer bg-brand-dark text-white shadow-sm";
+
+                        if (tab1) tab1.className = inactiveClass;
+                        if (tab2) tab2.className = inactiveClass;
+                        if (tab3) tab3.className = inactiveClass;
+
+                        if (step === 1) {
+                            if (step1) step1.classList.remove('hidden');
+                            if (tab1) tab1.className = activeClass;
+                        } else if (step === 2) {
+                            if (step2) step2.classList.remove('hidden');
+                            if (tab2) tab2.className = activeClass;
+                        } else if (step === 3) {
+                            if (step3) step3.classList.remove('hidden');
+                            if (tab3) tab3.className = activeClass;
+                            togglePaymentMethodUI();
+                        }
+
+                        const innerScroll = document.querySelector('#modal-form-card .overflow-y-auto');
+                        if (innerScroll) innerScroll.scrollTop = 0;
+
+                        updateBookingSummaryUI();
+                    }
+
+                    function togglePaymentMethodUI() {
+                        const cardRadio = document.getElementById('pay-method-card');
+                        const isCard = cardRadio ? cardRadio.checked : true;
+
+                        const billingCol = document.getElementById('column-payment-details');
+                        const payMethodCol = document.getElementById('column-payment-method');
+                        const summaryCol = document.getElementById('column-payment-summary');
+
+                        const cardDetails = document.getElementById('payment-details-card');
+                        const bankDetails = document.getElementById('payment-details-bank');
+                        const cardLabel = document.getElementById('payment-label-card');
+                        const bankLabel = document.getElementById('payment-label-bank');
+
+                        // Hide or Show the "Payment Details" (Billing Information) column
+                        if (billingCol) {
+                            if (isCard) {
+                                billingCol.classList.remove('hidden');
+                            } else {
+                                billingCol.classList.add('hidden');
+                            }
+                        }
+
+                        // Adjust layout grid column widths dynamically
+                        if (payMethodCol && summaryCol) {
+                            if (isCard) {
+                                payMethodCol.className = 'lg:col-span-4 space-y-4';
+                                summaryCol.className = 'lg:col-span-4';
+                            } else {
+                                payMethodCol.className = 'lg:col-span-7 space-y-4';
+                                summaryCol.className = 'lg:col-span-5';
+                            }
+                        }
+
+                        if (cardDetails) {
+                            if (isCard) {
+                                cardDetails.classList.remove('hidden');
+                            } else {
+                                cardDetails.classList.add('hidden');
+                            }
+                        }
+
+                        if (bankDetails) {
+                            if (isCard) {
+                                bankDetails.classList.add('hidden');
+                            } else {
+                                bankDetails.classList.remove('hidden');
+                            }
+                        }
+
+                        if (cardLabel && bankLabel) {
+                            if (isCard) {
+                                cardLabel.classList.add('border-brand-gold');
+                                cardLabel.classList.remove('border-stone-200');
+                                bankLabel.classList.remove('border-brand-gold');
+                                bankLabel.classList.add('border-stone-200');
+                            } else {
+                                bankLabel.classList.add('border-brand-gold');
+                                bankLabel.classList.remove('border-stone-200');
+                                cardLabel.classList.remove('border-brand-gold');
+                                cardLabel.classList.add('border-stone-200');
+                            }
+                        }
+                    }
+
+                    function selectBankOption(bankKey) {
+                        const bankData = {
+                            bca: { name: 'Bank BCA', va: '88012 385 892 104', holder: 'PT WAE WATU REEF RESORT' },
+                            mandiri: { name: 'Bank Mandiri', va: '89012 385 892 104', holder: 'PT WAE WATU REEF RESORT' },
+                            bni: { name: 'Bank BNI', va: '98012 385 892 104', holder: 'PT WAE WATU REEF RESORT' },
+                            bri: { name: 'Bank BRI', va: '78012 385 892 104', holder: 'PT WAE WATU REEF RESORT' }
+                        };
+
+                        const target = bankData[bankKey] || bankData.bca;
+
+                        ['bca', 'mandiri', 'bni', 'bri'].forEach(key => {
+                            const card = document.getElementById(`bank-opt-${key}`);
+                            const radio = document.getElementById(`radio-bank-${key}`);
+                            if (card) {
+                                if (key === bankKey) {
+                                    card.className = 'p-2.5 rounded-xl border border-brand-gold bg-white shadow-sm cursor-pointer transition-all flex items-center justify-between';
+                                } else {
+                                    card.className = 'p-2.5 rounded-xl border border-stone-200 bg-stone-50 cursor-pointer transition-all flex items-center justify-between hover:border-stone-400';
+                                }
+                            }
+                            if (radio) radio.checked = (key === bankKey);
+                        });
+
+                        const nameEl = document.getElementById('selected-bank-name');
+                        const vaEl = document.getElementById('selected-bank-va');
+                        const holderEl = document.getElementById('selected-bank-holder');
+
+                        if (nameEl) nameEl.innerText = target.name;
+                        if (vaEl) vaEl.innerText = target.va;
+                        if (holderEl) holderEl.innerText = target.holder;
+                    }
+
+                    function copyBankVA() {
+                        const vaEl = document.getElementById('selected-bank-va');
+                        if (vaEl) {
+                            const cleanVa = vaEl.innerText.replace(/\s+/g, '');
+                            navigator.clipboard.writeText(cleanVa);
+                            alert('Nomor Virtual Account berhasil disalin: ' + cleanVa);
+                        }
+                    }
+
+                    function getApiBase() {
+                        if (window.location.hostname === 'dianitsya.github.io' || window.location.protocol === 'https:') {
+                            return 'https://wae-watu-production.up.railway.app';
+                        }
+                        if (window.location.hostname && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+                            return `http://${window.location.hostname}:8001`;
+                        }
+                        return 'http://127.0.0.1:8001';
+                    }
+
+                    function formatImageUrl(url) {
+                        if (!url) return '';
+                        if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+                            return url;
+                        }
+                        const apiBase = getApiBase();
+                        return `${apiBase}${url.startsWith('/') ? '' : '/'}${url}`;
+                    }
+
+                    async function loadMidtransSnapScript() {
+                        try {
+                            const res = await fetch(`${getApiBase()}/api/midtrans/config`);
+                            const data = await res.json();
+                            if (data && data.client_key) {
+                                const script = document.createElement('script');
+                                script.src = data.snap_js_url;
+                                script.setAttribute('data-client-key', data.client_key);
+                                document.head.appendChild(script);
+                            }
+                        } catch (e) {
+                            const script = document.createElement('script');
+                            script.src = 'https://app.sandbox.midtrans.com/snap/snap.js';
+                            script.setAttribute('data-client-key', 'SB-Mid-client-D0IkiqrGGO1tEGgM');
+                            document.head.appendChild(script);
+                        }
+                    }
+                    loadMidtransSnapScript();
+
+                    function showBookingSuccessUI(bookingCode) {
+                        const codeBadge = document.getElementById('booking-code-badge');
+                        if (codeBadge) {
+                            codeBadge.innerText = `BOOKING CODE: ${bookingCode}`;
+                        }
+
+                        const step1 = document.getElementById('step-1-content');
+                        const step2 = document.getElementById('step-2-content');
+                        const step3 = document.getElementById('step-3-content');
+                        const step4 = document.getElementById('step-4-content');
+
+                        if (step1) step1.classList.add('hidden');
+                        if (step2) step2.classList.add('hidden');
+                        if (step3) step3.classList.add('hidden');
+
+                        if (step4) {
+                            step4.classList.remove('hidden');
+                            step4.classList.add('flex');
+                        }
+
+                        const payBtn = document.querySelector('#modal-form-card button[onclick="completeBooking()"]');
+                        if (payBtn) payBtn.innerHTML = '<span>BAYAR SEKARANG</span> <span>🔒</span>';
+
+                        setTimeout(() => {
+                            window.location.href = 'my-bookings.html';
+                        }, 1200);
+                    }
+
+                    async function completeBooking() {
+                        const payBtn = document.querySelector('#modal-form-card button[onclick="completeBooking()"]');
+                        if (payBtn) payBtn.innerHTML = '<span>MEMPROSES PEMBAYARAN...</span>';
+
+                        const checkInVal = document.getElementById('booking-check-in') ? document.getElementById('booking-check-in').value : '2026-10-15';
+                        const checkOutVal = document.getElementById('booking-check-out') ? document.getElementById('booking-check-out').value : '2026-10-18';
+
+                        const nameInput = document.getElementById('booking-guest-name');
+                        const phoneInput = document.getElementById('booking-guest-phone');
+                        const emailInput = document.getElementById('booking-guest-email');
+                        const notes1Input = document.getElementById('booking-step1-notes');
+                        const notes2Input = document.getElementById('booking-special-notes');
+
+                        const guestNameVal = (nameInput && nameInput.value.trim()) ? nameInput.value.trim() : (currentUser ? currentUser.name : 'Guest Wae Watu');
+                        const guestEmailVal = (emailInput && emailInput.value.trim()) ? emailInput.value.trim() : (currentUser ? currentUser.email : 'guest@waewatu.com');
+                        const guestPhoneVal = (phoneInput && phoneInput.value.trim()) ? phoneInput.value.trim() : (currentUser && currentUser.phone ? currentUser.phone : '+6281234567890');
+
+                        const notes1 = (notes1Input && notes1Input.value.trim()) ? notes1Input.value.trim() : '';
+                        const notes2 = (notes2Input && notes2Input.value.trim()) ? notes2Input.value.trim() : '';
+                        const combinedNotes = [notes1, notes2].filter(Boolean).join(' | ');
+                        const specialNotesVal = combinedNotes || 'Tidak ada catatan khusus';
+
+                        try {
+                            const response = await fetch(`${getApiBase()}/api/bookings`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    villa_id: 1,
+                                    check_in: checkInVal,
+                                    check_out: checkOutVal,
+                                    guests: 2,
+                                    guest_name: guestNameVal,
+                                    guest_email: guestEmailVal,
+                                    guest_phone: guestPhoneVal,
+                                    special_notes: specialNotesVal
+                                })
+                            });
+
+                            const result = await response.json();
+                            if (result.status === 'success' && result.data) {
+                                const bookingCode = result.data.booking_code;
+
+                                if (window.snap && result.snap_token) {
+                                    window.snap.pay(result.snap_token, {
+                                        onSuccess: function (res) {
+                                            console.log('Midtrans success:', res);
+                                            showBookingSuccessUI(bookingCode);
+                                        },
+                                        onPending: function (res) {
+                                            console.log('Midtrans pending:', res);
+                                            showBookingSuccessUI(bookingCode);
+                                        },
+                                        onError: function (res) {
+                                            console.log('Midtrans error:', res);
+                                            alert('Pembayaran Midtrans mengalami kendala.');
+                                            showBookingSuccessUI(bookingCode);
+                                        },
+                                        onClose: function () {
+                                            console.log('Midtrans popup closed');
+                                            showBookingSuccessUI(bookingCode);
+                                        }
+                                    });
+                                    return;
+                                } else if (result.snap_error) {
+                                    alert('ℹ️ Catatan Midtrans Gateway:\n' +
+                                        'Pop-up Midtrans belum muncul karena Server Key Midtrans di backend masih berupa kunci dummy sampel.\n\n' +
+                                        'Pesan dari Midtrans: "' + result.snap_error + '"\n\n' +
+                                        '👉 Silakan buka Admin Panel di http://192.168.100.16:8000/admin/cms (Section 7) dan masukkan Server Key & Client Key Midtrans Sandbox Anda.');
+                                }
+
+                                showBookingSuccessUI(bookingCode);
+                                return;
+                            }
+                        } catch (err) {
+                            console.log('Backend API request error:', err);
+                        }
+
+                        showBookingSuccessUI('WW-' + date('Y') + '-DEMO');
+                    }
+
+                    // USER AUTH & BOOKING AUTHORIZATION LOGIC
+                    var currentUser = null;
+
+                    function saveUserToStorage(user) {
+                        currentUser = user;
+                        const authBar = document.getElementById('user-header-auth');
+                        const loginBtn = document.getElementById('user-login-btn');
+                        const nameSpan = document.getElementById('user-display-name');
+                        const avatarInitial = document.getElementById('user-avatar-initial');
+                        const dropdownName = document.getElementById('user-dropdown-name');
+                        const dropdownEmail = document.getElementById('user-dropdown-email');
+
+                        if (user && user.name) {
+                            localStorage.setItem('waewatu_user', JSON.stringify(user));
+                            if (authBar) {
+                                authBar.classList.remove('hidden');
+                                authBar.classList.add('block');
+                            }
+                            if (loginBtn) loginBtn.classList.add('hidden');
+                            if (nameSpan) nameSpan.innerText = user.name.split(' ')[0].toUpperCase();
+                            if (avatarInitial) avatarInitial.innerText = user.name.charAt(0).toUpperCase();
+                            if (dropdownName) dropdownName.innerText = user.name;
+                            if (dropdownEmail) dropdownEmail.innerText = user.email || '';
+                        } else {
+                            localStorage.removeItem('waewatu_user');
+                            if (authBar) {
+                                authBar.classList.add('hidden');
+                                authBar.classList.remove('block');
+                            }
+                            if (loginBtn) loginBtn.classList.remove('hidden');
+                        }
+                    }
+
+                    function toggleProfileDropdown() {
+                        const menu = document.getElementById('profile-dropdown-menu');
+                        if (menu) menu.classList.toggle('hidden');
+                    }
+
+                    function closeProfileDropdown() {
+                        const menu = document.getElementById('profile-dropdown-menu');
+                        if (menu) menu.classList.add('hidden');
+                    }
+
+                    async function openMyBookingsModal() {
+                        closeProfileDropdown();
+                        const modal = document.getElementById('my-bookings-modal');
+                        const listContainer = document.getElementById('my-bookings-list');
+                        if (modal) {
+                            modal.classList.remove('hidden');
+                            modal.classList.add('flex');
+                            document.body.style.overflow = 'hidden';
+                        }
+
+                        if (!currentUser || !currentUser.email) {
+                            listContainer.innerHTML = `
                     <div class="text-center py-10 text-stone-400 space-y-2">
                         <p class="text-sm">Silakan login terlebih dahulu untuk melihat riwayat reservasi Anda.</p>
                     </div>
                 `;
-                return;
-            }
+                            return;
+                        }
 
-            listContainer.innerHTML = `
+                        listContainer.innerHTML = `
                 <div class="text-center py-10 space-y-2 text-stone-400">
                     <div class="inline-block animate-spin text-2xl">⏳</div>
                     <p class="text-xs font-light">Memuat riwayat reservasi Anda...</p>
                 </div>
             `;
 
-            try {
-                const res = await fetch(`${getApiBase()}/api/auth/my-bookings?email=${encodeURIComponent(currentUser.email)}`, {
-                    headers: { 'Accept': 'application/json' }
-                });
-                const data = await res.json();
+                        try {
+                            const res = await fetch(`${getApiBase()}/api/auth/my-bookings?email=${encodeURIComponent(currentUser.email)}`, {
+                                headers: { 'Accept': 'application/json' }
+                            });
+                            const data = await res.json();
 
-                if (data.status === 'success' && data.bookings && data.bookings.length > 0) {
-                    listContainer.innerHTML = data.bookings.map(b => {
-                        const formattedPrice = 'Rp ' + parseInt(b.total_price).toLocaleString('id-ID');
-                        const statusBadge = b.status === 'confirmed'
-                            ? '<span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Terkonfirmasi</span>'
-                            : (b.status === 'pending'
-                                ? '<span class="bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Menunggu Konfirmasi</span>'
-                                : '<span class="bg-rose-500/20 text-rose-300 border border-rose-500/40 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Dibatalkan</span>');
+                            if (data.status === 'success' && data.bookings && data.bookings.length > 0) {
+                                listContainer.innerHTML = data.bookings.map(b => {
+                                    const formattedPrice = 'Rp ' + parseInt(b.total_price).toLocaleString('id-ID');
+                                    const statusBadge = b.status === 'confirmed'
+                                        ? '<span class="bg-emerald-100 text-emerald-800 border border-emerald-300 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Terkonfirmasi</span>'
+                                        : (b.status === 'pending'
+                                            ? '<span class="bg-amber-100 text-amber-800 border border-amber-300 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Menunggu Konfirmasi</span>'
+                                            : '<span class="bg-rose-100 text-rose-800 border border-rose-300 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Dibatalkan</span>');
 
-                        return `
-                            <div class="bg-white/5 border border-white/10 rounded-2xl p-5 space-y-3">
+                                    return `
+                            <div class="bg-stone-50 border border-stone-200 rounded-2xl p-5 space-y-3 shadow-xs">
                                 <div class="flex justify-between items-start">
                                     <div>
-                                        <span class="font-mono text-xs font-bold text-brand-gold tracking-wider">${b.booking_code}</span>
-                                        <h4 class="font-serif text-xl text-white font-normal mt-0.5">${b.villa ? b.villa.name : 'The Reef Villa'}</h4>
+                                        <span class="font-mono text-xs font-bold text-brand-dark tracking-wider">${b.booking_code}</span>
+                                        <h4 class="font-serif text-xl text-brand-dark font-medium mt-0.5">${b.villa ? b.villa.name : 'The Reef Villa'}</h4>
                                     </div>
                                     ${statusBadge}
                                 </div>
-                                <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-xs border-t border-b border-white/10 py-3 text-stone-300">
+                                <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-xs bg-white border border-stone-200 rounded-xl p-3 text-stone-700">
                                     <div>
-                                        <span class="block text-[9px] uppercase tracking-wider text-stone-400">Check-in</span>
-                                        <span class="font-semibold text-white">${b.check_in}</span>
+                                        <span class="block text-[9px] uppercase tracking-wider text-stone-500 font-semibold">Check-in</span>
+                                        <span class="font-semibold text-gray-900">${b.check_in}</span>
                                     </div>
                                     <div>
-                                        <span class="block text-[9px] uppercase tracking-wider text-stone-400">Check-out</span>
-                                        <span class="font-semibold text-white">${b.check_out}</span>
+                                        <span class="block text-[9px] uppercase tracking-wider text-stone-500 font-semibold">Check-out</span>
+                                        <span class="font-semibold text-gray-900">${b.check_out}</span>
                                     </div>
                                     <div>
-                                        <span class="block text-[9px] uppercase tracking-wider text-stone-400">Tamu</span>
-                                        <span class="font-semibold text-white">${b.guests} Tamu</span>
+                                        <span class="block text-[9px] uppercase tracking-wider text-stone-500 font-semibold">Tamu</span>
+                                        <span class="font-semibold text-gray-900">${b.guests} Tamu</span>
                                     </div>
                                 </div>
                                 <div class="flex justify-between items-center pt-1">
-                                    <span class="text-xs text-stone-400">Total Biaya Pemesanan</span>
-                                    <span class="font-serif text-lg font-bold text-brand-gold">${formattedPrice}</span>
+                                    <span class="text-xs text-stone-600 font-medium">Total Biaya Pemesanan</span>
+                                    <span class="font-serif text-lg font-bold text-brand-dark">${formattedPrice}</span>
                                 </div>
                             </div>
                         `;
-                    }).join('');
-                } else {
-                    listContainer.innerHTML = `
-                        <div class="text-center py-12 space-y-3 bg-white/5 border border-white/10 rounded-2xl p-6">
+                                }).join('');
+                            } else {
+                                listContainer.innerHTML = `
+                        <div class="text-center py-12 space-y-3 bg-stone-50 border border-stone-200 rounded-2xl p-6">
                             <span class="text-4xl block">🏝️</span>
-                            <h4 class="font-serif text-xl text-white">Belum Ada Reservasi</h4>
-                            <p class="text-xs text-stone-400 max-w-sm mx-auto font-light leading-relaxed">Anda belum melakukan reservasi vila di Wae Watu. Klik tombol di bawah untuk memilih jadwal dan kamar vila impian Anda.</p>
+                            <h4 class="font-serif text-xl text-brand-dark font-medium">Belum Ada Reservasi</h4>
+                            <p class="text-xs text-stone-600 font-light">Anda belum memiliki riwayat pemesanan vila di Wae Watu Reef Resort.</p>
                             <button onclick="closeMyBookingsModal(); handleBookNowClick();" class="mt-2 inline-block bg-brand-gold text-brand-dark px-6 py-2.5 text-[10px] font-bold tracking-widest uppercase rounded-xl hover:bg-brand-goldHover transition-all cursor-pointer">
                                 Pesan Kamar Sekarang →
                             </button>
                         </div>
                     `;
-                }
-            } catch (err) {
-                listContainer.innerHTML = `
+                            }
+                        } catch (err) {
+                            listContainer.innerHTML = `
                     <div class="text-center py-8 text-rose-400 text-xs">
                         Gagal memuat data reservasi. Silakan periksa koneksi internet Anda.
                     </div>
                 `;
-            }
-        }
-
-        function closeMyBookingsModal() {
-            const modal = document.getElementById('my-bookings-modal');
-            if (modal) {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-                document.body.style.overflow = 'auto';
-            }
-        }
-
-        async function checkUserAuthState() {
-            const stored = localStorage.getItem('waewatu_user');
-            if (stored) {
-                try {
-                    const parsed = JSON.parse(stored);
-                    saveUserToStorage(parsed);
-                } catch (e) { }
-            }
-
-            try {
-                const res = await fetch(`${getApiBase()}/api/auth/me`, {
-                    headers: { 'Accept': 'application/json' }
-                });
-                const data = await res.json();
-                if (data.logged_in && data.user) {
-                    saveUserToStorage(data.user);
-                }
-            } catch (err) {
-                console.log('User auth check offline');
-            }
-        }
-
-        let authTriggeredByBooking = false;
-
-        function handleBookNowClick() {
-            if (!currentUser) {
-                authTriggeredByBooking = true;
-                openUserAuthModal(true);
-            } else {
-                openBookingModal(1);
-            }
-        }
-
-        function openUserAuthModal(isBooking = false) {
-            authTriggeredByBooking = isBooking;
-            document.getElementById('user-auth-modal').classList.remove('hidden');
-            document.getElementById('user-auth-modal').classList.add('flex');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeUserAuthModal() {
-            authTriggeredByBooking = false;
-            document.getElementById('user-auth-modal').classList.add('hidden');
-            document.getElementById('user-auth-modal').classList.remove('flex');
-            document.body.style.overflow = 'auto';
-        }
-
-        function switchAuthTab(tab) {
-            const loginBtn = document.getElementById('tab-login-btn');
-            const regBtn = document.getElementById('tab-register-btn');
-            const loginForm = document.getElementById('user-login-form');
-            const regForm = document.getElementById('user-register-form');
-
-            if (tab === 'login') {
-                loginBtn.className = "w-1/2 py-2.5 border-b-2 border-brand-dark text-brand-dark font-bold";
-                regBtn.className = "w-1/2 py-2.5 border-b-2 border-transparent text-gray-400 hover:text-gray-700";
-                loginForm.classList.remove('hidden');
-                regForm.classList.add('hidden');
-            } else {
-                regBtn.className = "w-1/2 py-2.5 border-b-2 border-brand-dark text-brand-dark font-bold";
-                loginBtn.className = "w-1/2 py-2.5 border-b-2 border-transparent text-gray-400 hover:text-gray-700";
-                regForm.classList.remove('hidden');
-                loginForm.classList.add('hidden');
-            }
-        }
-
-        async function submitUserLogin(e) {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            const errDiv = document.getElementById('login-error');
-            errDiv.classList.add('hidden');
-
-            try {
-                const res = await fetch(`${getApiBase()}/api/auth/login`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({ email, password })
-                });
-
-                const data = await res.json();
-                if (data.status === 'success' && data.user) {
-                    saveUserToStorage(data.user);
-                    const shouldOpenBooking = authTriggeredByBooking;
-                    closeUserAuthModal();
-                    if (shouldOpenBooking) {
-                        openBookingModal(1);
-                    }
-                } else {
-                    errDiv.innerText = data.message || 'Login gagal.';
-                    errDiv.classList.remove('hidden');
-                }
-            } catch (err) {
-                errDiv.innerText = 'Gagal menghubungi server API.';
-                errDiv.classList.remove('hidden');
-            }
-        }
-
-        async function submitUserRegister(e) {
-            e.preventDefault();
-            const name = document.getElementById('reg-name').value;
-            const email = document.getElementById('reg-email').value;
-            const phone = document.getElementById('reg-phone').value;
-            const password = document.getElementById('reg-password').value;
-            const errDiv = document.getElementById('register-error');
-            errDiv.classList.add('hidden');
-
-            try {
-                const res = await fetch(`${getApiBase()}/api/auth/register`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({ name, email, phone, password })
-                });
-
-                const data = await res.json();
-                if (data.status === 'success' && data.user) {
-                    saveUserToStorage(data.user);
-                    const shouldOpenBooking = authTriggeredByBooking;
-                    closeUserAuthModal();
-                    if (shouldOpenBooking) {
-                        openBookingModal(1);
-                    }
-                } else {
-                    errDiv.innerText = data.message || 'Registrasi gagal.';
-                    errDiv.classList.remove('hidden');
-                }
-            } catch (err) {
-                errDiv.innerText = 'Gagal menghubungi server API.';
-                errDiv.classList.remove('hidden');
-            }
-        }
-
-        async function handleUserLogout() {
-            try {
-                await fetch(`${getApiBase()}/api/auth/logout`, {
-                    method: 'POST',
-                    headers: { 'Accept': 'application/json' }
-                });
-            } catch (err) { }
-            saveUserToStorage(null);
-        }
-
-        // DYNAMIC CONTENT LOADER FROM API WITH FALLBACK HOST CONNECTIVITY
-        async function fetchContentApi() {
-            const urls = [
-                `${getApiBase()}/api/content`,
-                'http://127.0.0.1:8000/api/content',
-                'http://localhost:8000/api/content'
-            ];
-            for (const url of urls) {
-                try {
-                    const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
-                    if (res.ok) {
-                        return await res.json();
-                    }
-                } catch (e) { }
-            }
-            return null;
-        }
-
-        async function loadLiveSiteContent() {
-            try {
-                const data = await fetchContentApi();
-                if (!data || data.status !== 'success') return;
-
-                // 1. Update Hero & Text Contents
-                if (data.contents) {
-                    if (data.contents.hero_title) {
-                        const h1 = document.querySelector('#hero-section h1');
-                        if (h1) h1.innerText = data.contents.hero_title;
-                    }
-                    if (data.contents.hero_subtitle) {
-                        const pSub = document.getElementById('hero-subtitle');
-                        if (pSub) pSub.innerText = data.contents.hero_subtitle;
-                    }
-                    if (data.contents.hero_badge) {
-                        const badge = document.getElementById('hero-badge');
-                        if (badge) badge.innerText = data.contents.hero_badge;
-                    }
-                    if (data.contents.conservation_quote) {
-                        const quoteP = document.querySelector('#reef p.font-serif');
-                        if (quoteP) quoteP.innerText = data.contents.conservation_quote;
-                    }
-
-                    // Parse Footer Contact Info
-                    if (data.contents.footer_email) {
-                        const emailEl = document.getElementById('footer-email-link');
-                        if (emailEl) {
-                            emailEl.href = `mailto:${data.contents.footer_email}`;
-                            emailEl.innerText = data.contents.footer_email.toUpperCase();
-                        }
-                    }
-                    if (data.contents.footer_phone) {
-                        const phoneEl = document.getElementById('footer-phone-link');
-                        if (phoneEl) {
-                            phoneEl.href = `tel:${data.contents.footer_phone.replace(/\s+/g, '')}`;
-                            phoneEl.innerText = data.contents.footer_phone;
-                        }
-                    }
-                    if (data.contents.footer_whatsapp) {
-                        const waEl = document.getElementById('footer-whatsapp-link');
-                        if (waEl) {
-                            const waNum = data.contents.footer_whatsapp.replace(/[^0-9]/g, '');
-                            waEl.href = `https://wa.me/${waNum}`;
                         }
                     }
 
-                    // Parse Tax & Service Settings from CMS
-                    if (data.contents.tax_enabled !== undefined) {
-                        siteTaxEnabled = String(data.contents.tax_enabled) === '1';
+                    function closeMyBookingsModal() {
+                        const modal = document.getElementById('my-bookings-modal');
+                        if (modal) {
+                            modal.classList.add('hidden');
+                            modal.classList.remove('flex');
+                            document.body.style.overflow = 'auto';
+                        }
                     }
-                    if (data.contents.tax_percentage !== undefined) {
-                        siteTaxPercentage = parseFloat(data.contents.tax_percentage) || 0;
-                    }
-                    if (data.contents.tax_label) {
-                        siteTaxLabel = data.contents.tax_label;
-                    }
-                }
 
-                // 2. Update 9 Experiences Cards
-                if (data.experiences && data.experiences.length > 0) {
-                    const expContainer = document.getElementById('experiences-slider');
-                    if (expContainer) {
-                        expContainer.innerHTML = data.experiences.map(exp => `
+                    async function checkUserAuthState() {
+                        const stored = localStorage.getItem('waewatu_user');
+                        if (stored) {
+                            try {
+                                const parsed = JSON.parse(stored);
+                                saveUserToStorage(parsed);
+                            } catch (e) { }
+                        }
+
+                        try {
+                            const res = await fetch(`${getApiBase()}/api/auth/me`, {
+                                headers: { 'Accept': 'application/json' }
+                            });
+                            const data = await res.json();
+                            if (data.logged_in && data.user) {
+                                saveUserToStorage(data.user);
+                            }
+                        } catch (err) {
+                            console.log('User auth check offline');
+                        }
+                    }
+
+                    function getPmsBookingCartUrl() {
+                        const host = window.location.hostname;
+                        const isLocal = !host || host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.') || host.endsWith('.local');
+
+                        if (isLocal) {
+                            return 'http://127.0.0.1:8000/booking-list';
+                        }
+
+                        return 'https://terra.dexautosport.com/booking-list';
+                    }
+
+                    function openPreBookingModal(defaultVillaSlug = 'the-reef-villa') {
+                        const modal = document.getElementById('pre-booking-modal');
+                        if (!modal) return;
+
+                        // Force show modal by directly setting style
+                        modal.style.display = 'flex';
+                        document.body.style.overflow = 'hidden';
+
+                        try {
+                            const select = document.getElementById('prebook-villa-select');
+                            if (select) {
+                                for (let opt of select.options) {
+                                    if (opt.value === defaultVillaSlug) {
+                                        opt.selected = true;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            const checkInInput = document.getElementById('prebook-check-in');
+                            const checkOutInput = document.getElementById('prebook-check-out');
+                            const heroIn = document.getElementById('hero-checkin');
+                            const heroOut = document.getElementById('hero-checkout');
+
+                            const todayStr = new Date().toISOString().split('T')[0];
+                            if (checkInInput) {
+                                checkInInput.min = todayStr;
+                                checkInInput.value = (heroIn && heroIn.value) ? heroIn.value : '2026-10-15';
+                            }
+                            if (checkOutInput) {
+                                checkOutInput.min = todayStr;
+                                checkOutInput.value = (heroOut && heroOut.value) ? heroOut.value : '2026-10-18';
+                            }
+
+                            const guestsSelect = document.getElementById('prebook-guests');
+                            const heroGuests = document.getElementById('hero-guests');
+                            if (guestsSelect) {
+                                const gVal = (heroGuests && heroGuests.value) ? heroGuests.value : '2';
+                                guestsSelect.value = gVal;
+                            }
+
+                            const nameInput = document.getElementById('prebook-guest-name');
+                            if (nameInput) {
+                                const userStored = localStorage.getItem('waewatu_user');
+                                let uName = '';
+                                if (userStored) {
+                                    try { uName = JSON.parse(userStored).name; } catch (e) { }
+                                }
+                                const activeUser = (typeof currentUser !== 'undefined' && currentUser) ? currentUser.name : '';
+                                nameInput.value = uName || activeUser || '';
+                            }
+
+                            calculatePrebookNights();
+                        } catch (e) {
+                            console.error('Error initializing prebooking modal:', e);
+                        }
+                    }
+
+                    function closePreBookingModal() {
+                        const modal = document.getElementById('pre-booking-modal');
+                        if (modal) {
+                            modal.style.display = 'none';
+                            document.body.style.overflow = 'auto';
+                        }
+                    }
+
+                    function calculatePrebookNights() {
+                        const inEl = document.getElementById('prebook-check-in');
+                        const outEl = document.getElementById('prebook-check-out');
+                        const inVal = inEl ? inEl.value : '';
+                        const outVal = outEl ? outEl.value : '';
+                        const infoSpan = document.getElementById('prebook-nights-info');
+
+                        let nights = 1;
+                        if (inVal && outVal) {
+                            const d1 = new Date(inVal);
+                            const d2 = new Date(outVal);
+                            const diffTime = d2 - d1;
+                            nights = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+                        }
+
+                        if (infoSpan) infoSpan.innerText = `📅 Durasi: ${nights} Malam`;
+                        updatePrebookPrice(nights);
+                    }
+
+                    function updatePrebookPrice(calcNights = null) {
+                        const select = document.getElementById('prebook-villa-select');
+                        if (!select || select.selectedIndex < 0) return;
+                        const opt = select.options[select.selectedIndex];
+                        if (!opt) return;
+
+                        const villaName = opt.getAttribute('data-name') || 'The Reef Villa';
+                        const price = parseFloat(opt.getAttribute('data-price') || 15000000);
+                        const imgUrl = opt.getAttribute('data-img') || 'https://images.unsplash.com/photo-1512100356356-de1b84283e18?auto=format&fit=crop&w=400&q=80';
+
+                        const inEl = document.getElementById('prebook-check-in');
+                        const outEl = document.getElementById('prebook-check-out');
+                        const inVal = inEl ? inEl.value : '';
+                        const outVal = outEl ? outEl.value : '';
+
+                        if (!calcNights) {
+                            if (inVal && outVal) {
+                                const d1 = new Date(inVal);
+                                const d2 = new Date(outVal);
+                                calcNights = Math.max(1, Math.ceil((d2 - d1) / (1000 * 60 * 60 * 24)));
+                            } else {
+                                calcNights = 1;
+                            }
+                        }
+
+                        const totalPrice = price * calcNights;
+
+                        const imgEl = document.getElementById('detail-villa-img');
+                        const nameEl = document.getElementById('detail-villa-name-title');
+                        const rateEl = document.getElementById('detail-villa-rate-display');
+                        const totalDisplay = document.getElementById('prebook-total-display');
+                        const subtotalDisplay = document.getElementById('detail-subtotal-display');
+                        const breakdownLabel = document.getElementById('detail-rate-breakdown-label');
+                        const formattedDates = document.getElementById('detail-formatted-dates');
+
+                        if (imgEl) imgEl.src = imgUrl;
+                        if (nameEl) nameEl.innerText = villaName;
+                        if (rateEl) rateEl.innerHTML = `Rp ${price.toLocaleString('id-ID')} <span class="text-[10px] text-stone-500 font-normal">/ malam</span>`;
+                        if (totalDisplay) totalDisplay.innerText = 'Rp ' + Math.round(totalPrice).toLocaleString('id-ID');
+                        if (subtotalDisplay) subtotalDisplay.innerText = 'Rp ' + Math.round(totalPrice).toLocaleString('id-ID');
+                        if (breakdownLabel) breakdownLabel.innerText = `Biaya Kamar (Rp ${price.toLocaleString('id-ID')} × ${calcNights} Malam)`;
+
+                        if (formattedDates && inVal && outVal) {
+                            try {
+                                const dIn = new Date(inVal);
+                                const dOut = new Date(outVal);
+                                const opts = { day: 'numeric', month: 'short', year: 'numeric' };
+                                formattedDates.innerText = `${dIn.toLocaleDateString('id-ID', opts)} — ${dOut.toLocaleDateString('id-ID', opts)}`;
+                            } catch (e) { }
+                        }
+                    }
+
+                    function confirmPreBookingAndRedirect() {
+                        const select = document.getElementById('prebook-villa-select');
+                        const opt = select.options[select.selectedIndex];
+
+                        const villaSlug = opt.value || 'the-reef-villa';
+                        const villaName = opt.getAttribute('data-name') || 'The Reef Villa';
+                        const price = parseFloat(opt.getAttribute('data-price') || 15000000);
+
+                        const checkIn = document.getElementById('prebook-check-in').value || '2026-10-15';
+                        const checkOut = document.getElementById('prebook-check-out').value || '2026-10-18';
+                        const guests = document.getElementById('prebook-guests').value || '2';
+                        const guestName = document.getElementById('prebook-guest-name').value || '';
+
+                        closePreBookingModal();
+
+                        const pmsCartUrl = getPmsBookingCartUrl();
+                        const targetUrl = `${pmsCartUrl}?add_villa=1&unit_slug=${encodeURIComponent(villaSlug)}&villa_name=${encodeURIComponent(villaName)}&check_in=${encodeURIComponent(checkIn)}&check_out=${encodeURIComponent(checkOut)}&guests=${encodeURIComponent(guests)}&guest_name=${encodeURIComponent(guestName)}&price=${price}`;
+
+                        window.location.href = targetUrl;
+                    }
+
+                    function handleBookNowClick(villaSlug = 'the-reef-villa') {
+                        openPreBookingModal(villaSlug);
+                    }
+
+                    function openBookingModal(step = 1) {
+                        openPreBookingModal();
+                    }
+
+                    function openUserAuthModal(isBooking = false) {
+                        authTriggeredByBooking = isBooking;
+                        document.getElementById('user-auth-modal').classList.remove('hidden');
+                        document.getElementById('user-auth-modal').classList.add('flex');
+                        document.body.style.overflow = 'hidden';
+                    }
+
+                    function closeUserAuthModal() {
+                        authTriggeredByBooking = false;
+                        document.getElementById('user-auth-modal').classList.add('hidden');
+                        document.getElementById('user-auth-modal').classList.remove('flex');
+                        document.body.style.overflow = 'auto';
+                    }
+
+                    function switchAuthTab(tab) {
+                        const loginBtn = document.getElementById('tab-login-btn');
+                        const regBtn = document.getElementById('tab-register-btn');
+                        const loginForm = document.getElementById('user-login-form');
+                        const regForm = document.getElementById('user-register-form');
+
+                        if (tab === 'login') {
+                            loginBtn.className = "w-1/2 py-2.5 border-b-2 border-brand-dark text-brand-dark font-bold";
+                            regBtn.className = "w-1/2 py-2.5 border-b-2 border-transparent text-gray-400 hover:text-gray-700";
+                            loginForm.classList.remove('hidden');
+                            regForm.classList.add('hidden');
+                        } else {
+                            regBtn.className = "w-1/2 py-2.5 border-b-2 border-brand-dark text-brand-dark font-bold";
+                            loginBtn.className = "w-1/2 py-2.5 border-b-2 border-transparent text-gray-400 hover:text-gray-700";
+                            regForm.classList.remove('hidden');
+                            loginForm.classList.add('hidden');
+                        }
+                    }
+
+                    async function submitUserLogin(e) {
+                        e.preventDefault();
+                        const email = document.getElementById('login-email').value;
+                        const password = document.getElementById('login-password').value;
+                        const errDiv = document.getElementById('login-error');
+                        errDiv.classList.add('hidden');
+
+                        try {
+                            const res = await fetch(`${getApiBase()}/api/auth/login`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json'
+                                },
+                                body: JSON.stringify({ email, password })
+                            });
+
+                            const data = await res.json();
+                            if (data.status === 'success' && data.user) {
+                                saveUserToStorage(data.user);
+                                closeUserAuthModal();
+                                if (authTriggeredByBooking) {
+                                    handleBookNowClick();
+                                }
+                            } else {
+                                errDiv.innerText = data.message || 'Login gagal.';
+                                errDiv.classList.remove('hidden');
+                            }
+                        } catch (err) {
+                            errDiv.innerText = 'Gagal menghubungi server API.';
+                            errDiv.classList.remove('hidden');
+                        }
+                    }
+
+                    async function submitUserRegister(e) {
+                        e.preventDefault();
+                        const name = document.getElementById('reg-name').value;
+                        const email = document.getElementById('reg-email').value;
+                        const phone = document.getElementById('reg-phone').value;
+                        const password = document.getElementById('reg-password').value;
+                        const errDiv = document.getElementById('register-error');
+                        errDiv.classList.add('hidden');
+
+                        try {
+                            const res = await fetch(`${getApiBase()}/api/auth/register`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json'
+                                },
+                                body: JSON.stringify({ name, email, phone, password })
+                            });
+
+                            const data = await res.json();
+                            if (data.status === 'success' && data.user) {
+                                saveUserToStorage(data.user);
+                                closeUserAuthModal();
+                                if (authTriggeredByBooking) {
+                                    handleBookNowClick();
+                                }
+                            } else {
+                                errDiv.innerText = data.message || 'Registrasi gagal.';
+                                errDiv.classList.remove('hidden');
+                            }
+                        } catch (err) {
+                            errDiv.innerText = 'Gagal menghubungi server API.';
+                            errDiv.classList.remove('hidden');
+                        }
+                    }
+
+                    async function handleUserLogout() {
+                        try {
+                            await fetch(`${getApiBase()}/api/auth/logout`, {
+                                method: 'POST',
+                                headers: { 'Accept': 'application/json' }
+                            });
+                        } catch (err) { }
+                        saveUserToStorage(null);
+                    }
+
+                    // DYNAMIC CONTENT LOADER FROM API WITH FALLBACK HOST CONNECTIVITY
+                    async function fetchContentApi() {
+                        const urls = [
+                            `${getApiBase()}/api/content`,
+                            'http://127.0.0.1:8001/api/content',
+                            'http://localhost:8001/api/content'
+                        ];
+                        for (const url of urls) {
+                            try {
+                                const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+                                if (res.ok) {
+                                    return await res.json();
+                                }
+                            } catch (e) { }
+                        }
+                        return null;
+                    }
+
+                    async function loadLiveSiteContent() {
+                        try {
+                            const data = await fetchContentApi();
+                            if (!data || data.status !== 'success') return;
+
+                            // 1. Update Hero & Text Contents
+                            if (data.contents) {
+                                if (data.contents.hero_title) {
+                                    const h1 = document.querySelector('#hero-section h1');
+                                    if (h1) h1.innerText = data.contents.hero_title;
+                                }
+                                if (data.contents.hero_subtitle) {
+                                    const pSub = document.getElementById('hero-subtitle');
+                                    if (pSub) pSub.innerText = data.contents.hero_subtitle;
+                                }
+                                if (data.contents.hero_badge) {
+                                    const badge = document.getElementById('hero-badge');
+                                    if (badge) badge.innerText = data.contents.hero_badge;
+                                }
+                                if (data.contents.conservation_quote) {
+                                    const quoteP = document.querySelector('#reef p.font-serif');
+                                    if (quoteP) quoteP.innerText = data.contents.conservation_quote;
+                                }
+
+                                // Parse Footer Contact Info
+                                if (data.contents.footer_email) {
+                                    const emailEl = document.getElementById('footer-email-link');
+                                    if (emailEl) {
+                                        emailEl.href = `mailto:${data.contents.footer_email}`;
+                                        emailEl.innerText = data.contents.footer_email.toUpperCase();
+                                    }
+                                }
+                                if (data.contents.footer_phone) {
+                                    const phoneEl = document.getElementById('footer-phone-link');
+                                    if (phoneEl) {
+                                        phoneEl.href = `tel:${data.contents.footer_phone.replace(/\s+/g, '')}`;
+                                        phoneEl.innerText = data.contents.footer_phone;
+                                    }
+                                }
+                                if (data.contents.footer_whatsapp) {
+                                    const waEl = document.getElementById('footer-whatsapp-link');
+                                    if (waEl) {
+                                        const waNum = data.contents.footer_whatsapp.replace(/[^0-9]/g, '');
+                                        waEl.href = `https://wa.me/${waNum}`;
+                                    }
+                                }
+
+                                // Parse Tax & Service Settings from CMS
+                                if (data.contents.tax_enabled !== undefined) {
+                                    siteTaxEnabled = String(data.contents.tax_enabled) === '1';
+                                }
+                                if (data.contents.tax_percentage !== undefined) {
+                                    siteTaxPercentage = parseFloat(data.contents.tax_percentage) || 0;
+                                }
+                                if (data.contents.tax_label) {
+                                    siteTaxLabel = data.contents.tax_label;
+                                }
+                            }
+
+                            // 2. Update 9 Experiences Cards
+                            if (data.experiences && data.experiences.length > 0) {
+                                const expContainer = document.getElementById('experiences-slider');
+                                if (expContainer) {
+                                    expContainer.innerHTML = data.experiences.map(exp => `
                             <div class="flex-none w-[340px] group cursor-pointer snap-start">
                                 <div class="relative aspect-square overflow-hidden bg-gray-900 rounded-none mb-4">
                                     <img src="${formatImageUrl(exp.image_url)}" alt="${exp.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
@@ -2558,14 +3218,14 @@
                                 </div>
                             </div>
                         `).join('');
-                    }
-                }
+                                }
+                            }
 
-                // 3. Update 4 Dining Items
-                if (data.dining_items && data.dining_items.length > 0) {
-                    const diningContainer = document.getElementById('dining-grid');
-                    if (diningContainer) {
-                        diningContainer.innerHTML = data.dining_items.map(item => `
+                            // 3. Update 4 Dining Items
+                            if (data.dining_items && data.dining_items.length > 0) {
+                                const diningContainer = document.getElementById('dining-grid');
+                                if (diningContainer) {
+                                    diningContainer.innerHTML = data.dining_items.map(item => `
                             <div class="group flex flex-col">
                                 <div class="img-container aspect-[4/5] mb-3 bg-navy-900 overflow-hidden">
                                     <img src="${formatImageUrl(item.image_url)}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -2575,14 +3235,14 @@
                                 </p>
                             </div>
                         `).join('');
-                    }
-                }
+                                }
+                            }
 
-                // 4. Update 3 Conservation Cards
-                if (data.conservation_cards && data.conservation_cards.length > 0) {
-                    const consContainer = document.getElementById('conservation-cards-grid');
-                    if (consContainer) {
-                        consContainer.innerHTML = data.conservation_cards.map(card => `
+                            // 4. Update 3 Conservation Cards
+                            if (data.conservation_cards && data.conservation_cards.length > 0) {
+                                const consContainer = document.getElementById('conservation-cards-grid');
+                                if (consContainer) {
+                                    consContainer.innerHTML = data.conservation_cards.map(card => `
                             <div class="group flex flex-col">
                                 <div class="img-container aspect-[3/4] mb-4 bg-brand-dark relative overflow-hidden">
                                     <img src="${formatImageUrl(card.image_url)}" alt="${card.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -2593,52 +3253,170 @@
                                 </p>
                             </div>
                         `).join('');
+                                }
+                            }
+
+                            // 5. Update Villa Price & Status
+                            if (data.villas && data.villas.length > 0) {
+                                const villa = data.villas[0];
+                                currentVillaName = villa.name;
+                                currentVillaPrice = parseInt(villa.price_per_night);
+                                if (villa.image_url) {
+                                    currentVillaImg = formatImageUrl(villa.image_url);
+                                }
+                                const formattedPrice = 'Rp ' + currentVillaPrice.toLocaleString('id-ID');
+                                const priceEls = document.querySelectorAll('.villa-price-display');
+                                priceEls.forEach(el => el.innerText = formattedPrice);
+
+                                if (villa.available_units !== undefined) {
+                                    const countEl = document.getElementById('villa-available-count');
+                                    if (countEl) countEl.innerText = villa.available_units;
+                                }
+                            }
+
+                            updateBookingSummaryUI();
+                            // Populate Villa options in Pre-booking Modal from CMS/database
+                            if (data.villas && data.villas.length > 0) {
+                                const villaSelect = document.getElementById('prebook-villa-select');
+                                if (villaSelect) {
+                                    villaSelect.innerHTML = data.villas.map(v => `
+                            <option value="${v.slug}" data-name="${v.name}" data-price="${v.price_per_night}">
+                                🏝️ ${v.name} — Rp ${parseFloat(v.price_per_night).toLocaleString('id-ID')} / malam
+                            </option>
+                        `).join('');
+                                    if (villaSelect.options.length > 0) {
+                                        villaSelect.options[0].selected = true;
+                                    }
+                                }
+                            }
+                        } catch (err) {
+                            console.log('API live content loader error:', err);
+                        }
                     }
-                }
 
-                // 5. Update Villa Price & Status
-                if (data.villas && data.villas.length > 0) {
-                    const villa = data.villas[0];
-                    currentVillaName = villa.name;
-                    currentVillaPrice = parseInt(villa.price_per_night);
-                    if (villa.image_url) {
-                        currentVillaImg = formatImageUrl(villa.image_url);
-                    }
-                    const formattedPrice = 'Rp ' + currentVillaPrice.toLocaleString('id-ID');
-                    const priceEls = document.querySelectorAll('.villa-price-display');
-                    priceEls.forEach(el => el.innerText = formattedPrice);
-                }
+                    window.addEventListener('click', function (e) {
+                        const modal = document.getElementById('booking-modal');
+                        const authModal = document.getElementById('user-auth-modal');
+                        const myBookingsModal = document.getElementById('my-bookings-modal');
+                        const authBar = document.getElementById('user-header-auth');
+                        if (e.target === modal) {
+                            closeBookingModal();
+                        }
+                        if (e.target === authModal) {
+                            closeUserAuthModal();
+                        }
+                        if (e.target === myBookingsModal) {
+                            closeMyBookingsModal();
+                        }
+                        if (authBar && !authBar.contains(e.target)) {
+                            closeProfileDropdown();
+                        }
+                    });
 
-                updateBookingSummaryUI();
-            } catch (err) {
-                console.log('API live content loader error:', err);
-            }
-        }
+                    document.addEventListener('DOMContentLoaded', () => {
+                        checkUserAuthState();
+                        loadLiveSiteContent();
 
-        window.addEventListener('click', function (e) {
-            const modal = document.getElementById('booking-modal');
-            const authModal = document.getElementById('user-auth-modal');
-            const myBookingsModal = document.getElementById('my-bookings-modal');
-            const authBar = document.getElementById('user-header-auth');
-            if (e.target === modal) {
-                closeBookingModal();
-            }
-            if (e.target === authModal) {
-                closeUserAuthModal();
-            }
-            if (e.target === myBookingsModal) {
-                closeMyBookingsModal();
-            }
-            if (authBar && !authBar.contains(e.target)) {
-                closeProfileDropdown();
-            }
-        });
+                        // Auto-fill guest name from logged-in user
+                        const userStored = localStorage.getItem('waewatu_user');
+                        if (userStored) {
+                            try {
+                                const u = JSON.parse(userStored);
+                                const nameEl = document.getElementById('villa-guestname');
+                                if (nameEl && u.name) nameEl.value = u.name;
+                            } catch (e) { }
+                        }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            checkUserAuthState();
-            loadLiveSiteContent();
-        });
-    </script>
+                        // Set default dates: today & tomorrow+2
+                        const checkInEl = document.getElementById('villa-checkin');
+                        const checkOutEl = document.getElementById('villa-checkout');
+                        if (checkInEl && checkOutEl) {
+                            const today = new Date();
+                            const cout = new Date();
+                            cout.setDate(today.getDate() + 3);
+                            const fmt = d => d.toISOString().split('T')[0];
+                            checkInEl.min = fmt(today);
+                            checkInEl.value = fmt(today);
+                            checkOutEl.min = fmt(today);
+                            checkOutEl.value = fmt(cout);
+                            updateVillaNightsLabel();
+                        }
+
+                        // Live nights & price calculation
+                        function updateVillaNightsLabel() {
+                            const cin = document.getElementById('villa-checkin');
+                            const cout = document.getElementById('villa-checkout');
+                            const rooms = document.getElementById('villa-rooms');
+                            const label = document.getElementById('villa-nights-label');
+                            if (!cin || !cout || !cin.value || !cout.value) return;
+                            const d1 = new Date(cin.value);
+                            const d2 = new Date(cout.value);
+                            const nights = Math.max(1, Math.ceil((d2 - d1) / 86400000));
+                            const roomsVal = rooms ? parseInt(rooms.value) : 1;
+                            const ratePerNight = (typeof currentVillaPrice !== 'undefined' && currentVillaPrice) ? currentVillaPrice : 15000000;
+                            const total = (ratePerNight * nights * roomsVal).toLocaleString('id-ID');
+                            if (label) label.textContent = `${nights} malam · ${roomsVal} kamar · Estimasi total: Rp ${total}`;
+                        }
+
+                        if (checkInEl) checkInEl.addEventListener('change', updateVillaNightsLabel);
+                        if (checkOutEl) checkOutEl.addEventListener('change', updateVillaNightsLabel);
+                        const roomsEl = document.getElementById('villa-rooms');
+                        if (roomsEl) roomsEl.addEventListener('change', updateVillaNightsLabel);
+
+                        // RESERVE A VILLA → langsung redirect ke Terra PMS booking cart
+                        const reserveBtn = document.getElementById('btn-reserve-villa-main');
+                        if (reserveBtn) {
+                            reserveBtn.addEventListener('click', function (e) {
+                                e.preventDefault();
+                                const cin = document.getElementById('villa-checkin');
+                                const cout = document.getElementById('villa-checkout');
+                                const adults = document.getElementById('villa-adults');
+                                const children = document.getElementById('villa-children');
+                                const rooms = document.getElementById('villa-rooms');
+                                const guestName = document.getElementById('villa-guestname');
+
+                                const checkIn = cin ? cin.value : '';
+                                const checkOut = cout ? cout.value : '';
+                                const adultsVal = adults ? adults.value : '2';
+                                const childrenVal = children ? children.value : '0';
+                                const roomsVal = rooms ? parseInt(rooms.value) : 1;
+                                const nameVal = guestName ? guestName.value.trim() : '';
+
+                                if (!checkIn || !checkOut) {
+                                    alert('Silakan pilih tanggal check-in dan check-out terlebih dahulu.');
+                                    return;
+                                }
+
+                                const ratePerNight = (typeof currentVillaPrice !== 'undefined' && currentVillaPrice) ? currentVillaPrice : 15000000;
+                                const pmsCartUrl = getPmsBookingCartUrl();
+
+                                // Terra PMS query parameters:
+                                // `price` = harga per malam per kamar (Rate per night)
+                                // `guests` = jumlah dewasa (Adults)
+                                // `children` = jumlah anak (Children)
+                                // `rooms` = jumlah kamar (Rooms)
+                                const url = `${pmsCartUrl}?add_villa=1&unit_slug=the-reef-villa&villa_name=${encodeURIComponent('The Reef Villa')}&check_in=${encodeURIComponent(checkIn)}&check_out=${encodeURIComponent(checkOut)}&guests=${encodeURIComponent(adultsVal)}&children=${encodeURIComponent(childrenVal)}&rooms=${encodeURIComponent(roomsVal)}&guest_name=${encodeURIComponent(nameVal)}&price=${ratePerNight}`;
+                                window.open(url, '_blank');
+                            });
+                        }
+
+                        // BOOK NOW (navbar) & BOOK YOUR STAY still open pre-booking modal as fallback
+                        const bookNowNav = document.getElementById('btn-book-now-nav');
+                        if (bookNowNav) bookNowNav.addEventListener('click', function (e) {
+                            e.preventDefault();
+                            // Scroll to villa section so user can fill the form
+                            const sec = document.getElementById('the-villa');
+                            if (sec) sec.scrollIntoView({ behavior: 'smooth' });
+                        });
+
+                        const bookYourStay = document.getElementById('btn-book-your-stay');
+                        if (bookYourStay) bookYourStay.addEventListener('click', function (e) {
+                            e.preventDefault();
+                            const sec = document.getElementById('the-villa');
+                            if (sec) sec.scrollIntoView({ behavior: 'smooth' });
+                        });
+                    });
+                </script>
 
 </body>
 

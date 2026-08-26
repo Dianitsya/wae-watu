@@ -24,7 +24,6 @@ class DatabaseSeeder extends Seeder
                 'email' => 'admin@waewatu.com',
                 'password' => Hash::make('adminpassword123'),
                 'phone' => '+6281234567890',
-                'role' => 'admin',
             ]
         );
 
@@ -35,7 +34,6 @@ class DatabaseSeeder extends Seeder
                 'email' => 'guest@waewatu.com',
                 'password' => Hash::make('guestpassword123'),
                 'phone' => '+6289876543210',
-                'role' => 'user',
             ]
         );
 

@@ -178,6 +178,7 @@ class AdminController extends Controller
             'price_per_night' => 'required|numeric|min:0',
             'status' => 'required|in:available,sold_out,maintenance',
             'capacity' => 'required|integer|min:1',
+            'available_units' => 'required|integer|min:0',
             'description' => 'required|string',
             'image_url' => 'nullable|string',
             'image_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:10240',

@@ -78,10 +78,16 @@ class BookingController extends Controller
             'status' => 'pending',
         ]);
 
+        $bookingData = $booking->load('villa');
+        $snapData = $this->createMidtransSnapToken($bookingData);
+
         return response()->json([
             'status' => 'success',
             'message' => 'Reservation created successfully!',
-            'data' => $booking->load('villa')
+            'data' => $bookingData,
+            'snap_token' => $snapData['token'] ?? null,
+            'snap_url' => $snapData['redirect_url'] ?? null,
+            'client_key' => $this->getMidtransClientKey(),
         ], 201);
     }
 
@@ -92,5 +98,142 @@ class BookingController extends Controller
             'status' => 'success',
             'data' => $booking
         ]);
+    }
+
+    public function midtransConfig()
+    {
+        return response()->json([
+            'status' => 'success',
+            'client_key' => $this->getMidtransClientKey(),
+            'is_production' => $this->isMidtransProduction(),
+            'snap_js_url' => $this->isMidtransProduction()
+                ? 'https://app.midtrans.com/snap/snap.js'
+                : 'https://app.sandbox.midtrans.com/snap/snap.js',
+        ]);
+    }
+
+    public function midtransNotification(Request $request)
+    {
+        $serverKey = $this->getMidtransServerKey();
+
+        $orderId = $request->input('order_id');
+        $statusCode = $request->input('status_code');
+        $grossAmount = $request->input('gross_amount');
+        $signatureKey = $request->input('signature_key');
+        $transactionStatus = $request->input('transaction_status');
+        $fraudStatus = $request->input('fraud_status');
+
+        if ($orderId && $statusCode && $grossAmount && $signatureKey) {
+            $mySignature = hash('sha512', $orderId . $statusCode . $grossAmount . $serverKey);
+            if ($signatureKey !== $mySignature) {
+                return response()->json(['status' => 'error', 'message' => 'Invalid signature'], 403);
+            }
+        }
+
+        $booking = Booking::where('booking_code', $orderId)->first();
+        if (!$booking) {
+            return response()->json(['status' => 'error', 'message' => 'Booking not found'], 404);
+        }
+
+        if ($transactionStatus == 'capture') {
+            if ($fraudStatus == 'challenge') {
+                $booking->update(['status' => 'pending']);
+            } else if ($fraudStatus == 'accept') {
+                $booking->update(['status' => 'confirmed']);
+            }
+        } else if ($transactionStatus == 'settlement') {
+            $booking->update(['status' => 'confirmed']);
+        } else if ($transactionStatus == 'pending') {
+            $booking->update(['status' => 'pending']);
+        } else if (in_array($transactionStatus, ['deny', 'expire', 'cancel'])) {
+            $booking->update(['status' => 'cancelled']);
+        }
+
+        return response()->json(['status' => 'success', 'message' => 'Notification processed successfully']);
+    }
+
+    private function getMidtransServerKey()
+    {
+        $cmsKey = \App\Models\SiteContent::where('key', 'midtrans_server_key')->value('value');
+        return !empty($cmsKey) ? $cmsKey : config('midtrans.server_key');
+    }
+
+    private function getMidtransClientKey()
+    {
+        $cmsKey = \App\Models\SiteContent::where('key', 'midtrans_client_key')->value('value');
+        return !empty($cmsKey) ? $cmsKey : config('midtrans.client_key');
+    }
+
+    private function isMidtransProduction()
+    {
+        $cmsVal = \App\Models\SiteContent::where('key', 'midtrans_is_production')->value('value');
+        if ($cmsVal !== null) {
+            return $cmsVal == '1';
+        }
+        return config('midtrans.is_production', false);
+    }
+
+    private function createMidtransSnapToken($booking)
+    {
+        $serverKey = $this->getMidtransServerKey();
+        $isProduction = $this->isMidtransProduction();
+
+        $snapApiUrl = $isProduction
+            ? 'https://app.midtrans.com/snap/v1/transactions'
+            : 'https://app.sandbox.midtrans.com/snap/v1/transactions';
+
+        $payload = [
+            'transaction_details' => [
+                'order_id' => $booking->booking_code,
+                'gross_amount' => (int) round($booking->total_price),
+            ],
+            'customer_details' => [
+                'first_name' => $booking->guest_name,
+                'email' => $booking->guest_email,
+                'phone' => $booking->guest_phone,
+            ],
+            'item_details' => [
+                [
+                    'id' => 'VILLA-' . $booking->villa_id,
+                    'price' => (int) round($booking->total_price),
+                    'quantity' => 1,
+                    'name' => 'Reservasi ' . ($booking->villa ? $booking->villa->name : 'Wae Watu Villa'),
+                ]
+            ],
+            'credit_card' => [
+                'secure' => true,
+            ]
+        ];
+
+        try {
+            $response = \Illuminate\Support\Facades\Http::withHeaders([
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Basic ' . base64_encode($serverKey . ':'),
+            ])->post($snapApiUrl, $payload);
+
+            if ($response->successful()) {
+                $data = $response->json();
+                return [
+                    'token' => $data['token'] ?? null,
+                    'redirect_url' => $data['redirect_url'] ?? null,
+                    'error' => null,
+                ];
+            } else {
+                \Illuminate\Support\Facades\Log::error('Midtrans Snap Error: ' . $response->body());
+                return [
+                    'token' => null,
+                    'redirect_url' => null,
+                    'error' => $response->json()['error_messages'][0] ?? $response->body(),
+                ];
+            }
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Midtrans Snap Error: ' . $e->getMessage());
+            return [
+                'token' => null,
+                'redirect_url' => null,
+                'error' => $e->getMessage(),
+            ];
+        }
     }
 }
