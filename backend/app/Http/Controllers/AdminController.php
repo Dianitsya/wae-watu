@@ -99,6 +99,20 @@ class AdminController extends Controller
         ));
     }
 
+    private function uploadImage($file, $subfolder)
+    {
+        $directory = public_path('uploads/' . $subfolder);
+        if (!file_exists($directory)) {
+            mkdir($directory, 0777, true);
+        }
+
+        $extension = $file->getClientOriginalExtension();
+        $filename = uniqid($subfolder . '_') . '_' . time() . '.' . $extension;
+        $file->move($directory, $filename);
+
+        return '/uploads/' . $subfolder . '/' . $filename;
+    }
+
     public function updateCms(Request $request)
     {
         $inputs = $request->except(['_token', 'experiences', 'dining', 'conservation']);
@@ -113,6 +127,11 @@ class AdminController extends Controller
         // Batch Update Experiences
         if ($request->has('experiences')) {
             foreach ($request->input('experiences') as $id => $data) {
+                if ($request->hasFile("experiences.{$id}.image_file")) {
+                    $file = $request->file("experiences.{$id}.image_file");
+                    $data['image_url'] = $this->uploadImage($file, 'experiences');
+                }
+                unset($data['image_file']);
                 Experience::where('id', $id)->update($data);
             }
         }
@@ -120,6 +139,11 @@ class AdminController extends Controller
         // Batch Update Dining
         if ($request->has('dining')) {
             foreach ($request->input('dining') as $id => $data) {
+                if ($request->hasFile("dining.{$id}.image_file")) {
+                    $file = $request->file("dining.{$id}.image_file");
+                    $data['image_url'] = $this->uploadImage($file, 'dining');
+                }
+                unset($data['image_file']);
                 DiningItem::where('id', $id)->update($data);
             }
         }
@@ -127,6 +151,11 @@ class AdminController extends Controller
         // Batch Update Conservation Cards
         if ($request->has('conservation')) {
             foreach ($request->input('conservation') as $id => $data) {
+                if ($request->hasFile("conservation.{$id}.image_file")) {
+                    $file = $request->file("conservation.{$id}.image_file");
+                    $data['image_url'] = $this->uploadImage($file, 'conservation');
+                }
+                unset($data['image_file']);
                 ConservationCard::where('id', $id)->update($data);
             }
         }
@@ -151,8 +180,14 @@ class AdminController extends Controller
             'capacity' => 'required|integer|min:1',
             'description' => 'required|string',
             'image_url' => 'nullable|string',
+            'image_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:10240',
         ]);
 
+        if ($request->hasFile('image_file')) {
+            $validated['image_url'] = $this->uploadImage($request->file('image_file'), 'villas');
+        }
+
+        unset($validated['image_file']);
         $villa->update($validated);
 
         return redirect()->back()->with('success', "Updated {$villa->name} details & pricing successfully!");
@@ -192,9 +227,15 @@ class AdminController extends Controller
             'subtitle' => 'nullable|string|max:255',
             'badge_text' => 'nullable|string|max:255',
             'image_url' => 'nullable|string',
+            'image_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,svg|max:10240',
             'is_active' => 'nullable|boolean',
         ]);
 
+        if ($request->hasFile('image_file')) {
+            $validated['image_url'] = $this->uploadImage($request->file('image_file'), 'promotions');
+        }
+
+        unset($validated['image_file']);
         $validated['is_active'] = $request->has('is_active');
         $promotion->update($validated);
 

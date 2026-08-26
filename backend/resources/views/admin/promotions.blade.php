@@ -17,7 +17,7 @@
                 <!-- Promo Image Preview -->
                 <div class="lg:col-span-5 space-y-3">
                     <div class="aspect-[16/9] rounded-xl overflow-hidden bg-stone-200 shadow-sm border border-stone-300">
-                        <img src="{{ $promo->image_url }}" alt="{{ $promo->title }}" class="w-full h-full object-cover">
+                        <img id="preview-promo-{{ $promo->id }}" src="{{ $promo->image_url }}" alt="{{ $promo->title }}" class="w-full h-full object-cover">
                     </div>
                     <div class="flex justify-between items-center text-xs">
                         <span class="font-medium text-slate-500">Status Tayang Iklan:</span>
@@ -30,7 +30,7 @@
 
                 <!-- Update Promo Form -->
                 <div class="lg:col-span-7">
-                    <form action="{{ url('/admin/promotions/' . $promo->id) }}" method="POST" class="space-y-4">
+                    <form action="{{ url('/admin/promotions/' . $promo->id) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                         @csrf
                         @method('PUT')
 
@@ -46,18 +46,29 @@
                                 class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2 text-xs font-light text-slate-800">
                         </div>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Teks Badge Emblem (e.g. BY TERRA ECOSYSTEM)</label>
-                                <input type="text" name="badge_text" value="{{ old('badge_text', $promo->badge_text) }}"
-                                    class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2 text-xs font-mono uppercase text-brand-gold">
-                            </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Teks Badge Emblem (e.g. BY TERRA ECOSYSTEM)</label>
+                            <input type="text" name="badge_text" value="{{ old('badge_text', $promo->badge_text) }}"
+                                class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2 text-xs font-mono uppercase text-brand-gold">
+                        </div>
 
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Tautan Foto Banner HD (URL Image)</label>
-                                <input type="text" name="image_url" value="{{ old('image_url', $promo->image_url) }}"
-                                    class="w-full bg-stone-50 border border-stone-300 rounded-xl px-3.5 py-2 text-xs font-mono text-slate-700">
-                            </div>
+                        <!-- Banner Upload Input -->
+                        <div class="space-y-2 bg-stone-50/70 p-3.5 rounded-xl border border-stone-200">
+                            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                                📤 Upload Foto Banner Promo (File Gambar)
+                            </label>
+                            <input type="file" name="image_file" accept="image/*"
+                                onchange="previewImage(this, 'preview-promo-{{ $promo->id }}')"
+                                class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-brand-dark file:text-white hover:file:bg-brand-teal cursor-pointer">
+
+                            <details class="text-[11px] text-slate-500 pt-1">
+                                <summary class="cursor-pointer font-medium hover:text-brand-dark">Atau gunakan URL eksternal (opsional)...</summary>
+                                <div class="mt-2">
+                                    <input type="text" name="image_url" value="{{ old('image_url', $promo->image_url) }}"
+                                        placeholder="https://images.unsplash.com/..."
+                                        class="w-full bg-white border border-stone-300 rounded-lg px-3 py-1.5 text-xs font-mono text-slate-700">
+                                </div>
+                            </details>
                         </div>
 
                         <div class="flex items-center space-x-3 pt-2">
@@ -76,4 +87,19 @@
         @endforeach
     </div>
 </div>
+
+<script>
+function previewImage(input, targetId) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = document.getElementById(targetId);
+            if (img) {
+                img.src = e.target.result;
+            }
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
 @endsection

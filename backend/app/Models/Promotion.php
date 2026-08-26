@@ -16,4 +16,16 @@ class Promotion extends Model
 
     protected $casts = [
         'is_active' => 'boolean',
-    ];}
+    ];
+
+    public function getImageUrlAttribute($value)
+    {
+        if (empty($value)) {
+            return $value;
+        }
+        if (str_starts_with($value, 'http://') || str_starts_with($value, 'https://') || str_starts_with($value, 'data:')) {
+            return $value;
+        }
+        return url($value);
+    }
+}

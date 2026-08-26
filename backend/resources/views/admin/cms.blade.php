@@ -3,7 +3,7 @@
 @section('title', 'Kelola Seluruh Konten Website (CMS)')
 
 @section('content')
-<form action="{{ url('/admin/cms/update') }}" method="POST" class="space-y-10">
+<form action="{{ url('/admin/cms/update') }}" method="POST" enctype="multipart/form-data" class="space-y-10">
     @csrf
 
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -12,7 +12,7 @@
             <p class="text-xs text-slate-500 mt-1">Seluruh teks headline, foto aktivitas, foto makanan, kutipan konservasi, dan kontak footer dapat Anda ubah di halaman ini.</p>
         </div>
         <button type="submit" class="bg-brand-dark hover:bg-brand-teal text-white px-8 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-lg flex items-center space-x-2">
-            <span>💾 SIMPAN SEMUAN PERUBAHAN CMS</span>
+            <span>💾 SIMPAN SEMUA PERUBAHAN CMS</span>
         </button>
     </div>
 
@@ -56,16 +56,27 @@
                         <span class="font-serif italic font-bold text-brand-gold text-lg">Card {{ $exp->number_code }}</span>
                     </div>
 
+                    <div class="aspect-[4/3] rounded-lg overflow-hidden bg-stone-200 border border-stone-300">
+                        <img id="preview-exp-{{ $exp->id }}" src="{{ $exp->image_url }}" alt="{{ $exp->title }}" class="w-full h-full object-cover">
+                    </div>
+
                     <div>
                         <label class="block text-[10px] font-semibold text-slate-600 uppercase mb-1">Judul Aktivitas</label>
                         <input type="text" name="experiences[{{ $exp->id }}][title]" value="{{ $exp->title }}" required
                             class="w-full bg-white border border-stone-300 rounded-lg px-3 py-1.5 text-xs font-medium">
                     </div>
 
-                    <div>
-                        <label class="block text-[10px] font-semibold text-slate-600 uppercase mb-1">URL Foto Aktivitas HD</label>
-                        <input type="text" name="experiences[{{ $exp->id }}][image_url]" value="{{ $exp->image_url }}" required
-                            class="w-full bg-white border border-stone-300 rounded-lg px-3 py-1.5 text-[10px] font-mono text-slate-700">
+                    <div class="space-y-1 bg-white p-2.5 rounded-lg border border-stone-200">
+                        <label class="block text-[10px] font-semibold text-slate-600 uppercase">📤 Upload Foto Aktivitas</label>
+                        <input type="file" name="experiences[{{ $exp->id }}][image_file]" accept="image/*"
+                            onchange="previewImage(this, 'preview-exp-{{ $exp->id }}')"
+                            class="block w-full text-[10px] text-slate-500 file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-[10px] file:font-semibold file:bg-brand-dark file:text-white hover:file:bg-brand-teal cursor-pointer">
+                        
+                        <details class="text-[10px] text-slate-500 pt-0.5">
+                            <summary class="cursor-pointer font-medium">URL eksternal...</summary>
+                            <input type="text" name="experiences[{{ $exp->id }}][image_url]" value="{{ $exp->image_url }}"
+                                class="w-full bg-stone-50 border border-stone-300 rounded px-2 py-1 text-[10px] font-mono text-slate-700 mt-1">
+                        </details>
                     </div>
 
                     <div>
@@ -88,16 +99,27 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             @foreach($diningItems as $dining)
                 <div class="p-5 rounded-xl border border-stone-200 bg-stone-50 space-y-3">
+                    <div class="aspect-[16/9] rounded-lg overflow-hidden bg-stone-200 border border-stone-300">
+                        <img id="preview-dining-{{ $dining->id }}" src="{{ $dining->image_url }}" alt="{{ $dining->title }}" class="w-full h-full object-cover">
+                    </div>
+
                     <div>
                         <label class="block text-[10px] font-semibold text-slate-600 uppercase mb-1">Judul Menu / Dining</label>
                         <input type="text" name="dining[{{ $dining->id }}][title]" value="{{ $dining->title }}" required
                             class="w-full bg-white border border-stone-300 rounded-lg px-3 py-1.5 text-xs font-medium">
                     </div>
 
-                    <div>
-                        <label class="block text-[10px] font-semibold text-slate-600 uppercase mb-1">URL Foto Makanan / Dining HD</label>
-                        <input type="text" name="dining[{{ $dining->id }}][image_url]" value="{{ $dining->image_url }}" required
-                            class="w-full bg-white border border-stone-300 rounded-lg px-3 py-1.5 text-[10px] font-mono">
+                    <div class="space-y-1 bg-white p-2.5 rounded-lg border border-stone-200">
+                        <label class="block text-[10px] font-semibold text-slate-600 uppercase">📤 Upload Foto Dining</label>
+                        <input type="file" name="dining[{{ $dining->id }}][image_file]" accept="image/*"
+                            onchange="previewImage(this, 'preview-dining-{{ $dining->id }}')"
+                            class="block w-full text-[10px] text-slate-500 file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-[10px] file:font-semibold file:bg-brand-dark file:text-white hover:file:bg-brand-teal cursor-pointer">
+                        
+                        <details class="text-[10px] text-slate-500 pt-0.5">
+                            <summary class="cursor-pointer font-medium">URL eksternal...</summary>
+                            <input type="text" name="dining[{{ $dining->id }}][image_url]" value="{{ $dining->image_url }}"
+                                class="w-full bg-stone-50 border border-stone-300 rounded px-2 py-1 text-[10px] font-mono text-slate-700 mt-1">
+                        </details>
                     </div>
                 </div>
             @endforeach
@@ -113,16 +135,27 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             @foreach($conservationCards as $card)
                 <div class="p-5 rounded-xl border border-stone-200 bg-stone-50 space-y-3">
+                    <div class="aspect-[4/3] rounded-lg overflow-hidden bg-stone-200 border border-stone-300">
+                        <img id="preview-cons-{{ $card->id }}" src="{{ $card->image_url }}" alt="{{ $card->title }}" class="w-full h-full object-cover">
+                    </div>
+
                     <div>
                         <label class="block text-[10px] font-semibold text-slate-600 uppercase mb-1">Judul Kartu Konservasi</label>
                         <input type="text" name="conservation[{{ $card->id }}][title]" value="{{ $card->title }}" required
                             class="w-full bg-white border border-stone-300 rounded-lg px-3 py-1.5 text-xs font-medium">
                     </div>
 
-                    <div>
-                        <label class="block text-[10px] font-semibold text-slate-600 uppercase mb-1">URL Foto Underwater HD</label>
-                        <input type="text" name="conservation[{{ $card->id }}][image_url]" value="{{ $card->image_url }}" required
-                            class="w-full bg-white border border-stone-300 rounded-lg px-3 py-1.5 text-[10px] font-mono">
+                    <div class="space-y-1 bg-white p-2.5 rounded-lg border border-stone-200">
+                        <label class="block text-[10px] font-semibold text-slate-600 uppercase">📤 Upload Foto Conservation</label>
+                        <input type="file" name="conservation[{{ $card->id }}][image_file]" accept="image/*"
+                            onchange="previewImage(this, 'preview-cons-{{ $card->id }}')"
+                            class="block w-full text-[10px] text-slate-500 file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-[10px] file:font-semibold file:bg-brand-dark file:text-white hover:file:bg-brand-teal cursor-pointer">
+                        
+                        <details class="text-[10px] text-slate-500 pt-0.5">
+                            <summary class="cursor-pointer font-medium">URL eksternal...</summary>
+                            <input type="text" name="conservation[{{ $card->id }}][image_url]" value="{{ $card->image_url }}"
+                                class="w-full bg-stone-50 border border-stone-300 rounded px-2 py-1 text-[10px] font-mono text-slate-700 mt-1">
+                        </details>
                     </div>
 
                     <div>
@@ -160,6 +193,8 @@
                     class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-medium text-slate-900">
             </div>
         </div>
+    </div>
+
     <!-- Section 6: Tax & Service Charge Settings -->
     <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-stone-200 space-y-6">
         <h3 class="font-serif text-2xl text-brand-dark font-medium border-b border-stone-200 pb-3 flex items-center space-x-2">
@@ -195,4 +230,19 @@
         </button>
     </div>
 </form>
+
+<script>
+function previewImage(input, targetId) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = document.getElementById(targetId);
+            if (img) {
+                img.src = e.target.result;
+            }
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
 @endsection
