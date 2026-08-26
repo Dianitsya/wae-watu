@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\VillaController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\InquiryController;
+use App\Http\Controllers\PromotionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +16,9 @@ use App\Http\Controllers\InquiryController;
 // Villa endpoints
 Route::get('/villas', [VillaController::class, 'index']);
 Route::get('/villas/{slug}', [VillaController::class, 'show']);
+
+// Promotion & Banner endpoints
+Route::get('/promotions', [PromotionController::class, 'index']);
 
 // Booking endpoints
 Route::post('/bookings/check-availability', [BookingController::class, 'checkAvailability']);

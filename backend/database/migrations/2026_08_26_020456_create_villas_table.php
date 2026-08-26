@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
+            $table->enum('status', ['available', 'sold_out', 'maintenance'])->default('available');
             $table->integer('capacity')->default(2);
             $table->decimal('price_per_night', 12, 2);
             $table->text('description');

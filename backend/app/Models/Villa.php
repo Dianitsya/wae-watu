@@ -9,6 +9,7 @@ class Villa extends Model
     protected $fillable = [
         'name',
         'slug',
+        'status',
         'capacity',
         'price_per_night',
         'description',

@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Promotion;
+use Illuminate\Http\Request;
+
+class PromotionController extends Controller
+{
+    public function index()
+    {
+        $promotions = Promotion::where('is_active', true)->get();
+        return response()->json([
+            'status' => 'success',
+            'data' => $promotions
+        ]);
+    }
+}
