@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'admin@waewatu.com',
                 'password' => Hash::make('adminpassword123'),
                 'phone' => '+6281234567890',
+                'role' => 'admin',
             ]
         );
 

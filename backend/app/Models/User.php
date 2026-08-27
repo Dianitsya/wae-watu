@@ -34,9 +34,9 @@ class User extends Authenticatable
 
     public function isAdmin(): bool
     {
-        if (isset($this->attributes['role'])) {
-            return $this->attributes['role'] === 'admin';
+        if (isset($this->attributes['role']) && !empty($this->attributes['role'])) {
+            return strtolower($this->attributes['role']) === 'admin';
         }
-        return true;
+        return $this->email === 'admin@waewatu.com';
     }
 }
