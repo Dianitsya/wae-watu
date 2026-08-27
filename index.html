@@ -2546,13 +2546,23 @@
 
                     function formatImageUrl(url) {
                         if (!url) return '';
+                        const host = window.location.hostname;
+                        const isLocal = (!host || host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.'));
+
+                        // If url contains local 127.0.0.1 or localhost but page is opened on production / GitHub Pages
+                        if (!isLocal && (url.includes('127.0.0.1:8000') || url.includes('localhost:8000'))) {
+                            url = url.replace(/http:\/\/(127\.0\.0\.1|localhost):8000/, 'https://terra.dexautosport.com');
+                        } else if (!isLocal && (url.includes('127.0.0.1:8001') || url.includes('localhost:8001'))) {
+                            url = url.replace(/http:\/\/(127\.0\.0\.1|localhost):8001/, 'https://wae-watu-production.up.railway.app');
+                        }
+
                         if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
                             if (window.location.protocol === 'https:' && url.startsWith('http://')) {
                                 return url.replace('http://', 'https://');
                             }
                             return url;
                         }
-                        const apiBase = getApiBase();
+                        const apiBase = (typeof getPmsApiBase === 'function' ? getPmsApiBase() : getApiBase());
                         return `${apiBase}${url.startsWith('/') ? '' : '/'}${url}`;
                     }
 
