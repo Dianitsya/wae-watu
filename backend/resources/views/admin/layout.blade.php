@@ -46,7 +46,11 @@
             <div class="flex items-center space-x-4">
                 <a href="{{ url('/admin') }}" class="flex items-center space-x-3">
                     <img src="{{ asset('images/wae-watu-logo-light.png') }}" alt="Wae Watu Logo"
-                        class="h-8 w-auto object-contain">
+                        class="h-8 w-auto object-contain" onerror="this.style.display='none';">
+                    <div>
+                        <h1 class="font-serif text-xl tracking-wider text-stone-100 font-medium leading-none">WAE WATU</h1>
+                        <p class="text-[9px] tracking-[0.25em] text-brand-gold uppercase mt-0.5">ADMIN CONTROL PANEL</p>
+                    </div>
                 </a>
             </div>
 
