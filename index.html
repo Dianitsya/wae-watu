@@ -3153,25 +3153,24 @@
                         saveUserToStorage(null);
                     }
 
+                    function getPmsApiBase() {
+                        const host = window.location.hostname;
+                        if (!host || host === 'localhost' || host === '127.0.0.1') {
+                            return 'http://127.0.0.1:8000';
+                        }
+                        if (host.startsWith('192.168.')) {
+                            return `http://${host}:8000`;
+                        }
+                        return 'https://terra.dexautosport.com';
+                    }
+
                     // DYNAMIC CONTENT LOADER DIRECTLY FROM TERRA PMS API WITH FALLBACKS
                     async function fetchContentApi() {
-                        const host = window.location.hostname;
-                        const isLocal = (!host || host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.'));
-
-                        let urls = [];
-                        if (isLocal) {
-                            urls = [
-                                'http://127.0.0.1:8000/api/property-data/wae-watu-reef-resort',
-                                `${getApiBase()}/api/content`,
-                                'http://127.0.0.1:8001/api/content'
-                            ];
-                        } else {
-                            // Production / HTTPS environment: NEVER request http:// ports to prevent Mixed Content blocking
-                            urls = [
-                                `${getApiBase()}/api/property-data/wae-watu-reef-resort`,
-                                `${getApiBase()}/api/content`
-                            ];
-                        }
+                        const pmsBase = getPmsApiBase();
+                        const urls = [
+                            `${pmsBase}/api/property-data/wae-watu-reef-resort`,
+                            `${getApiBase()}/api/content`
+                        ];
 
                         for (const url of urls) {
                             try {
