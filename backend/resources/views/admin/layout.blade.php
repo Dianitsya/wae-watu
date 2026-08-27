@@ -45,9 +45,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <div class="flex items-center space-x-4">
                 <a href="{{ url('/admin') }}" class="flex items-center space-x-3">
-                    <div class="bg-white/95 px-3 py-1 rounded-lg border border-white/20 shadow-md">
-                        <img src="{{ asset('images/wae-watu-logo.jpg') }}" alt="Wae Watu Logo" class="h-6 w-auto object-contain">
-                    </div>
+                    <img src="{{ asset('images/wae-watu-logo-light.png') }}" alt="Wae Watu Logo" class="h-8 w-auto object-contain">
                     <div>
                         <h1 class="font-serif text-xl tracking-wider text-stone-100 font-medium leading-none">WAE WATU</h1>
                         <p class="text-[9px] tracking-[0.25em] text-brand-gold uppercase mt-0.5">ADMIN CONTROL PANEL</p>
