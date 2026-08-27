@@ -864,21 +864,22 @@
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center mb-20">
                 <!-- Left Image -->
                 <div class="lg:col-span-6 img-container aspect-[4/3] bg-stone-200">
-                    <img src="https://images.unsplash.com/photo-1512100356356-de1b84283e18?auto=format&fit=crop&w=1200&q=80"
-                        alt="The Reef Villa Overwater Cottage" class="w-full h-full object-cover">
+                    <img id="villa-main-img" src="https://images.unsplash.com/photo-1512100356356-de1b84283e18?auto=format&fit=crop&w=1200&q=80"
+                        alt="Villa Overwater Cottage" class="villa-main-img w-full h-full object-cover"
+                        onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1512100356356-de1b84283e18?auto=format&fit=crop&w=1200&q=80';">
                 </div>
 
                 <!-- Right Description & Specs Table -->
                 <div class="lg:col-span-6 space-y-7">
                     <div>
-                        <h2 class="font-serif text-4xl md:text-5xl text-brand-textDark font-normal">The Reef Villa</h2>
+                        <h2 class="villa-name-display font-serif text-4xl md:text-5xl text-brand-textDark font-normal">The Reef Villa</h2>
                         <span
                             class="villa-price-display font-serif italic text-2xl text-brand-gold font-bold block mt-1">Rp
                             15.000.000 <span class="font-sans text-xs not-italic text-stone-500 font-normal">/
                                 malam</span></span>
                     </div>
 
-                    <p class="text-xs md:text-[13px] text-brand-textMuted font-light leading-relaxed max-w-lg">
+                    <p class="villa-description-display text-xs md:text-[13px] text-brand-textMuted font-light leading-relaxed max-w-lg">
                         There is only one kind of room at Wae Watu — a thatched villa standing on its own legs over the
                         reef, with a private sea deck and a ladder straight down into the water. Every villa is the
                         same; only the view of the tide differs.
@@ -889,7 +890,7 @@
                         class="border-t border-b border-stone-300/80 py-5 space-y-4 text-[10px] tracking-[0.2em] font-medium text-brand-textDark uppercase">
                         <div class="flex justify-between items-center">
                             <span class="text-brand-textMuted">CAPACITY</span>
-                            <span>2 GUESTS</span>
+                            <span><span id="villa-capacity-count">2</span> GUESTS</span>
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="text-brand-textMuted">VIEW</span>
@@ -938,6 +939,10 @@
                                     <option value="4">4</option>
                                     <option value="5">5</option>
                                     <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
                                 </select>
                             </div>
                             <div>
@@ -950,6 +955,7 @@
                                     <option value="2">2</option>
                                     <option value="3">3</option>
                                     <option value="4">4</option>
+                                    <option value="5">5</option>
                                 </select>
                             </div>
                             <div>
@@ -962,6 +968,11 @@
                                     <option value="3">3</option>
                                     <option value="4">4</option>
                                     <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
                                 </select>
                             </div>
                         </div>
@@ -3258,24 +3269,59 @@
                                 }
                             }
 
-                            // 5. Update Villa Price & Status
+                            // 5. Update All Villa Fields (Name, Price, Description, Capacity, Image, Stock & Status)
                             if (data.villas && data.villas.length > 0) {
                                 const villa = data.villas[0];
                                 currentVillaName = villa.name;
                                 currentVillaPrice = parseInt(villa.price_per_night);
-                                if (villa.image_url) {
-                                    currentVillaImg = formatImageUrl(villa.image_url);
-                                }
+                                
+                                // Update Name
+                                const nameEls = document.querySelectorAll('.villa-name-display');
+                                nameEls.forEach(el => el.innerText = villa.name);
+
+                                // Update Price
                                 const formattedPrice = 'Rp ' + currentVillaPrice.toLocaleString('id-ID');
                                 const priceEls = document.querySelectorAll('.villa-price-display');
                                 priceEls.forEach(el => el.innerText = formattedPrice);
 
+                                // Update Description
+                                if (villa.description) {
+                                    const descEls = document.querySelectorAll('.villa-description-display');
+                                    descEls.forEach(el => el.innerText = villa.description);
+                                }
+
+                                // Update Capacity
+                                if (villa.capacity) {
+                                    window.currentVillaCapacity = parseInt(villa.capacity);
+                                    const capEl = document.getElementById('villa-capacity-count');
+                                    if (capEl) capEl.innerText = villa.capacity;
+                                }
+
+                                // Update Villa Image
+                                if (villa.image_url && villa.image_url.trim() !== '') {
+                                    const formattedImg = formatImageUrl(villa.image_url);
+                                    if (formattedImg) {
+                                        currentVillaImg = formattedImg;
+                                        const imgEls = document.querySelectorAll('.villa-main-img');
+                                        imgEls.forEach(el => {
+                                            el.onerror = function() {
+                                                this.onerror = null;
+                                                this.src = 'https://images.unsplash.com/photo-1512100356356-de1b84283e18?auto=format&fit=crop&w=1200&q=80';
+                                            };
+                                            el.src = currentVillaImg;
+                                        });
+                                    }
+                                }
+
+                                // Update Stock & Status
                                 if (villa.available_units !== undefined) {
-                                    window.currentVillaAvailableUnits = parseInt(villa.available_units);
+                                    window.currentVillaAvailableUnits = (villa.status === 'sold_out' || villa.status === 'maintenance') ? 0 : parseInt(villa.available_units);
                                     const countEl = document.getElementById('villa-available-count');
                                     if (countEl) {
-                                        if (window.currentVillaAvailableUnits <= 0) {
+                                        if (window.currentVillaAvailableUnits <= 0 || villa.status === 'sold_out') {
                                             countEl.innerHTML = '<span class="text-red-500 font-bold">0 (Sold Out)</span>';
+                                        } else if (villa.status === 'maintenance') {
+                                            countEl.innerHTML = '<span class="text-amber-600 font-bold">0 (Maintenance)</span>';
                                         } else {
                                             countEl.innerText = window.currentVillaAvailableUnits;
                                         }
@@ -3351,8 +3397,28 @@
                             updateVillaNightsLabel();
                         }
 
+                        function validateGuestCapacityAndRooms() {
+                            const adults = document.getElementById('villa-adults');
+                            const children = document.getElementById('villa-children');
+                            const rooms = document.getElementById('villa-rooms');
+                            if (!adults || !rooms) return;
+
+                            const adultVal = parseInt(adults.value || 1);
+                            const childVal = parseInt(children ? children.value : 0);
+                            const totalGuests = adultVal + childVal;
+
+                            const capPerRoom = (typeof window.currentVillaCapacity !== 'undefined' && window.currentVillaCapacity > 0) ? window.currentVillaCapacity : 2;
+                            const minRoomsRequired = Math.max(1, Math.ceil(totalGuests / capPerRoom));
+
+                            let currentRoomsVal = parseInt(rooms.value || 1);
+                            if (currentRoomsVal < minRoomsRequired) {
+                                rooms.value = minRoomsRequired;
+                            }
+                        }
+
                         // Live nights & price calculation
                         function updateVillaNightsLabel() {
+                            validateGuestCapacityAndRooms();
                             const cin = document.getElementById('villa-checkin');
                             const cout = document.getElementById('villa-checkout');
                             const rooms = document.getElementById('villa-rooms');
@@ -3371,6 +3437,10 @@
                         if (checkOutEl) checkOutEl.addEventListener('change', updateVillaNightsLabel);
                         const roomsEl = document.getElementById('villa-rooms');
                         if (roomsEl) roomsEl.addEventListener('change', updateVillaNightsLabel);
+                        const adultsEl = document.getElementById('villa-adults');
+                        if (adultsEl) adultsEl.addEventListener('change', updateVillaNightsLabel);
+                        const childrenEl = document.getElementById('villa-children');
+                        if (childrenEl) childrenEl.addEventListener('change', updateVillaNightsLabel);
 
                         window.triggerReserveVillaSubmit = function () {
                             // Cek ketersediaan sisa kamar (Stock)
@@ -3422,6 +3492,27 @@
                             const adultsVal = adults ? adults.value : '2';
                             const childrenVal = children ? children.value : '0';
 
+                            // Validasi Kapasitas Tamu per Kamar untuk Semua Jumlah Dewasa/Anak
+                            const adultVal = parseInt(adultsVal || 1);
+                            const childVal = parseInt(childrenVal || 0);
+                            const totalGuests = adultVal + childVal;
+                            const capPerRoom = (typeof window.currentVillaCapacity !== 'undefined' && window.currentVillaCapacity > 0) ? window.currentVillaCapacity : 2;
+                            const minRoomsRequired = Math.max(1, Math.ceil(totalGuests / capPerRoom));
+
+                            if (roomsVal < minRoomsRequired) {
+                                if (typeof Swal !== 'undefined') {
+                                    Swal.fire({
+                                        icon: 'warning',
+                                        title: 'Jumlah Kamar Kurang',
+                                        text: `Kapasitas 1 kamar maksimal ${capPerRoom} tamu. Untuk ${totalGuests} tamu, Anda harus menambah jumlah kamar menjadi minimal ${minRoomsRequired} kamar.`,
+                                        confirmButtonColor: '#072e33'
+                                    });
+                                } else {
+                                    alert(`Kapasitas 1 kamar maksimal ${capPerRoom} tamu. Untuk ${totalGuests} tamu, Anda harus menambah jumlah kamar menjadi minimal ${minRoomsRequired} kamar.`);
+                                }
+                                return;
+                            }
+
                             let nameVal = guestName ? guestName.value.trim() : '';
                             if (!nameVal) {
                                 const userStored = localStorage.getItem('waewatu_user');
@@ -3439,9 +3530,10 @@
                             }
 
                             const ratePerNight = (typeof currentVillaPrice !== 'undefined' && currentVillaPrice) ? currentVillaPrice : 15000000;
+                            const villaDisplayName = (typeof currentVillaName !== 'undefined' && currentVillaName) ? currentVillaName : 'The Reef Villa';
                             const pmsCartUrl = getPmsBookingCartUrl();
 
-                            const url = `${pmsCartUrl}?add_villa=1&unit_slug=the-reef-villa&villa_name=${encodeURIComponent('The Reef Villa')}&check_in=${encodeURIComponent(checkIn)}&check_out=${encodeURIComponent(checkOut)}&guests=${encodeURIComponent(adultsVal)}&children=${encodeURIComponent(childrenVal)}&rooms=${encodeURIComponent(roomsVal)}&guest_name=${encodeURIComponent(nameVal)}&price=${ratePerNight}`;
+                            const url = `${pmsCartUrl}?add_villa=1&unit_slug=the-reef-villa&villa_name=${encodeURIComponent(villaDisplayName)}&check_in=${encodeURIComponent(checkIn)}&check_out=${encodeURIComponent(checkOut)}&guests=${encodeURIComponent(adultsVal)}&children=${encodeURIComponent(childrenVal)}&rooms=${encodeURIComponent(roomsVal)}&guest_name=${encodeURIComponent(nameVal)}&price=${ratePerNight}`;
                             window.open(url, '_blank');
                         };
 
