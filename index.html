@@ -8,6 +8,8 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -132,9 +134,9 @@
                     BOOK NOW
                 </button>
 
-                <!-- Guest Login Button (Shown when not logged in) -->
+                <!-- Guest Login Button (Hidden) -->
                 <button id="user-login-btn" onclick="openUserAuthModal()"
-                    class="text-stone-300 hover:text-brand-gold text-[9px] xl:text-[10px] font-semibold tracking-[0.2em] uppercase transition-all px-3 py-2 rounded-xl border border-white/10 hover:border-brand-gold/40 bg-white/5 flex items-center space-x-1.5">
+                    class="hidden text-stone-300 hover:text-brand-gold text-[9px] xl:text-[10px] font-semibold tracking-[0.2em] uppercase transition-all px-3 py-2 rounded-xl border border-white/10 hover:border-brand-gold/40 bg-white/5 items-center space-x-1.5">
                     <span>🔑 Login</span>
                 </button>
 
@@ -3067,7 +3069,7 @@
                                 saveUserToStorage(data.user);
                                 closeUserAuthModal();
                                 if (authTriggeredByBooking) {
-                                    handleBookNowClick();
+                                    triggerReserveVillaSubmit();
                                 }
                             } else {
                                 errDiv.innerText = data.message || 'Login gagal.';
@@ -3103,7 +3105,7 @@
                                 saveUserToStorage(data.user);
                                 closeUserAuthModal();
                                 if (authTriggeredByBooking) {
-                                    handleBookNowClick();
+                                    triggerReserveVillaSubmit();
                                 }
                             } else {
                                 errDiv.innerText = data.message || 'Registrasi gagal.';
@@ -3269,8 +3271,15 @@
                                 priceEls.forEach(el => el.innerText = formattedPrice);
 
                                 if (villa.available_units !== undefined) {
+                                    window.currentVillaAvailableUnits = parseInt(villa.available_units);
                                     const countEl = document.getElementById('villa-available-count');
-                                    if (countEl) countEl.innerText = villa.available_units;
+                                    if (countEl) {
+                                        if (window.currentVillaAvailableUnits <= 0) {
+                                            countEl.innerHTML = '<span class="text-red-500 font-bold">0 (Sold Out)</span>';
+                                        } else {
+                                            countEl.innerText = window.currentVillaAvailableUnits;
+                                        }
+                                    }
                                 }
                             }
 
@@ -3363,40 +3372,85 @@
                         const roomsEl = document.getElementById('villa-rooms');
                         if (roomsEl) roomsEl.addEventListener('change', updateVillaNightsLabel);
 
+                        window.triggerReserveVillaSubmit = function () {
+                            // Cek ketersediaan sisa kamar (Stock)
+                            const countEl = document.getElementById('villa-available-count');
+                            let availableStock = (typeof window.currentVillaAvailableUnits !== 'undefined') ? window.currentVillaAvailableUnits : 28;
+                            if (countEl && !isNaN(parseInt(countEl.innerText))) {
+                                availableStock = parseInt(countEl.innerText);
+                            }
+
+                            const roomsEl = document.getElementById('villa-rooms');
+                            const roomsVal = roomsEl ? parseInt(roomsEl.value) : 1;
+
+                            if (availableStock <= 0) {
+                                if (typeof Swal !== 'undefined') {
+                                    Swal.fire({
+                                        icon: 'info',
+                                        title: 'Mohon maaf kamar habis',
+                                        text: 'Kamar tidak dapat dipesan karena full booked.',
+                                        confirmButtonColor: '#072e33'
+                                    });
+                                } else {
+                                    alert('Mohon maaf kamar habis. Kamar tidak dapat dipesan karena semua kamar full booked.');
+                                }
+                                return;
+                            }
+
+                            if (roomsVal > availableStock) {
+                                if (typeof Swal !== 'undefined') {
+                                    Swal.fire({
+                                        icon: 'warning',
+                                        title: 'Stok Kamar Tidak Cukup',
+                                        text: `Maaf, sisa unit kamar yang tersedia hanya ${availableStock} unit, namun Anda meminta ${roomsVal} kamar.`,
+                                        confirmButtonColor: '#072e33'
+                                    });
+                                } else {
+                                    alert(`Maaf, sisa unit kamar yang tersedia hanya ${availableStock} unit, namun Anda meminta ${roomsVal} kamar.`);
+                                }
+                                return;
+                            }
+
+                            const cin = document.getElementById('villa-checkin');
+                            const cout = document.getElementById('villa-checkout');
+                            const adults = document.getElementById('villa-adults');
+                            const children = document.getElementById('villa-children');
+                            const guestName = document.getElementById('villa-guestname');
+
+                            const checkIn = cin ? cin.value : '';
+                            const checkOut = cout ? cout.value : '';
+                            const adultsVal = adults ? adults.value : '2';
+                            const childrenVal = children ? children.value : '0';
+
+                            let nameVal = guestName ? guestName.value.trim() : '';
+                            if (!nameVal) {
+                                const userStored = localStorage.getItem('waewatu_user');
+                                if (userStored) {
+                                    try {
+                                        const u = JSON.parse(userStored);
+                                        nameVal = u.name || '';
+                                    } catch (e) { }
+                                }
+                            }
+
+                            if (!checkIn || !checkOut) {
+                                alert('Silakan pilih tanggal check-in dan check-out terlebih dahulu.');
+                                return;
+                            }
+
+                            const ratePerNight = (typeof currentVillaPrice !== 'undefined' && currentVillaPrice) ? currentVillaPrice : 15000000;
+                            const pmsCartUrl = getPmsBookingCartUrl();
+
+                            const url = `${pmsCartUrl}?add_villa=1&unit_slug=the-reef-villa&villa_name=${encodeURIComponent('The Reef Villa')}&check_in=${encodeURIComponent(checkIn)}&check_out=${encodeURIComponent(checkOut)}&guests=${encodeURIComponent(adultsVal)}&children=${encodeURIComponent(childrenVal)}&rooms=${encodeURIComponent(roomsVal)}&guest_name=${encodeURIComponent(nameVal)}&price=${ratePerNight}`;
+                            window.open(url, '_blank');
+                        };
+
                         // RESERVE A VILLA → langsung redirect ke Terra PMS booking cart
                         const reserveBtn = document.getElementById('btn-reserve-villa-main');
                         if (reserveBtn) {
                             reserveBtn.addEventListener('click', function (e) {
                                 e.preventDefault();
-                                const cin = document.getElementById('villa-checkin');
-                                const cout = document.getElementById('villa-checkout');
-                                const adults = document.getElementById('villa-adults');
-                                const children = document.getElementById('villa-children');
-                                const rooms = document.getElementById('villa-rooms');
-                                const guestName = document.getElementById('villa-guestname');
-
-                                const checkIn = cin ? cin.value : '';
-                                const checkOut = cout ? cout.value : '';
-                                const adultsVal = adults ? adults.value : '2';
-                                const childrenVal = children ? children.value : '0';
-                                const roomsVal = rooms ? parseInt(rooms.value) : 1;
-                                const nameVal = guestName ? guestName.value.trim() : '';
-
-                                if (!checkIn || !checkOut) {
-                                    alert('Silakan pilih tanggal check-in dan check-out terlebih dahulu.');
-                                    return;
-                                }
-
-                                const ratePerNight = (typeof currentVillaPrice !== 'undefined' && currentVillaPrice) ? currentVillaPrice : 15000000;
-                                const pmsCartUrl = getPmsBookingCartUrl();
-
-                                // Terra PMS query parameters:
-                                // `price` = harga per malam per kamar (Rate per night)
-                                // `guests` = jumlah dewasa (Adults)
-                                // `children` = jumlah anak (Children)
-                                // `rooms` = jumlah kamar (Rooms)
-                                const url = `${pmsCartUrl}?add_villa=1&unit_slug=the-reef-villa&villa_name=${encodeURIComponent('The Reef Villa')}&check_in=${encodeURIComponent(checkIn)}&check_out=${encodeURIComponent(checkOut)}&guests=${encodeURIComponent(adultsVal)}&children=${encodeURIComponent(childrenVal)}&rooms=${encodeURIComponent(roomsVal)}&guest_name=${encodeURIComponent(nameVal)}&price=${ratePerNight}`;
-                                window.open(url, '_blank');
+                                triggerReserveVillaSubmit();
                             });
                         }
 
