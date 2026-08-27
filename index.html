@@ -804,7 +804,7 @@
             <div class="mb-14">
                 <p class="text-[10px] tracking-[0.35em] text-brand-teal uppercase font-medium mb-3">THE RESORT</p>
                 <h2
-                    class="font-serif text-4xl md:text-5xl lg:text-6xl font-normal leading-[1.1] text-brand-textDark max-w-xl">
+                    class="resort-title-display font-serif text-4xl md:text-5xl lg:text-6xl font-normal leading-[1.1] text-brand-textDark max-w-xl">
                     A village above the water,<br>built to touch it lightly.
                 </h2>
             </div>
@@ -817,7 +817,7 @@
                 </div>
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <h3 class="font-serif italic text-2xl text-brand-textDark font-normal">The boardwalk</h3>
-                    <p class="text-[11px] text-brand-textMuted font-light leading-relaxed max-w-md">
+                    <p class="resort-description-display text-[11px] text-brand-textMuted font-light leading-relaxed max-w-md">
                         A kilometre of weathered timber curls across the shallows, past young mangroves planted by our
                         own team. Every villa, table and jetty is reached on foot, above the tide.
                     </p>
@@ -3238,6 +3238,16 @@
                                         const waNum = data.contents.footer_whatsapp.replace(/[^0-9]/g, '');
                                         waEl.href = `https://wa.me/${waNum}`;
                                     }
+                                }
+
+                                // Parse Resort Section CMS Text
+                                if (data.contents.resort_title) {
+                                    const titleEls = document.querySelectorAll('.resort-title-display');
+                                    titleEls.forEach(el => el.innerHTML = data.contents.resort_title.replace(/\n/g, '<br>'));
+                                }
+                                if (data.contents.resort_description) {
+                                    const descEls = document.querySelectorAll('.resort-description-display');
+                                    descEls.forEach(el => el.innerText = data.contents.resort_description);
                                 }
 
                                 // Parse Tax & Service Settings from CMS

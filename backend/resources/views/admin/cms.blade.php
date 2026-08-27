@@ -50,6 +50,32 @@
             </div>
         </div>
 
+        <!-- Section THE RESORT (Section 6) -->
+        <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-stone-200 space-y-6">
+            <h3 class="font-serif text-2xl text-brand-dark font-medium border-b border-stone-200 pb-3 flex items-center space-x-2">
+                <span>🏖️ Section — THE RESORT (Header & Sub-Headline)</span>
+            </h3>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                        Judul Headline THE RESORT ("A village above the water, built to touch it lightly.")
+                    </label>
+                    <textarea name="resort_title" rows="2" required
+                        class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-serif font-bold text-slate-900 leading-snug">{{ $contents['resort_title'] ?? "A village above the water,\nbuilt to touch it lightly." }}</textarea>
+                    <p class="text-[10px] text-slate-500 mt-1">* Gunakan enter/baris baru untuk memisahkan kalimat atas & bawah.</p>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+                        Deskripsi Singkat Boardwalk / Resort
+                    </label>
+                    <textarea name="resort_description" rows="3"
+                        class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-light text-slate-800 leading-relaxed">{{ $contents['resort_description'] ?? 'A kilometre of weathered timber curls across the shallows, past young mangroves planted by our own team. Every villa, table and jetty is reached on foot, above the tide.' }}</textarea>
+                </div>
+            </div>
+        </div>
+
         <!-- Section 2: 9 Experience Cards -->
         <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-stone-200 space-y-6">
             <h3
