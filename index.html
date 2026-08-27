@@ -3164,12 +3164,11 @@
                         return 'https://terra.dexautosport.com';
                     }
 
-                    // DYNAMIC CONTENT LOADER DIRECTLY FROM TERRA PMS API WITH FALLBACKS
+                    // DYNAMIC CONTENT LOADER FROM ADMIN WAE WATU CMS & TERRA PMS WITH FALLBACKS
                     async function fetchContentApi() {
-                        const pmsBase = getPmsApiBase();
                         const urls = [
-                            `${pmsBase}/api/property-data/wae-watu-reef-resort`,
-                            `${getApiBase()}/api/content`
+                            `${getApiBase()}/api/content`,
+                            `${getPmsApiBase()}/api/property-data/wae-watu-reef-resort`
                         ];
 
                         for (const url of urls) {
