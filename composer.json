@@ -1,0 +1,8 @@
+{
+    "name": "waewatu/root",
+    "type": "project",
+    "description": "Wae Watu Reef Resort Root Launcher for Railway Nixpacks",
+    "require": {
+        "php": "^8.2"
+    }
+}
