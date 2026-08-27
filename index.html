@@ -865,7 +865,7 @@
                 <!-- Left Image -->
                 <div class="lg:col-span-6 img-container aspect-[4/3] bg-stone-200">
                     <img id="villa-main-img"
-                        src="http://127.0.0.1:8000/storage/properties/1491185906a8fba49045c1.jpg"
+                        src="https://images.unsplash.com/photo-1512100356356-de1b84283e18?auto=format&fit=crop&w=1200&q=80"
                         alt="Villa Overwater Cottage" class="villa-main-img w-full h-full object-cover"
                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1512100356356-de1b84283e18?auto=format&fit=crop&w=1200&q=80';">
                 </div>
@@ -2547,6 +2547,9 @@
                     function formatImageUrl(url) {
                         if (!url) return '';
                         if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+                            if (window.location.protocol === 'https:' && url.startsWith('http://')) {
+                                return url.replace('http://', 'https://');
+                            }
                             return url;
                         }
                         const apiBase = getApiBase();
@@ -3153,15 +3156,23 @@
                     // DYNAMIC CONTENT LOADER DIRECTLY FROM TERRA PMS API WITH FALLBACKS
                     async function fetchContentApi() {
                         const host = window.location.hostname;
-                        const pmsApiUrl = (!host || host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.'))
-                            ? 'http://127.0.0.1:8000/api/property-data/wae-watu-reef-resort'
-                            : `http://${host}:8000/api/property-data/wae-watu-reef-resort`;
+                        const isLocal = (!host || host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.'));
 
-                        const urls = [
-                            pmsApiUrl,
-                            `${getApiBase()}/api/content`,
-                            'http://127.0.0.1:8001/api/content'
-                        ];
+                        let urls = [];
+                        if (isLocal) {
+                            urls = [
+                                'http://127.0.0.1:8000/api/property-data/wae-watu-reef-resort',
+                                `${getApiBase()}/api/content`,
+                                'http://127.0.0.1:8001/api/content'
+                            ];
+                        } else {
+                            // Production / HTTPS environment: NEVER request http:// ports to prevent Mixed Content blocking
+                            urls = [
+                                `${getApiBase()}/api/property-data/wae-watu-reef-resort`,
+                                `${getApiBase()}/api/content`
+                            ];
+                        }
+
                         for (const url of urls) {
                             try {
                                 const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
