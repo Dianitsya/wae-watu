@@ -45,11 +45,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <div class="flex items-center space-x-4">
                 <a href="{{ url('/admin') }}" class="flex items-center space-x-3">
-                    <img src="{{ asset('images/wae-watu-logo-light.png') }}" alt="Wae Watu Logo" class="h-8 w-auto object-contain">
-                    <div>
-                        <h1 class="font-serif text-xl tracking-wider text-stone-100 font-medium leading-none">WAE WATU</h1>
-                        <p class="text-[9px] tracking-[0.25em] text-brand-gold uppercase mt-0.5">ADMIN CONTROL PANEL</p>
-                    </div>
+                    <img src="{{ asset('images/wae-watu-logo-light.png') }}" alt="Wae Watu Logo"
+                        class="h-8 w-auto object-contain">
                 </a>
             </div>
 
@@ -62,10 +59,6 @@
                 <a href="{{ url('/admin/cms') }}"
                     class="px-3 py-2 rounded-lg transition-colors {{ Request::is('admin/cms*') ? 'bg-brand-gold text-brand-dark font-bold' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
                     ✏️ CMS Website
-                </a>
-                <a href="{{ url('/admin/promotions') }}"
-                    class="px-3 py-2 rounded-lg transition-colors {{ Request::is('admin/promotions*') ? 'bg-brand-gold text-brand-dark font-bold' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
-                    🖼️ Banner Iklan
                 </a>
 
                 <!-- Logout Button -->
@@ -105,10 +98,7 @@
         @yield('content')
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-stone-200 border-t border-stone-300 text-slate-500 text-[11px] py-4 text-center">
-        Wae Watu Reef Resort & Sanctuary — Powered by Terra Ecosystem
-    </footer>
+
 </body>
 
 </html>
