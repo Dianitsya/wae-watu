@@ -203,11 +203,9 @@
 
         <!-- Hero Text & Controls Overlay -->
         <div class="relative z-10 max-w-4xl mx-auto pt-12 md:pt-16 flex-grow flex flex-col justify-center items-center">
-            <!-- Wae Watu Official Logo & Badge -->
+            <!-- Wae Watu Official Logo -->
             <div class="flex flex-col items-center mb-6">
                 <img src="images/wae-watu-logo-light.png" alt="Wae Watu Logo" class="h-14 md:h-18 w-auto object-contain mb-2 drop-shadow-xl">
-                <span id="hero-badge"
-                    class="text-[9px] md:text-[10px] tracking-[0.4em] text-brand-gold uppercase font-medium">BY WAE WATU REEF RESORT</span>
             </div>
 
             <!-- Location Subtitle -->
@@ -3196,7 +3194,7 @@
                                 }
                                 if (data.contents.hero_badge) {
                                     const badge = document.getElementById('hero-badge');
-                                    if (badge) badge.innerText = data.contents.hero_badge;
+                                    if (badge) badge.innerText = '';
                                 }
                                 if (data.contents.conservation_quote) {
                                     const quoteP = document.querySelector('#reef p.font-serif');

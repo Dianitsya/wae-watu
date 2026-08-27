@@ -57,9 +57,9 @@ class DatabaseSeeder extends Seeder
         Promotion::updateOrCreate(
             ['title' => 'Days measured in tides, not hours.'],
             [
-                'title' => 'Days measured in tides, not hours.',
-                'subtitle' => 'Special Early Bird Ocean Villa Offer — Save 20% on 5-Night Stays',
-                'badge_text' => 'BY TERRA ECOSYSTEM',
+                'hero_title' => 'Days measured in tides, not hours.',
+                'hero_subtitle' => 'WAE WATU / REEF RESORT',
+                'hero_badge' => '',
                 'image_url' => 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1600&q=85',
                 'is_active' => true
             ]
@@ -133,9 +133,8 @@ class DatabaseSeeder extends Seeder
 
         // 7. Create SiteContent Key-Values
         $contents = [
-            'hero_title' => 'Days measured in tides, not hours.',
-            'hero_subtitle' => 'WAE WATU / REEF RESORT',
-            'hero_badge' => 'BY TERRA ECOSYSTEM',
+            'hero_title' => 'Wae Wattu Reff Resort.',
+            'hero_subtitle' => 'A private reef sanctuary where luxury meets nature',
             'resort_title' => "A village above the water,\nbuilt to touch it lightly.",
             'resort_description' => 'A kilometre of weathered timber curls across the shallows, past young mangroves planted by our own team. Every villa, table and jetty is reached on foot, above the tide.',
             'resort_image_url' => 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1600&q=85',
