@@ -73,6 +73,31 @@
                     <textarea name="resort_description" rows="3"
                         class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-light text-slate-800 leading-relaxed">{{ $contents['resort_description'] ?? 'A kilometre of weathered timber curls across the shallows, past young mangroves planted by our own team. Every villa, table and jetty is reached on foot, above the tide.' }}</textarea>
                 </div>
+
+                <!-- Foto Utama Section THE RESORT -->
+                <div class="space-y-3 pt-2">
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                        📷 Foto Utama Section THE RESORT (Boardwalk / Cottage)
+                    </label>
+                    
+                    <div class="aspect-[21/9] rounded-xl overflow-hidden bg-stone-200 border border-stone-300 max-w-xl">
+                        <img id="preview-resort-img" src="{{ $contents['resort_image_url'] ?? 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1600&q=85' }}" alt="Resort Preview" class="w-full h-full object-cover">
+                    </div>
+
+                    <div class="space-y-2 bg-stone-50 p-4 rounded-xl border border-stone-200 max-w-xl">
+                        <label class="block text-[11px] font-semibold text-slate-700 uppercase">📤 Upload File Foto Resort Baru</label>
+                        <input type="file" name="resort_image_file" accept="image/*"
+                            onchange="previewImage(this, 'preview-resort-img')"
+                            class="block w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-brand-dark file:text-white hover:file:bg-brand-teal cursor-pointer">
+
+                        <details class="text-[11px] text-slate-500 pt-1">
+                            <summary class="cursor-pointer font-medium hover:text-brand-dark">Atau gunakan URL eksternal (opsional)...</summary>
+                            <input type="text" name="resort_image_url" value="{{ $contents['resort_image_url'] ?? 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1600&q=85' }}"
+                                placeholder="https://images.unsplash.com/..."
+                                class="w-full bg-white border border-stone-300 rounded-lg px-3 py-1.5 text-xs font-mono text-slate-700 mt-1">
+                        </details>
+                    </div>
+                </div>
             </div>
         </div>
 

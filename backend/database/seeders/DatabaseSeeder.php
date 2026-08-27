@@ -138,6 +138,7 @@ class DatabaseSeeder extends Seeder
             'hero_badge' => 'BY TERRA ECOSYSTEM',
             'resort_title' => "A village above the water,\nbuilt to touch it lightly.",
             'resort_description' => 'A kilometre of weathered timber curls across the shallows, past young mangroves planted by our own team. Every villa, table and jetty is reached on foot, above the tide.',
+            'resort_image_url' => 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1600&q=85',
             'conservation_quote' => '“Luxury should not only preserve nature — it should help restore it. Every guest becomes part of a larger story: protecting our oceans for generations to come.”',
             'footer_phone' => '+62 385 892 104',
             'footer_whatsapp' => '+62 812 3456 7890',

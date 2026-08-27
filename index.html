@@ -813,7 +813,7 @@
             <div class="mb-16">
                 <div class="img-container aspect-[21/9] mb-4 bg-stone-200">
                     <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1600&q=85"
-                        alt="The boardwalk overwater cottages" class="w-full h-full object-cover">
+                        alt="The boardwalk overwater cottages" class="resort-main-img w-full h-full object-cover">
                 </div>
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <h3 class="font-serif italic text-2xl text-brand-textDark font-normal">The boardwalk</h3>
@@ -3248,6 +3248,11 @@
                                 if (data.contents.resort_description) {
                                     const descEls = document.querySelectorAll('.resort-description-display');
                                     descEls.forEach(el => el.innerText = data.contents.resort_description);
+                                }
+                                if (data.contents.resort_image_url) {
+                                    const formattedResortImg = formatImageUrl(data.contents.resort_image_url);
+                                    const resortImgs = document.querySelectorAll('.resort-main-img');
+                                    resortImgs.forEach(el => el.src = formattedResortImg);
                                 }
 
                                 // Parse Tax & Service Settings from CMS

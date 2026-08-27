@@ -115,12 +115,21 @@ class AdminController extends Controller
 
     public function updateCms(Request $request)
     {
-        $inputs = $request->except(['_token', 'experiences', 'dining', 'conservation']);
+        $inputs = $request->except(['_token', 'experiences', 'dining', 'conservation', 'resort_image_file']);
 
         foreach ($inputs as $key => $value) {
             SiteContent::updateOrCreate(
                 ['key' => $key],
                 ['value' => $value, 'type' => 'text']
+            );
+        }
+
+        if ($request->hasFile('resort_image_file')) {
+            $file = $request->file('resort_image_file');
+            $resortImageUrl = $this->uploadImage($file, 'resort');
+            SiteContent::updateOrCreate(
+                ['key' => 'resort_image_url'],
+                ['value' => $resortImageUrl, 'type' => 'text']
             );
         }
 
