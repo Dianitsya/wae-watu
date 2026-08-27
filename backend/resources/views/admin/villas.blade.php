@@ -9,6 +9,20 @@
             <h2 class="font-serif text-3xl font-normal text-brand-dark">Kelola Kamar Vila & Harga Per Malam</h2>
             <p class="text-xs text-slate-500 mt-1">Ubah tarif harga kamar, status penjualan (Available / Sold Out / Maintenance), dan foto deskripsi vila di bawah ini.</p>
         </div>
+    <!-- Centralized Terra PMS Info Banner -->
+    <div class="bg-gradient-to-r from-slate-900 via-emerald-950 to-teal-900 text-white rounded-2xl p-6 shadow-md border border-emerald-700/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div class="space-y-1.5">
+            <div class="inline-flex items-center gap-2 bg-emerald-800/80 px-3 py-1 rounded-full text-[10px] font-bold text-emerald-200 uppercase tracking-wider">
+                ⚡ INTEGRASI TERPUSAT TERRA PMS
+            </div>
+            <h3 class="text-lg font-serif font-semibold text-white">Pengaturan Kamar & Harga Dikelola Terpusat di Terra PMS</h3>
+            <p class="text-xs text-emerald-100/80 max-w-2xl leading-relaxed">
+                Seluruh pengaturan tarif harga kamar per malam, sisa unit kamar (stock), kapasitas tamu, dan status ketersediaan vila disentralisasi dari sistem **Terra Property Management System (PMS)**.
+            </p>
+        </div>
+        <a href="http://127.0.0.1:8000/admin" target="_blank" class="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-slate-900 px-5 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md shrink-0">
+            🏢 Buka Terra PMS Admin ↗
+        </a>
     </div>
 
     <div class="grid grid-cols-1 gap-8">

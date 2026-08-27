@@ -864,7 +864,8 @@
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center mb-20">
                 <!-- Left Image -->
                 <div class="lg:col-span-6 img-container aspect-[4/3] bg-stone-200">
-                    <img id="villa-main-img" src="https://images.unsplash.com/photo-1512100356356-de1b84283e18?auto=format&fit=crop&w=1200&q=80"
+                    <img id="villa-main-img"
+                        src="http://127.0.0.1:8000/storage/properties/1491185906a8fba49045c1.jpg"
                         alt="Villa Overwater Cottage" class="villa-main-img w-full h-full object-cover"
                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1512100356356-de1b84283e18?auto=format&fit=crop&w=1200&q=80';">
                 </div>
@@ -872,17 +873,17 @@
                 <!-- Right Description & Specs Table -->
                 <div class="lg:col-span-6 space-y-7">
                     <div>
-                        <h2 class="villa-name-display font-serif text-4xl md:text-5xl text-brand-textDark font-normal">The Reef Villa</h2>
+                        <h2 class="villa-name-display font-serif text-4xl md:text-5xl text-brand-textDark font-normal">
+                            The Good Villa</h2>
                         <span
                             class="villa-price-display font-serif italic text-2xl text-brand-gold font-bold block mt-1">Rp
-                            15.000.000 <span class="font-sans text-xs not-italic text-stone-500 font-normal">/
+                            10.000.000 <span class="font-sans text-xs not-italic text-stone-500 font-normal">/
                                 malam</span></span>
                     </div>
 
-                    <p class="villa-description-display text-xs md:text-[13px] text-brand-textMuted font-light leading-relaxed max-w-lg">
-                        There is only one kind of room at Wae Watu — a thatched villa standing on its own legs over the
-                        reef, with a private sea deck and a ladder straight down into the water. Every villa is the
-                        same; only the view of the tide differs.
+                    <p
+                        class="villa-description-display text-xs md:text-[13px] text-brand-textMuted font-light leading-relaxed max-w-lg">
+                        A thatched luxury overwater villa standing on its own legs over the reef, with a private sea deck and a ladder straight down into the water.
                     </p>
 
                     <!-- Specs Table (Matching Screenshot) -->
@@ -890,7 +891,7 @@
                         class="border-t border-b border-stone-300/80 py-5 space-y-4 text-[10px] tracking-[0.2em] font-medium text-brand-textDark uppercase">
                         <div class="flex justify-between items-center">
                             <span class="text-brand-textMuted">CAPACITY</span>
-                            <span><span id="villa-capacity-count">2</span> GUESTS</span>
+                            <span><span id="villa-capacity-count">1</span> GUESTS</span>
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="text-brand-textMuted">VIEW</span>
@@ -902,7 +903,7 @@
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="text-brand-textMuted">VILLAS ON THE REEF</span>
-                            <span id="villa-available-count">28</span>
+                            <span id="villa-available-count">5</span>
                         </div>
                     </div>
 
@@ -2859,6 +2860,17 @@
                         return 'https://terra.dexautosport.com/booking-list';
                     }
 
+                    function getPmsPropertyDetailUrl() {
+                        const host = window.location.hostname;
+                        const isLocal = !host || host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.') || host.endsWith('.local');
+
+                        if (isLocal) {
+                            return 'http://127.0.0.1:8000/detail/hotel-1/wae-watu-reef-resort';
+                        }
+
+                        return 'https://terra.dexautosport.com/detail/hotel-1/wae-watu-reef-resort';
+                    }
+
                     function openPreBookingModal(defaultVillaSlug = 'the-reef-villa') {
                         const modal = document.getElementById('pre-booking-modal');
                         if (!modal) return;
@@ -3138,18 +3150,24 @@
                         saveUserToStorage(null);
                     }
 
-                    // DYNAMIC CONTENT LOADER FROM API WITH FALLBACK HOST CONNECTIVITY
+                    // DYNAMIC CONTENT LOADER DIRECTLY FROM TERRA PMS API WITH FALLBACKS
                     async function fetchContentApi() {
+                        const host = window.location.hostname;
+                        const pmsApiUrl = (!host || host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.'))
+                            ? 'http://127.0.0.1:8000/api/property-data/wae-watu-reef-resort'
+                            : `http://${host}:8000/api/property-data/wae-watu-reef-resort`;
+
                         const urls = [
+                            pmsApiUrl,
                             `${getApiBase()}/api/content`,
-                            'http://127.0.0.1:8001/api/content',
-                            'http://localhost:8001/api/content'
+                            'http://127.0.0.1:8001/api/content'
                         ];
                         for (const url of urls) {
                             try {
                                 const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
                                 if (res.ok) {
-                                    return await res.json();
+                                    const json = await res.json();
+                                    if (json && (json.villas || json.status === 'success')) return json;
                                 }
                             } catch (e) { }
                         }
@@ -3274,7 +3292,7 @@
                                 const villa = data.villas[0];
                                 currentVillaName = villa.name;
                                 currentVillaPrice = parseInt(villa.price_per_night);
-                                
+
                                 // Update Name
                                 const nameEls = document.querySelectorAll('.villa-name-display');
                                 nameEls.forEach(el => el.innerText = villa.name);
@@ -3282,12 +3300,13 @@
                                 // Update Price
                                 const formattedPrice = 'Rp ' + currentVillaPrice.toLocaleString('id-ID');
                                 const priceEls = document.querySelectorAll('.villa-price-display');
-                                priceEls.forEach(el => el.innerText = formattedPrice);
+                                priceEls.forEach(el => el.innerHTML = `${formattedPrice} <span class="font-sans text-xs not-italic text-stone-500 font-normal">/ malam</span>`);
 
                                 // Update Description
                                 if (villa.description) {
+                                    const cleanDesc = villa.description.replace(/<[^>]*>?/gm, '').trim();
                                     const descEls = document.querySelectorAll('.villa-description-display');
-                                    descEls.forEach(el => el.innerText = villa.description);
+                                    descEls.forEach(el => el.innerText = cleanDesc);
                                 }
 
                                 // Update Capacity
@@ -3304,7 +3323,7 @@
                                         currentVillaImg = formattedImg;
                                         const imgEls = document.querySelectorAll('.villa-main-img');
                                         imgEls.forEach(el => {
-                                            el.onerror = function() {
+                                            el.onerror = function () {
                                                 this.onerror = null;
                                                 this.src = 'https://images.unsplash.com/photo-1512100356356-de1b84283e18?auto=format&fit=crop&w=1200&q=80';
                                             };
@@ -3531,9 +3550,20 @@
 
                             const ratePerNight = (typeof currentVillaPrice !== 'undefined' && currentVillaPrice) ? currentVillaPrice : 15000000;
                             const villaDisplayName = (typeof currentVillaName !== 'undefined' && currentVillaName) ? currentVillaName : 'The Reef Villa';
-                            const pmsCartUrl = getPmsBookingCartUrl();
+                            const pmsDetailUrl = getPmsPropertyDetailUrl();
 
-                            const url = `${pmsCartUrl}?add_villa=1&unit_slug=the-reef-villa&villa_name=${encodeURIComponent(villaDisplayName)}&check_in=${encodeURIComponent(checkIn)}&check_out=${encodeURIComponent(checkOut)}&guests=${encodeURIComponent(adultsVal)}&children=${encodeURIComponent(childrenVal)}&rooms=${encodeURIComponent(roomsVal)}&guest_name=${encodeURIComponent(nameVal)}&price=${ratePerNight}`;
+                            // Format check_in & check_out for check_InOut (DD-MM-YYYY - DD-MM-YYYY)
+                            let cinFmt = checkIn;
+                            let coutFmt = checkOut;
+                            try {
+                                const [y1, m1, d1] = checkIn.split('-');
+                                const [y2, m2, d2] = checkOut.split('-');
+                                cinFmt = `${d1}-${m1}-${y1}`;
+                                coutFmt = `${d2}-${m2}-${y2}`;
+                            } catch (e) { }
+
+                            const checkInOutParam = `${cinFmt} - ${coutFmt}`;
+                            const url = `${pmsDetailUrl}?interval_id=2&check_in=${encodeURIComponent(checkIn)}&check_out=${encodeURIComponent(checkOut)}&check_InOut=${encodeURIComponent(checkInOutParam)}&adults=${encodeURIComponent(adultsVal)}&children=${encodeURIComponent(childrenVal)}&rooms=${encodeURIComponent(roomsVal)}`;
                             window.open(url, '_blank');
                         };
 

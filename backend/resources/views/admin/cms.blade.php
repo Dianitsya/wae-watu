@@ -3,275 +3,250 @@
 @section('title', 'Kelola Seluruh Konten Website (CMS)')
 
 @section('content')
-<form action="{{ url('/admin/cms/update') }}" method="POST" enctype="multipart/form-data" class="space-y-10">
-    @csrf
+    <form action="{{ url('/admin/cms/update') }}" method="POST" enctype="multipart/form-data" class="space-y-10">
+        @csrf
 
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-            <h2 class="font-serif text-3xl font-normal text-brand-dark">Kelola Seluruh Konten & Foto Website (CMS Editor)</h2>
-            <p class="text-xs text-slate-500 mt-1">Seluruh teks headline, foto aktivitas, foto makanan, kutipan konservasi, dan kontak footer dapat Anda ubah di halaman ini.</p>
-        </div>
-        <button type="submit" class="bg-brand-dark hover:bg-brand-teal text-white px-8 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-lg flex items-center space-x-2">
-            <span>💾 SIMPAN SEMUA PERUBAHAN CMS</span>
-        </button>
-    </div>
-
-    <!-- Section 1: Hero Header & Quotes -->
-    <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-stone-200 space-y-6">
-        <h3 class="font-serif text-2xl text-brand-dark font-medium border-b border-stone-200 pb-3 flex items-center space-x-2">
-            <span>🌄 Section 1 — Hero Banner Header & Teks Utama</span>
-        </h3>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Judul Headline Utama Hero</label>
-                <input type="text" name="hero_title" value="{{ $contents['hero_title'] ?? '' }}" required
-                    class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-medium text-slate-900 focus:ring-2 focus:ring-brand-gold">
+                <h2 class="font-serif text-3xl font-normal text-brand-dark">Kelola Seluruh Konten & Foto Website (CMS Editor)
+                </h2>
+                <p class="text-xs text-slate-500 mt-1">Seluruh teks headline, foto aktivitas, foto makanan, kutipan
+                    konservasi, dan kontak footer dapat Anda ubah di halaman ini.</p>
             </div>
-
-            <div>
-                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Sub-Judul Hero Header</label>
-                <input type="text" name="hero_subtitle" value="{{ $contents['hero_subtitle'] ?? '' }}"
-                    class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-medium text-slate-900">
-            </div>
+            <button type="submit"
+                class="bg-brand-dark hover:bg-brand-teal text-white px-8 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-lg flex items-center space-x-2">
+                <span>💾 SIMPAN SEMUA PERUBAHAN CMS</span>
+            </button>
         </div>
 
-        <div>
-            <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Teks Kutipan Filosofi Konservasi (Section 4 Quote)</label>
-            <textarea name="conservation_quote" rows="3"
-                class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-light text-slate-800 leading-relaxed">{{ $contents['conservation_quote'] ?? '' }}</textarea>
-        </div>
-    </div>
+        <!-- Section 1: Hero Header & Quotes -->
+        <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-stone-200 space-y-6">
+            <h3
+                class="font-serif text-2xl text-brand-dark font-medium border-b border-stone-200 pb-3 flex items-center space-x-2">
+                <span>🌄 Section 1 — Hero Banner Header & Teks Utama</span>
+            </h3>
 
-    <!-- Section 2: 9 Experience Cards -->
-    <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-stone-200 space-y-6">
-        <h3 class="font-serif text-2xl text-brand-dark font-medium border-b border-stone-200 pb-3 flex items-center space-x-2">
-            <span>🏄 Section 2 — 9 Kartu Aktivitas Experiences ("Days measured in tides")</span>
-        </h3>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            @foreach($experiences as $exp)
-                <div class="p-5 rounded-xl border border-stone-200 bg-stone-50/80 space-y-3">
-                    <div class="flex items-center justify-between">
-                        <span class="font-serif italic font-bold text-brand-gold text-lg">Card {{ $exp->number_code }}</span>
-                    </div>
-
-                    <div class="aspect-[4/3] rounded-lg overflow-hidden bg-stone-200 border border-stone-300">
-                        <img id="preview-exp-{{ $exp->id }}" src="{{ $exp->image_url }}" alt="{{ $exp->title }}" class="w-full h-full object-cover">
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] font-semibold text-slate-600 uppercase mb-1">Judul Aktivitas</label>
-                        <input type="text" name="experiences[{{ $exp->id }}][title]" value="{{ $exp->title }}" required
-                            class="w-full bg-white border border-stone-300 rounded-lg px-3 py-1.5 text-xs font-medium">
-                    </div>
-
-                    <div class="space-y-1 bg-white p-2.5 rounded-lg border border-stone-200">
-                        <label class="block text-[10px] font-semibold text-slate-600 uppercase">📤 Upload Foto Aktivitas</label>
-                        <input type="file" name="experiences[{{ $exp->id }}][image_file]" accept="image/*"
-                            onchange="previewImage(this, 'preview-exp-{{ $exp->id }}')"
-                            class="block w-full text-[10px] text-slate-500 file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-[10px] file:font-semibold file:bg-brand-dark file:text-white hover:file:bg-brand-teal cursor-pointer">
-                        
-                        <details class="text-[10px] text-slate-500 pt-0.5">
-                            <summary class="cursor-pointer font-medium">URL eksternal...</summary>
-                            <input type="text" name="experiences[{{ $exp->id }}][image_url]" value="{{ $exp->image_url }}"
-                                class="w-full bg-stone-50 border border-stone-300 rounded px-2 py-1 text-[10px] font-mono text-slate-700 mt-1">
-                        </details>
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] font-semibold text-slate-600 uppercase mb-1">Deskripsi Singkat</label>
-
-                        <textarea name="experiences[{{ $exp->id }}][description]" rows="2"
-                            class="w-full bg-white border border-stone-300 rounded-lg px-3 py-1.5 text-xs font-light text-slate-700 leading-tight">{{ $exp->description }}</textarea>
-                    </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Judul Headline
+                        Utama Hero</label>
+                    <input type="text" name="hero_title" value="{{ $contents['hero_title'] ?? '' }}" required
+                        class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-medium text-slate-900 focus:ring-2 focus:ring-brand-gold">
                 </div>
-            @endforeach
-        </div>
-    </div>
 
-    <!-- Section 3: 4 Dining Cards -->
-    <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-stone-200 space-y-6">
-        <h3 class="font-serif text-2xl text-brand-dark font-medium border-b border-stone-200 pb-3 flex items-center space-x-2">
-            <span>🍽️ Section 3 — 4 Kartu Kuliner Dining</span>
-        </h3>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            @foreach($diningItems as $dining)
-                <div class="p-5 rounded-xl border border-stone-200 bg-stone-50 space-y-3">
-                    <div class="aspect-[16/9] rounded-lg overflow-hidden bg-stone-200 border border-stone-300">
-                        <img id="preview-dining-{{ $dining->id }}" src="{{ $dining->image_url }}" alt="{{ $dining->title }}" class="w-full h-full object-cover">
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] font-semibold text-slate-600 uppercase mb-1">Judul Menu / Dining</label>
-                        <input type="text" name="dining[{{ $dining->id }}][title]" value="{{ $dining->title }}" required
-                            class="w-full bg-white border border-stone-300 rounded-lg px-3 py-1.5 text-xs font-medium">
-                    </div>
-
-                    <div class="space-y-1 bg-white p-2.5 rounded-lg border border-stone-200">
-                        <label class="block text-[10px] font-semibold text-slate-600 uppercase">📤 Upload Foto Dining</label>
-                        <input type="file" name="dining[{{ $dining->id }}][image_file]" accept="image/*"
-                            onchange="previewImage(this, 'preview-dining-{{ $dining->id }}')"
-                            class="block w-full text-[10px] text-slate-500 file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-[10px] file:font-semibold file:bg-brand-dark file:text-white hover:file:bg-brand-teal cursor-pointer">
-                        
-                        <details class="text-[10px] text-slate-500 pt-0.5">
-                            <summary class="cursor-pointer font-medium">URL eksternal...</summary>
-                            <input type="text" name="dining[{{ $dining->id }}][image_url]" value="{{ $dining->image_url }}"
-                                class="w-full bg-stone-50 border border-stone-300 rounded px-2 py-1 text-[10px] font-mono text-slate-700 mt-1">
-                        </details>
-                    </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Sub-Judul Hero
+                        Header</label>
+                    <input type="text" name="hero_subtitle" value="{{ $contents['hero_subtitle'] ?? '' }}"
+                        class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-medium text-slate-900">
                 </div>
-            @endforeach
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Teks Kutipan
+                    Filosofi Konservasi (Section 4 Quote)</label>
+                <textarea name="conservation_quote" rows="3"
+                    class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-light text-slate-800 leading-relaxed">{{ $contents['conservation_quote'] ?? '' }}</textarea>
+            </div>
         </div>
-    </div>
 
-    <!-- Section 4: 3 Conservation Cards & Photographer Credit -->
-    <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-stone-200 space-y-6">
-        <h3 class="font-serif text-2xl text-brand-dark font-medium border-b border-stone-200 pb-3 flex items-center space-x-2">
-            <span>🪸 Section 4 — 3 Kartu Reef Conservation & Credit Badge</span>
-        </h3>
+        <!-- Section 2: 9 Experience Cards -->
+        <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-stone-200 space-y-6">
+            <h3
+                class="font-serif text-2xl text-brand-dark font-medium border-b border-stone-200 pb-3 flex items-center space-x-2">
+                <span>🏄 Section 2 — 9 Kartu Aktivitas Experiences ("Days measured in tides")</span>
+            </h3>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            @foreach($conservationCards as $card)
-                <div class="p-5 rounded-xl border border-stone-200 bg-stone-50 space-y-3">
-                    <div class="aspect-[4/3] rounded-lg overflow-hidden bg-stone-200 border border-stone-300">
-                        <img id="preview-cons-{{ $card->id }}" src="{{ $card->image_url }}" alt="{{ $card->title }}" class="w-full h-full object-cover">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                @foreach ($experiences as $exp)
+                    <div class="p-5 rounded-xl border border-stone-200 bg-stone-50/80 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="font-serif italic font-bold text-brand-gold text-lg">Card
+                                {{ $exp->number_code }}</span>
+                        </div>
+
+                        <div class="aspect-[4/3] rounded-lg overflow-hidden bg-stone-200 border border-stone-300">
+                            <img id="preview-exp-{{ $exp->id }}" src="{{ $exp->image_url }}" alt="{{ $exp->title }}"
+                                class="w-full h-full object-cover">
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-semibold text-slate-600 uppercase mb-1">Judul
+                                Aktivitas</label>
+                            <input type="text" name="experiences[{{ $exp->id }}][title]" value="{{ $exp->title }}"
+                                required
+                                class="w-full bg-white border border-stone-300 rounded-lg px-3 py-1.5 text-xs font-medium">
+                        </div>
+
+                        <div class="space-y-1 bg-white p-2.5 rounded-lg border border-stone-200">
+                            <label class="block text-[10px] font-semibold text-slate-600 uppercase">📤 Upload Foto
+                                Aktivitas</label>
+                            <input type="file" name="experiences[{{ $exp->id }}][image_file]" accept="image/*"
+                                onchange="previewImage(this, 'preview-exp-{{ $exp->id }}')"
+                                class="block w-full text-[10px] text-slate-500 file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-[10px] file:font-semibold file:bg-brand-dark file:text-white hover:file:bg-brand-teal cursor-pointer">
+
+                            <details class="text-[10px] text-slate-500 pt-0.5">
+                                <summary class="cursor-pointer font-medium">URL eksternal...</summary>
+                                <input type="text" name="experiences[{{ $exp->id }}][image_url]"
+                                    value="{{ $exp->image_url }}"
+                                    class="w-full bg-stone-50 border border-stone-300 rounded px-2 py-1 text-[10px] font-mono text-slate-700 mt-1">
+                            </details>
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-semibold text-slate-600 uppercase mb-1">Deskripsi
+                                Singkat</label>
+
+                            <textarea name="experiences[{{ $exp->id }}][description]" rows="2"
+                                class="w-full bg-white border border-stone-300 rounded-lg px-3 py-1.5 text-xs font-light text-slate-700 leading-tight">{{ $exp->description }}</textarea>
+                        </div>
                     </div>
+                @endforeach
+            </div>
+        </div>
 
-                    <div>
-                        <label class="block text-[10px] font-semibold text-slate-600 uppercase mb-1">Judul Kartu Konservasi</label>
-                        <input type="text" name="conservation[{{ $card->id }}][title]" value="{{ $card->title }}" required
-                            class="w-full bg-white border border-stone-300 rounded-lg px-3 py-1.5 text-xs font-medium">
-                    </div>
+        <!-- Section 3: 4 Dining Cards -->
+        <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-stone-200 space-y-6">
+            <h3
+                class="font-serif text-2xl text-brand-dark font-medium border-b border-stone-200 pb-3 flex items-center space-x-2">
+                <span>🍽️ Section 3 — 4 Kartu Kuliner Dining</span>
+            </h3>
 
-                    <div class="space-y-1 bg-white p-2.5 rounded-lg border border-stone-200">
-                        <label class="block text-[10px] font-semibold text-slate-600 uppercase">📤 Upload Foto Conservation</label>
-                        <input type="file" name="conservation[{{ $card->id }}][image_file]" accept="image/*"
-                            onchange="previewImage(this, 'preview-cons-{{ $card->id }}')"
-                            class="block w-full text-[10px] text-slate-500 file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-[10px] file:font-semibold file:bg-brand-dark file:text-white hover:file:bg-brand-teal cursor-pointer">
-                        
-                        <details class="text-[10px] text-slate-500 pt-0.5">
-                            <summary class="cursor-pointer font-medium">URL eksternal...</summary>
-                            <input type="text" name="conservation[{{ $card->id }}][image_url]" value="{{ $card->image_url }}"
-                                class="w-full bg-stone-50 border border-stone-300 rounded px-2 py-1 text-[10px] font-mono text-slate-700 mt-1">
-                        </details>
-                    </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                @foreach ($diningItems as $dining)
+                    <div class="p-5 rounded-xl border border-stone-200 bg-stone-50 space-y-3">
+                        <div class="aspect-[16/9] rounded-lg overflow-hidden bg-stone-200 border border-stone-300">
+                            <img id="preview-dining-{{ $dining->id }}" src="{{ $dining->image_url }}"
+                                alt="{{ $dining->title }}" class="w-full h-full object-cover">
+                        </div>
 
-                    <div>
-                        <label class="block text-[10px] font-semibold text-slate-600 uppercase mb-1">Teks Credit Badge Fotografer</label>
-                        <input type="text" name="conservation[{{ $card->id }}][photographer_credit]" value="{{ $card->photographer_credit }}" required
-                            class="w-full bg-white border border-stone-300 rounded-lg px-3 py-1.5 text-xs font-mono text-brand-gold">
+                        <div>
+                            <label class="block text-[10px] font-semibold text-slate-600 uppercase mb-1">Judul Menu /
+                                Dining</label>
+                            <input type="text" name="dining[{{ $dining->id }}][title]" value="{{ $dining->title }}"
+                                required
+                                class="w-full bg-white border border-stone-300 rounded-lg px-3 py-1.5 text-xs font-medium">
+                        </div>
+
+                        <div class="space-y-1 bg-white p-2.5 rounded-lg border border-stone-200">
+                            <label class="block text-[10px] font-semibold text-slate-600 uppercase">📤 Upload Foto
+                                Dining</label>
+                            <input type="file" name="dining[{{ $dining->id }}][image_file]" accept="image/*"
+                                onchange="previewImage(this, 'preview-dining-{{ $dining->id }}')"
+                                class="block w-full text-[10px] text-slate-500 file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-[10px] file:font-semibold file:bg-brand-dark file:text-white hover:file:bg-brand-teal cursor-pointer">
+
+                            <details class="text-[10px] text-slate-500 pt-0.5">
+                                <summary class="cursor-pointer font-medium">URL eksternal...</summary>
+                                <input type="text" name="dining[{{ $dining->id }}][image_url]"
+                                    value="{{ $dining->image_url }}"
+                                    class="w-full bg-stone-50 border border-stone-300 rounded px-2 py-1 text-[10px] font-mono text-slate-700 mt-1">
+                            </details>
+                        </div>
                     </div>
+                @endforeach
+            </div>
+        </div>
+
+        <!-- Section 4: 3 Conservation Cards & Photographer Credit -->
+        <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-stone-200 space-y-6">
+            <h3
+                class="font-serif text-2xl text-brand-dark font-medium border-b border-stone-200 pb-3 flex items-center space-x-2">
+                <span>🪸 Section 4 — 3 Kartu Reef Conservation & Credit Badge</span>
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                @foreach ($conservationCards as $card)
+                    <div class="p-5 rounded-xl border border-stone-200 bg-stone-50 space-y-3">
+                        <div class="aspect-[4/3] rounded-lg overflow-hidden bg-stone-200 border border-stone-300">
+                            <img id="preview-cons-{{ $card->id }}" src="{{ $card->image_url }}"
+                                alt="{{ $card->title }}" class="w-full h-full object-cover">
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-semibold text-slate-600 uppercase mb-1">Judul Kartu
+                                Konservasi</label>
+                            <input type="text" name="conservation[{{ $card->id }}][title]"
+                                value="{{ $card->title }}" required
+                                class="w-full bg-white border border-stone-300 rounded-lg px-3 py-1.5 text-xs font-medium">
+                        </div>
+
+                        <div class="space-y-1 bg-white p-2.5 rounded-lg border border-stone-200">
+                            <label class="block text-[10px] font-semibold text-slate-600 uppercase">📤 Upload Foto
+                                Conservation</label>
+                            <input type="file" name="conservation[{{ $card->id }}][image_file]" accept="image/*"
+                                onchange="previewImage(this, 'preview-cons-{{ $card->id }}')"
+                                class="block w-full text-[10px] text-slate-500 file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-[10px] file:font-semibold file:bg-brand-dark file:text-white hover:file:bg-brand-teal cursor-pointer">
+
+                            <details class="text-[10px] text-slate-500 pt-0.5">
+                                <summary class="cursor-pointer font-medium">URL eksternal...</summary>
+                                <input type="text" name="conservation[{{ $card->id }}][image_url]"
+                                    value="{{ $card->image_url }}"
+                                    class="w-full bg-stone-50 border border-stone-300 rounded px-2 py-1 text-[10px] font-mono text-slate-700 mt-1">
+                            </details>
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-semibold text-slate-600 uppercase mb-1">Teks Credit Badge
+                                Fotografer</label>
+                            <input type="text" name="conservation[{{ $card->id }}][photographer_credit]"
+                                value="{{ $card->photographer_credit }}" required
+                                class="w-full bg-white border border-stone-300 rounded-lg px-3 py-1.5 text-xs font-mono text-brand-gold">
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+
+        <!-- Section 5: Contact Info & Footer -->
+        <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-stone-200 space-y-6">
+            <h3
+                class="font-serif text-2xl text-brand-dark font-medium border-b border-stone-200 pb-3 flex items-center space-x-2">
+                <span>📞 Footer — Informasi Kontak & WhatsApp</span>
+            </h3>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Nomor WhatsApp
+                        Resort</label>
+                    <input type="text" name="footer_whatsapp" value="{{ $contents['footer_whatsapp'] ?? '' }}"
+                        class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-medium text-slate-900">
                 </div>
-            @endforeach
-        </div>
-    </div>
 
-    <!-- Section 5: Contact Info & Footer -->
-    <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-stone-200 space-y-6">
-        <h3 class="font-serif text-2xl text-brand-dark font-medium border-b border-stone-200 pb-3 flex items-center space-x-2">
-            <span>📞 Footer — Informasi Kontak & WhatsApp</span>
-        </h3>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Nomor Telepon
+                        Resort</label>
+                    <input type="text" name="footer_phone" value="{{ $contents['footer_phone'] ?? '' }}"
+                        class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-medium text-slate-900">
+                </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <div>
-                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Nomor WhatsApp Resort</label>
-                <input type="text" name="footer_whatsapp" value="{{ $contents['footer_whatsapp'] ?? '' }}"
-                    class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-medium text-slate-900">
-            </div>
-
-            <div>
-                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Nomor Telepon Resort</label>
-                <input type="text" name="footer_phone" value="{{ $contents['footer_phone'] ?? '' }}"
-                    class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-medium text-slate-900">
-            </div>
-
-            <div>
-                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Email Reservasi</label>
-                <input type="email" name="footer_email" value="{{ $contents['footer_email'] ?? '' }}"
-                    class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-medium text-slate-900">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Email
+                        Reservasi</label>
+                    <input type="email" name="footer_email" value="{{ $contents['footer_email'] ?? '' }}"
+                        class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-medium text-slate-900">
+                </div>
             </div>
         </div>
-    </div>
-
-    <!-- Section 6: Tax & Service Charge Settings -->
-    <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-stone-200 space-y-6">
-        <h3 class="font-serif text-2xl text-brand-dark font-medium border-b border-stone-200 pb-3 flex items-center space-x-2">
-            <span>🏷️ Section 6 — Pengaturan Pajak & Layanan (Tax & Service Charge)</span>
-        </h3>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <div>
-                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Status Pajak & Layanan</label>
-                <select name="tax_enabled" class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-medium text-slate-900 focus:ring-2 focus:ring-brand-gold">
-                    <option value="0" {{ ($contents['tax_enabled'] ?? '0') == '0' ? 'selected' : '' }}>Nonaktif (Harga Nett / Tanpa Pajak)</option>
-                    <option value="1" {{ ($contents['tax_enabled'] ?? '0') == '1' ? 'selected' : '' }}>Aktif (Tambahkan Pajak ke Total)</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Persentase Pajak (%)</label>
-                <input type="number" step="0.1" name="tax_percentage" value="{{ $contents['tax_percentage'] ?? '10' }}"
-                    class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-medium text-slate-900" placeholder="10">
-            </div>
-
-            <div>
-                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Nama / Label Pajak</label>
-                <input type="text" name="tax_label" value="{{ $contents['tax_label'] ?? 'Pajak & Layanan' }}"
-                    class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-medium text-slate-900" placeholder="Pajak & Layanan">
-            </div>
+        <div class="flex justify-end pt-4">
+            <button type="submit"
+                class="bg-brand-dark hover:bg-brand-teal text-white px-10 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-xl">
+                💾 SIMPAN SEMUA PERUBAHAN KONTEN WEBSITE
+            </button>
         </div>
-    </div>
+    </form>
 
-    <!-- Section 7: Midtrans Payment Gateway Settings -->
-    <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-stone-200 space-y-6">
-        <h3 class="font-serif text-2xl text-brand-dark font-medium border-b border-stone-200 pb-3 flex items-center space-x-2">
-            <span>💳 Section 7 — Pengaturan Midtrans Payment Gateway</span>
-        </h3>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <div>
-                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Mode Lingkungan Midtrans</label>
-                <select name="midtrans_is_production" class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-medium text-slate-900 focus:ring-2 focus:ring-brand-gold">
-                    <option value="0" {{ ($contents['midtrans_is_production'] ?? '0') == '0' ? 'selected' : '' }}>🟡 Sandbox (Mode Uji Coba)</option>
-                    <option value="1" {{ ($contents['midtrans_is_production'] ?? '0') == '1' ? 'selected' : '' }}>🟢 Production (Mode Transaksi Live)</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Midtrans Server Key</label>
-                <input type="text" name="midtrans_server_key" value="{{ $contents['midtrans_server_key'] ?? config('midtrans.server_key') }}"
-                    class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-mono text-slate-900" placeholder="SB-Mid-server-xxxx">
-            </div>
-
-            <div>
-                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Midtrans Client Key</label>
-                <input type="text" name="midtrans_client_key" value="{{ $contents['midtrans_client_key'] ?? config('midtrans.client_key') }}"
-                    class="w-full bg-stone-50 border border-stone-300 rounded-xl px-4 py-2.5 text-xs font-mono text-slate-900" placeholder="SB-Mid-client-xxxx">
-            </div>
-        </div>
-    </div>
-
-    <div class="flex justify-end pt-4">
-        <button type="submit" class="bg-brand-dark hover:bg-brand-teal text-white px-10 py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-xl">
-            💾 SIMPAN SEMUA PERUBAHAN KONTEN WEBSITE
-        </button>
-    </div>
-</form>
-
-<script>
-function previewImage(input, targetId) {
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const img = document.getElementById(targetId);
-            if (img) {
-                img.src = e.target.result;
+    <script>
+        function previewImage(input, targetId) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById(targetId);
+                    if (img) {
+                        img.src = e.target.result;
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
             }
         }
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-</script>
+    </script>
 @endsection

@@ -67,14 +67,6 @@
                     class="px-3 py-2 rounded-lg transition-colors {{ Request::is('admin/cms*') ? 'bg-brand-gold text-brand-dark font-bold' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
                     ✏️ CMS Website
                 </a>
-                <a href="{{ url('/admin/villas') }}"
-                    class="px-3 py-2 rounded-lg transition-colors {{ Request::is('admin/villas*') ? 'bg-brand-gold text-brand-dark font-bold' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
-                    🏷️ Kamar & Harga
-                </a>
-                <a href="{{ url('/admin/bookings') }}"
-                    class="px-3 py-2 rounded-lg transition-colors {{ Request::is('admin/bookings*') ? 'bg-brand-gold text-brand-dark font-bold' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
-                    📅 Reservasi
-                </a>
                 <a href="{{ url('/admin/promotions') }}"
                     class="px-3 py-2 rounded-lg transition-colors {{ Request::is('admin/promotions*') ? 'bg-brand-gold text-brand-dark font-bold' : 'text-stone-300 hover:text-white hover:bg-white/10' }}">
                     🖼️ Banner Iklan
